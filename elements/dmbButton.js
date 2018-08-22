@@ -5,9 +5,9 @@
 (function() {
     'use strict';
 
-    dumbo.parser('dmbButton', [], Builder);
+    dumbo.directive('dmbButton', [], Directive);
 
-    function Builder() {
+    function Directive() {
         var template = '<button id="{{id}}" class="{{dmbClass}}">' +
                             '<transclude></transclude>' +
                        '</button>';
@@ -19,9 +19,9 @@
                 dmbClick: '='
             },
             build: function(dom, scope) {
-                dom.on('click', scope.dmbClick);
+                dom.onclick = scope.dmbClick;
             },
             template: template
         };
     }
-})(jQuery);
+})();

@@ -5,9 +5,9 @@
 (function() {
     'use strict';
 
-    dumbo.factory('dmbEvents', [], Builder);
+    dumbo.factory('dmbEvents', [], Factory);
 
-    function Builder() {
+    function Factory() {
 
         return {
             resetValidation: 'dmb-validation.validate',

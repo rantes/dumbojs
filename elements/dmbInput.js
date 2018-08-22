@@ -1,14 +1,14 @@
 /**
  * @name dmb-input
  */
-(function($) {
+(function() {
     'use strict';
 
-    dumbo.parser('dmbInput', [
+    dumbo.directive('dmbInput', [
         'dmbEvents'
-    ], Builder);
+    ], Directive);
 
-    function Builder(dmbEvents) {
+    function Directive(dmbEvents) {
         var _errorInputClass = '_error',
             validations = {
             /**
@@ -94,11 +94,17 @@
                 return response;
             }
         },
-        template = '<div class="form-group">' +
+        template = '<div class="dmb-input">' +
                         '<label>{{label}}</label>' +
-                        '<input masked="{{masked}}" type="{{type}}" name="{{name}}" validate="{{validate}}" id="{{id}}" value="{{value}}" placeholder="{{label}}" />' +
+                        '<input aria-label="{{label}}" masked="{{masked}}" autocomplete="{{autocomplete}}" type="{{type}}" class="{{dmbClass}}" name="{{name}}" validate="{{validate}}" id="{{id}}" value="{{value}}" placeholder="{{label}}" />' +
                         '<span class="error-container"></span>' +
                     '</div>';
+
+        function maskInputUppercase(e) {
+            var value = $(e.target).val();
+
+            $(e.target).val(value.toUpperCase());
+        }
 
         function maskInputAlpha(e) {
             var char = e.which || e.keyCode;
@@ -177,7 +183,9 @@
 
         return {
             scope: {
+                autocomplete: '@',
                 id: '@',
+                dmbClass: '@',
                 label: '@',
                 masked: '@',
                 name: '@',
@@ -187,28 +195,37 @@
                 value: '@'
             },
             build: function(dom, scope) {
-                var $input = dom.find('input'),
-                    validators = [];
+                var input = dom.getElementsByTagName('input'),
+                    validators = [],
+                    body = document.getElementsByTagName('body');
 
                 if (scope.placeholder) {
-                    $input.prop('placeholder', scope.placeholder);
+                    input.prop('placeholder', scope.placeholder);
+                }
+
+                if (!scope.id) {
+                    scope.id = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
+                    input.attr('id', scope.id);
                 }
 
                 if (scope.validate) {
-                    validators = buildValidators($input);
+                    validators = buildValidators(input);
 
-                    $input.on('blur', function(element) {
+                    input.on('blur', function(element) {
                         _runValidators(element, validators);
                     });
 
-                    $('body').on(dmbEvents.validate, function() {
-                        _runValidators($input, validators);
+                    body.addEventListener(dmbEvents.validate, () => {
+                        _runValidators(input, validators);
                     });
 
-                    $('body').on(dmbEvents.resetValidation, function() {
-                        dom.find(_errorInputClass).removeClass(_errorInputClass);
-                    });
+                    body.addEventListener(dmbEvents.resetValidation, () => {
+                        let elements = dom.getElementsByClassName(_errorInputClass);
 
+                        for (let i = 0; elements.length; i++) {
+                            elements.item(0).classList.remove(_errorInputClass);
+                        }
+                    });
                 }
 
                 if (scope.masked) {
@@ -219,6 +236,9 @@
                         case 'numeric':
                             $input.on('keypress', maskInputNumeric);
                         break;
+                        case 'uppercase':
+                            $input.on('input', maskInputUppercase);
+                        break;
                     }
                 }
 
@@ -226,4 +246,4 @@
             template: template
         };
     }
-})(jQuery);
+})();
