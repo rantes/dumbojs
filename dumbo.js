@@ -1,4 +1,4 @@
-((window) => {
+(() => {
 'use strict';
 
     var completeRequires = null,
@@ -9,7 +9,7 @@
         validateCompleteLoad = null,
         validateCompleteRender = null,
         replaceDom = null,
-        vDom = document.createDocumentFragment(),
+        vDom = document.cloneNode(true),
         rendering = false,
         MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver,
         observer = new MutationObserver(function(mutations) {
@@ -58,7 +58,7 @@
         return defer;
     };
 
-    completeRequires = (required) => {
+    completeRequires = (required, object, element) => {
         var includes = [],
             defer = new Promise((resolve) => {
                 avaliable(required).then(() => {
@@ -67,7 +67,7 @@
                     for (let i = 0; i < requiredCount; i++) {
                         includes.push(window.dumbo.factories[required[i]]);
                     }
-                    resolve(includes);
+                    resolve({requires: includes, object, element});
                 });
             });
 
@@ -77,7 +77,7 @@
     isReadyToReplace = function(tag, dom) {
 
         return new Promise((resolve) => {
-            var interval = setInterval(function() {
+            var interval = setInterval(() => {
                     var tagValidated = tag,
                         oldDom = dom;
 
@@ -85,7 +85,7 @@
                         clearInterval(interval);
                         resolve({oldDom: oldDom, theTag: tagValidated});
                     }
-                }, 0);
+                }, 1);
             });
     };
 
@@ -173,8 +173,10 @@
                 timer = setInterval(function() {
                     var cont = 0;
 
-                    for (var el in window.dumbo.directives) {
-                        cont = cont + vDom.firstChild.getElementsByTagName(el).length;
+                    if (vDom.firstChild) {
+                        for (var el in window.dumbo.directives) {
+                            cont = cont + vDom.body.getElementsByTagName(el).length;
+                        }
                     }
 
                     if (cont === 0) {
@@ -187,7 +189,7 @@
         return defer;
     };
 
-    window.dumbo = {
+    Window.prototype.dumbo = {
         config: {prefixes: []},
         directives: {},
         factories: {},
@@ -206,8 +208,14 @@
             }
 
             window.dumbo[object][element] = true;
-            completeRequires(params).then((requires) => {
-                window.dumbo[object][element] = fn.apply(null, requires);
+            completeRequires(params, object, element).then((resolved) => {
+                window.dumbo[resolved.object][resolved.element] = fn.apply(null, resolved.requires);
+                if (resolved.object === 'directives') {
+                    document.registerElement(resolved.element, {
+                        prototype: Object.create(HTMLDivElement.prototype),
+                        extends: 'div'
+                    });
+                }
             });
         },
         factory: (factory, params, fn) => {
@@ -241,16 +249,16 @@
 
             if (typeof window.dumbo.directives[element] != 'undefined' && typeof window.dumbo.directives[element].template !== 'undefined') {
 
+                if (typeof window.dumbo.directives[element] !== 'undefined' && typeof window.dumbo.directives[element].pre === 'function') {
+                    window.dumbo.directives[element].pre(scope, attrs);
+                }
+
                 template = window.dumbo.directives[element].template.replace(/{{([\w]+)}}/gm, (x, y) => {
                     return scope[y] || '';
                 });
 
+                template = template.replace(/<transclude><\/transclude>/i, el.innerHTML);
                 dom = parser.parseFromString(template, 'text/html').getElementsByTagName('body').item(0).firstChild;
-                transclude = dom.getElementsByTagName('transclude');
-                if (transclude.length === 1) {
-                    content = el.innerHTML;
-                    transclude.item(0).outerHTML = content;
-                }
 
                 dom.classList.add('dmb-scope');
                 el.parentNode.replaceChild(dom, el);
@@ -289,7 +297,7 @@
             allTags = Object.keys(window.dumbo.directives),
             allTagsJoined = allTags.map((value) => {return `${value}:not(.rendering)`}).join(', '),
             totalElements = 0,
-            root = !!toReplace ? toReplace : vDom.firstChild;
+            root = !!toReplace ? toReplace : vDom.body;
 
         if (allTagsJoined.length) {
             elements = root.querySelectorAll(allTagsJoined);
@@ -318,28 +326,26 @@
         return false;
     };
 
-    document.onreadystatechange = () => {
+    document.addEventListener('DOMContentLoaded', () => {
         validateCompleteLoad().then(() => {
-                if (!vDom.firstChild) {
-                    vDom.appendChild(document.body.cloneNode(true));
-                }
 
                 if (!rendering) {
                     replaceDom();
 
                     validateCompleteRender().then(() => {
                         let completeRenderEvent = new Event('dmbCompleteRender'),
-                            newBody = vDom.querySelector('body'),
-                            oldBody = document.querySelector('body');
+                            oldBody = document.getElementsByTagName('body')[0],
+                            n = vDom.getElementsByTagName('body')[0];
 
-                        oldBody.parentNode.replaceChild(newBody, oldBody);
+                        observer.observe(n, config);
+                        oldBody.parentNode.replaceChild(n, oldBody);
                         document.dispatchEvent(completeRenderEvent);
-                        observer.observe(document, config);
+
                         return false;
                     });
 
                 }
                 return true;
         });
-    };
-})(window);
+    });
+})();
