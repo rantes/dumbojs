@@ -10,26 +10,26 @@ This is a complement/side development with [DumboPHP](https://github.com/rantes/
 (function() {
     'use strict';
 
-    dumbo.parser('dmbButton', [], Builder);
+    dumbo.directive('dmbButton', [], Directive);
 
-    function Builder() {
-        var template = '<button id="{{id}}" class="{{dmbClass}}">' +
+    function Directive() {
+        var template = '<button id="{{dmbId}}" class="{{dmbClass}}">' +
                             '<transclude></transclude>' +
                        '</button>';
 
         return {
             scope: {
-                id: '@',
+                dmbId: '@',
                 dmbClass: '@',
                 dmbClick: '='
             },
             build: function(dom, scope) {
-                dom.on('click', scope.dmbClick);
+                dom.addEventListener('click', scope.dmbClick);
             },
             template: template
         };
     }
-})(jQuery);
+})();
 
 ```
 
