@@ -13,7 +13,7 @@
             validations = {
             /**
              * Checks every required field, adds an error class and retun true or false.
-             * @param  {jQuery DOM} $form The form to check required fields
+             * @param  {jQuery DOM} form The form to check required fields
              * @return {boolean} true if there is no any error
              */
             _required: function (value) {
@@ -31,7 +31,7 @@
             },
             /**
              * Checks every email field, adds an error class and retun true or false.
-             * @param  {jQuery DOM} $form The form to check email fields
+             * @param  {jQuery DOM} form The form to check email fields
              * @return {boolean} true if there is no any error
              */
             _email: function (value) {
@@ -40,7 +40,7 @@
                         error: null
                     };
 
-                    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/;
                     if (value && !re.test(value)) {
                         response.valid = false;
                         response.error = 'No es una direcci&oacute;n de email v&aacute;lido';
@@ -50,7 +50,7 @@
             },
             /**
              * Checks every required field, adds an error class and retun true or false.
-             * @param  {jQuery DOM} $form The form to check required fields
+             * @param  {jQuery DOM} form The form to check required fields
              * @return {boolean} true if there is no any error
              */
             _numeric: function (value) {
@@ -58,7 +58,7 @@
                         valid: true,
                         error: null
                     },
-                    re = /^[0-9]\d*$/;
+                    re = /^[0-9]\d*/;
 
                 if (value && !re.test(value)) {
                     response.valid = false;
@@ -101,9 +101,9 @@
                     '</div>';
 
         function maskInputUppercase(e) {
-            var value = $(e.target).val();
+            var value = (e.target).val();
 
-            $(e.target).val(value.toUpperCase());
+            (e.target).val(value.toUpperCase());
         }
 
         function maskInputAlpha(e) {
@@ -126,15 +126,14 @@
             var unknownValidator = function() {
                     return {valid: false, error: 'Unknown validator type: "' + (validator || {}).key + '"'};
                 },
-                $element = $(element.target || element),
-                content = $element.val().trim(),
+                content = element.value.trim(),
                 valid = true,
                 validator= null,
                 func = null,
                 result = null,
                 message = null;
 
-            $element.val(content);
+            element.value = content;
             for (var i = 0, len = validators.length; i < len; i++) {
                 validator = validators[i];
                 func = validations['_' + validator.key] || unknownValidator;
@@ -148,19 +147,18 @@
             }
 
             if (valid === true) {
-                $element.parent().removeClass(_errorInputClass);
-                $element.parent().find('.error-container').html('');
+                element.parentNode.classList.remove(_errorInputClass);
+                element.parentNode.querySelectorAll('.error-container').item(0).innerHTML = '';
             } else {
-                $element.parent().addClass(_errorInputClass);
-                $element.parent().find('.error-container').html(message);
+                element.parentNode.classList.add(_errorInputClass);
+                element.parentNode.querySelectorAll('.error-container').item(0).innerHTML = message;
             }
-            $element.data('valid', valid);
+            element.dataset.valid = valid;
         }
 
-        function buildValidators(element) {
-            var $this = $(element.target || element),
-                validators = [],
-                validatorList = ($this.attr('validate') || '').split(',');
+        function buildValidators(element, scope) {
+            var validators = [],
+                validatorList = (scope.validate || '').split(',');
 
             for (var i = 0, len = validatorList.length; i < len; i++) {
                 var keyParam = validatorList[i].split(':');
@@ -172,8 +170,8 @@
                     });
 
                     if (keyParam[0] === 'required') {
-                        $this.parent().addClass('required');
-                        $this.attr('required',true);
+                        element.parentNode.classList.add('required');
+                        element.setAttribute('required',true);
                     }
                 }
             }
@@ -195,49 +193,48 @@
                 value: '@'
             },
             build: function(dom, scope) {
-                var input = dom.getElementsByTagName('input'),
-                    validators = [],
-                    body = document.getElementsByTagName('body');
+                var input = dom.getElementsByTagName('input').item(0),
+                    validators = [];
 
                 if (scope.placeholder) {
-                    input.prop('placeholder', scope.placeholder);
+                    input.setAttribute('placeholder', scope.placeholder);
                 }
 
                 if (!scope.id) {
                     scope.id = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
-                    input.attr('id', scope.id);
+                    input.setAttribute('id', scope.id);
                 }
 
                 if (scope.validate) {
-                    validators = buildValidators(input);
+                    validators = buildValidators(input, scope);
 
-                    input.on('blur', function(element) {
-                        _runValidators(element, validators);
-                    });
+                    input.addEventListener('blur', (e) => {
+                        _runValidators(e.target, validators);
+                    }, true);
 
-                    body.addEventListener(dmbEvents.validate, () => {
+                    document.addEventListener(dmbEvents.validate.listener, () => {
                         _runValidators(input, validators);
-                    });
+                    }, true);
 
-                    body.addEventListener(dmbEvents.resetValidation, () => {
+                    document.addEventListener(dmbEvents.resetValidation.listener, () => {
                         let elements = dom.getElementsByClassName(_errorInputClass);
 
                         for (let i = 0; elements.length; i++) {
                             elements.item(0).classList.remove(_errorInputClass);
                         }
-                    });
+                    }, true);
                 }
 
                 if (scope.masked) {
                     switch (scope.masked) {
                         case 'alpha':
-                            $input.on('keypress', maskInputAlpha);
+                            input.onkeypress = maskInputAlpha;
                         break;
                         case 'numeric':
-                            $input.on('keypress', maskInputNumeric);
+                            input.onkeypress = maskInputNumeric;
                         break;
                         case 'uppercase':
-                            $input.on('input', maskInputUppercase);
+                            input.oninput = maskInputUppercase;
                         break;
                     }
                 }

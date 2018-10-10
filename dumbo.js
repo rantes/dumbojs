@@ -123,9 +123,14 @@
                 break;
                 case '=':
                     if (typeof newScope[i] === 'undefined' && typeof flatAttrs[attr] !== 'undefined' && IsJsonString(flatAttrs[attr])) {
+                        console.log('1', flatAttrs[attr]);
                         newScope[i] = JSON.parse(flatAttrs[attr]);
-                    } else if (typeof newScope[i] === 'undefined' && typeof flatAttrs[attr] !== 'undefined') {
+                    } else if (typeof newScope[i] === 'undefined' && typeof flatAttrs[attr] === 'object') {
+                        console.log('2', flatAttrs[attr]);
                         newScope[i] = flatAttrs[attr];
+                    } else if (typeof newScope[i] === 'undefined' && parentScope[flatAttrs[attr]] && typeof parentScope[flatAttrs[attr]] === 'object') {
+                        console.log('here', flatAttrs[attr]);
+                        newScope[i] = parentScope[flatAttrs[attr]];
                     }
                 break;
                 case '&':

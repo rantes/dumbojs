@@ -1,16 +1,16 @@
-(function($) {
+(function() {
     'use strict';
 
-    dumbo.parser('dmbInputTime', [
+    dumbo.directive('dmbInputTime', [
         'dmbEvents'
-    ], Builder);
+    ], Directive);
 
-    function Builder(dmbEvents) {
+    function Directive(dmbEvents) {
         var _errorInputClass = '_error',
             validations = {
             /**
              * Checks every required field, adds an error class and retun true or false.
-             * @param  {jQuery DOM} $form The form to check required fields
+             * @param  {jQuery DOM} form The form to check required fields
              * @return {boolean} true if there is no any error
              */
             _required: function (value) {
@@ -31,7 +31,7 @@
                         valid: true,
                         error: null
                     },
-                    re = /^(0?[1-9]|[1][0-9]|2[0-4])\:(0?[1-9]|[1-5][0-9])$/g;
+                    re = /^(0?[1-9]|[1][0-9]|2[0-4])\:(0?[1-9]|[1-5][0-9])/g;
 
                     if (value.length && !re.test(value)) {
                         response.valid = false;
@@ -41,7 +41,7 @@
                     return response;
             }
         },
-        template = '<div class="form-group input-time">' +
+        template = '<div class="form-group dmb-input-time">' +
                         '<label>{{label}}</label>' +
                         '<input type="text" name="{{name}}" placeholder="hh:mm" validate="time,{{validate}}" id="{{id}}" value="{{value}}" />' +
                         '<div class="clock">' +
@@ -60,15 +60,14 @@
             var unknownValidator = function() {
                     return {valid: false, error: 'Unknown validator type: "' + (validator || {}).key + '"'};
                 },
-                $element = $(element.target || element),
-                content = $element.val().trim(),
+                content = element.val().trim(),
                 valid = true,
                 validator= null,
                 func = null,
                 result = null,
                 message = null;
 
-            $element.val(content);
+            element.value = content;
             for (var i = 0, len = validators.length; i < len; i++) {
                 validator = validators[i];
                 func = validations['_' + validator.key] || unknownValidator;
@@ -82,19 +81,18 @@
             }
 
             if (valid === true) {
-                $element.parent().removeClass(_errorInputClass);
-                $element.parent().find('.error-container').html('');
+                element.parent().removeClass(_errorInputClass);
+                element.parent().find('.error-container').html('');
             } else {
-                $element.parent().addClass(_errorInputClass);
-                $element.parent().find('.error-container').html(message);
+                element.parent().addClass(_errorInputClass);
+                element.parent().find('.error-container').html(message);
             }
-            $element.data('valid', valid);
+            element.data('valid', valid);
         }
 
-        function buildValidators(element) {
-            var $this = $(element.target || element),
-                validators = [],
-                validatorList = ($this.attr('validate') || '').split(',');
+        function buildValidators(element, scope) {
+            var validators = [],
+                validatorList = (scope.validate || '').split(',');
 
             for (var i = 0, len = validatorList.length; i < len; i++) {
                 var keyParam = validatorList[i].split(':');
@@ -106,8 +104,8 @@
                     });
 
                     if (keyParam[0] === 'required') {
-                        $this.parent().addClass('required');
-                        $this.attr('required',true);
+                        element.parentNode.classList.add('required');
+                        element.setAttribute('required',true);
                     }
                 }
             }
@@ -116,14 +114,15 @@
         }
 
         function setTime(e) {
-            var hour = e.data.hours.val(),
-                min = e.data.mins.val();
+            var hour = e.target.hours.value,
+                min = e.target.mins.value,
+                input = e.target.input;
 
             e.preventDefault();
 
             if (hour.length && min.length) {
-                e.data.input.val(hour + ':' + min);
-                e.data.input.removeClass('activate');
+                input.value = hour + ':' + min;
+                input.classList.remove('activate');
             }
         }
 
@@ -136,83 +135,105 @@
                 value: '@'
             },
             build: function(dom, scope) {
-                var $input = dom.find('input'),
+                var input = dom.getElementsByTagName('input').item(0),
                     validators = [],
-                    hours = dom.find('.hour'),
-                    minutes = dom.find('.minute'),
-                    $option = $('<option value=""></option>'),
+                    hours = dom.getElementsByClassName('hour').item(0),
+                    minutes = dom.getElementsByClassName('minute').item(0),
                     i = 0,
                     pad = '00',
                     padded = '',
-                    current = [];
+                    current = [],
+                    parser = new DOMParser(),
+                    option = parser.parseFromString(`<option value=""></option>`, 'text/html').getElementsByTagName('body').item(0).firstChild,
+                    setTimeb = dom.getElementsByClassName('set-time').item(0);
 
                 for (i = 0; i < 24; i++) {
                     padded = (pad + i).slice(-pad.length);
-                    $option.clone().text(padded).val(padded).appendTo(hours);
+                    option.innerHTML = padded;
+                    option.value = padded;
+                    hours.append(option.cloneNode(true));
                 }
 
                 for (i = 0; i < 60; i++) {
                     padded = (pad + i).slice(-pad.length);
-                    $option.clone().text(padded).val(padded).appendTo(minutes);
+                    option.innerHTML = padded;
+                    option.value = padded;
+                    minutes.append(option.cloneNode(true));
+                }
+
+                if (scope.placeholder) {
+                    input.setAttribute('placeholder', scope.placeholder);
+                }
+
+                if (!scope.id) {
+                    scope.id = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
+                    input.setAttribute('id', scope.id);
                 }
 
                 if (scope.validate) {
-                    validators = buildValidators($input);
+                    validators = buildValidators(input, scope);
 
-                    $input.on('blur', function() {
-                        _runValidators($input, validators);
-                    });
+                    input.addEventListener('blur', (e) => {
+                        _runValidators(e.target, validators);
+                    }, true);
 
-                    $('body').on(dmbEvents.validate, function() {
-                        _runValidators($input, validators);
-                    });
+                    document.addEventListener(dmbEvents.validate.listener, () => {
+                        _runValidators(input, validators);
+                    }, true);
 
-                    $('body').on(dmbEvents.resetValidation, function() {
-                        dom.find(_errorInputClass).removeClass(_errorInputClass);
-                    });
+                    document.addEventListener(dmbEvents.resetValidation.listener, () => {
+                        let elements = dom.getElementsByClassName(_errorInputClass);
+
+                        for (let i = 0; elements.length; i++) {
+                            elements.item(0).classList.remove(_errorInputClass);
+                        }
+                    }, true);
                 }
 
-                if ($input.val().length) {
-                    current = $input.val().split(':');
-                    hours.val(current[0]);
-                    minutes.val(current[1]);
+                if (input.value || input.value.length) {
+                    current = input.value.split(':');
+                    hours.value = current[0];
+                    minutes.value = current[1];
                 }
 
-                dom.on('click',function(e) {
-                    e.stopPropagation();
+                input.addEventListener('focusin', e => {
+                    e.target.classList.add('activate');
                 });
 
-                $input.on('focusin click', function(e) {
-                    var $this = $(e.target);
-
-                    $this.addClass('activate');
-                });
-
-                $('body').on('keyup', function(e) {
+                document.addEventListener('keyup', e => {
                     var char = e.keyCode;
 
                     if (char === 27) {
-                        $input.removeClass('activate');
+                        input.classList.add('activate');
                     }
                 });
 
-                $(document).on('click', function() {
-                    $input.removeClass('activate');
-                });
-
-                $input.on('keypress', function(e) {
-                    var char = e.which || e.keyCode;
+                input.addEventListener('keypress', e => {
+                    let char = e.which || e.keyCode;
 
                     if (char === 27) {
-                        $input.removeClass('activate');
+                        input.classList.remove('activate');
                     } else {
                         return false;
                     }
                 });
 
-                dom.find('.set-time').on('click', {input: $input, hours: hours, mins: minutes}, setTime);
+                document.addEventListener('click', e => {
+                    let sHour = dom.querySelector('.clock .hour'),
+                        sMinute = dom.querySelector('.clock .minute');
+
+                    if (e.target != input && e.target != sHour && e.target != sMinute) {
+                        input.classList.remove('activate');
+                    }
+                });
+
+                setTimeb.input = input;
+                setTimeb.hours = hours;
+                setTimeb.mins = minutes;
+
+                setTimeb.addEventListener('click', setTime);
             },
             template: template
         };
     }
-})(jQuery);
+})();
