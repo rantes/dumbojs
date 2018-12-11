@@ -1,0 +1,64 @@
+.dmb-select {
+    @include box-sizing(border-box);
+    padding-bottom: 15px;
+    position: relative;
+
+    select {
+        @include transition(border-color, 0.5s, ease-in-out);
+        @include transition(box-shadow, 0.5s, ease-in-out);
+        @include box-shadow(1px 1px 2px 0 rgba(0,0,0,0.5) inset);
+        @include border-radius(10px);
+        @include box-sizing(border-box);
+        background-color: $white;
+        border: 1px solid $grey-medium;
+        box-sizing: border-box;
+        color: $black-darkest;
+        display: block;
+        font-size: 12px;
+        height: 32px;
+        line-height: 16px;
+        margin: 0;
+        padding: 10px 10px 5px;
+        width: 100%;
+
+        &:focus {
+            @include transition(all 601ms cubic-bezier(0.68, -0.75, 0.265, 1.75));
+            @include box-shadow(1px 1px 2px 0 rgba(0,0,0,0.5) inset, 0 1px 1px rgba($black,0.075) inset, 0 0 8px rgba($green-light,0.6));
+            border: 1px solid $green-light;
+            color: $black;
+            outline: 0 none;
+        }
+
+        ._error & {
+            @include box-shadow(inset 0 2px 2px $grey-light, 0 1px 0 $red);
+            border: 1px solid $red;
+        }
+    }
+
+    label {
+        box-sizing: border-box;
+        display: inline-block;
+        font-size: 12px;
+        font-weight: normal;
+        margin-bottom: 5px;
+        padding-left: 6px;
+        text-align: left;
+        width: 99%;
+
+        ._error & {
+            color: $red;
+        }
+
+        .required &:after {
+            content: "*";
+        }
+    }
+
+    .error-container {
+        color: $red;
+        display: inline-block;
+        font-size: 12px;
+        height: 12px;
+        line-height: 1;
+    }
+}

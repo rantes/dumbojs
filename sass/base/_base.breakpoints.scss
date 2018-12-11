@@ -1,0 +1,87 @@
+//	_base.scss
+
+//	-----------------------------------------------------------------------------
+//
+//	The base for all SASS files. Only includes columns since those need to be
+//	reset per breakpoint.
+//
+//	-----------------------------------------------------------------------------
+//	Table of Contents (keep up-to-date)
+//	-----------------------------------------------------------------------------
+//
+//	_functions
+//		_get-column-margin()
+//	_media-queries
+//		_breakpoint()
+//
+//	-----------------------------------------------------------------------------
+
+  $header-height: 120px;
+  $header-caret-height: 0;
+  $breakpoint-large: 1600px;
+  $breakpoint-medium: 1023px;
+  $breakpoint-small: 767px;
+  $max-width: 1200px;
+
+//	-----------------------------------------------------------------------------
+//	_functions
+//	-----------------------------------------------------------------------------
+
+  //	_get-column-margin()
+  //	-----------------------------------------------------------------------------
+    @function get-column-margin($column-wrapper-margin, $column-gutter) {
+      //	The column margin is the distance from the container
+      //	to the edge of the column. Since the column already
+      //	includes half of the gutter on either side, we need
+      //	to remove it.
+      $column-half-gutter: $column-gutter * .5;
+      $column-margin: $column-wrapper-margin - $column-half-gutter;
+
+      @return $column-margin;
+    }
+
+//	-----------------------------------------------------------------------------
+//	_media-queries
+//	-----------------------------------------------------------------------------
+
+  //	The distance between the edge of the page and the edge of the outer column.
+  $column-wrapper-margin: 30px;
+  //	The distance between columns.
+  $column-gutter: 30px;
+  //	The column margin is the distance from the container to the edge of the
+  //	column element. Since the column already includes half of the gutter on
+  //	either side, we need to remove it.
+  $column-margin: get-column-margin($column-wrapper-margin, $column-gutter);
+  //	The margin around overlays.
+  $overlay-margin: 30px;
+  //	The column-wrapper-margin inside overlays.
+  $overlay-padding: 30px;
+  //	The offset for the overlay close.
+  $overlay-close-offset: 20px;
+
+  //	_breakpoint()
+  //	-----------------------------------------------------------------------------
+    //	Useful for maintaining your breakpoint locations in a single
+    //	location. Reset breakpoint specific variables inside each
+    //	conditional and include the mixins files at the top of each file
+    //	since SASS does not currently have variable scope.
+    @mixin breakpoint($breakpoint-type) {
+      @if $breakpoint-type == large {
+        @media screen and (min-width: $breakpoint-large) {
+          @content;
+        }
+      } @else if $breakpoint-type == medium {
+        @media screen and (max-width: $breakpoint-medium) {
+          @content;
+        }
+      } @else if $breakpoint-type == small {
+        @media screen and (max-width: $breakpoint-small) {
+
+          %columnwidth {
+            width: 100%;
+          }
+
+          @content;
+        }
+      }
+    }

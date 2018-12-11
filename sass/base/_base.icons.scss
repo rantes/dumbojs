@@ -1,0 +1,479 @@
+.icon {
+    @include icomoon-font();
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: $blue;
+    font-size: 24px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    height: 24px;
+    line-height: 1;
+    position: relative;
+    speak: none;
+    text-transform: none;
+    width: 24px;
+
+    &:before {
+        @include icomoon-font();
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        color: $black;
+        font-size: 24px;
+        line-height: 1;
+        height: 24px;
+        width: 24px;
+    }
+
+    &[badge]:after {
+        background-color: $blue-lighter;
+        border-radius: 10px;
+        color: $white;
+        content: attr(badge);
+        font-size: 12px;
+        height: 15px;
+        line-height: 15px;
+        min-width: 10px;
+        padding-left: 3px;
+        padding-right: 3px;
+        position: absolute;
+        right: -10px;
+        text-align: center;
+        top: -5px;
+    }
+
+    &-white {
+        color: $white;
+        
+        &:before {
+            color: $white;
+        }
+    }
+
+    &-rounded {
+        @include border-radius(24px);
+        border: solid 2px $black;
+    }
+
+    &-file-custom {
+        &:before {
+            content: "\e924";
+        }
+        &:after {
+            @include border-radius(1px);
+            border: solid 1px $black;
+            bottom: 3px;
+            color: $black;
+            content: attr(rel);
+            font-size: 10px;
+            left: 5px;
+            position: absolute;
+        }
+    }
+
+    &-chevron-left:before {
+      content: "\f053";
+    }
+    &-chevron-right:before {
+      content: "\f054";
+    }
+    &-chevron-up:before {
+      content: "\f077";
+    }
+    &-chevron-down:before {
+      content: "\f078";
+    }
+    &-bullhorn:before {
+      content: "\f0a1";
+    }
+    &-filter:before {
+      content: "\f0b0";
+    }
+    &-group:before {
+      content: "\f0c0";
+    }
+    &-users3:before {
+      content: "\f0c0";
+    }
+    &-bars:before {
+      content: "\f0c9";
+    }
+    &-navicon:before {
+      content: "\f0c9";
+    }
+    &-reorder:before {
+      content: "\f0c9";
+    }
+    &-list-ul:before {
+      content: "\f0ca";
+    }
+    &-angle-double-left:before {
+      content: "\f100";
+    }
+    &-angle-double-right:before {
+      content: "\f101";
+    }
+    &-angle-double-up:before {
+      content: "\f102";
+    }
+    &-angle-double-down:before {
+      content: "\f103";
+    }
+    &-angle-left:before {
+      content: "\f104";
+    }
+    &-angle-right:before {
+      content: "\f105";
+    }
+    &-angle-up:before {
+      content: "\f106";
+    }
+    &-angle-down:before {
+      content: "\f107";
+    }
+    &-desktop:before {
+      content: "\f108";
+    }
+    &-gamepad:before {
+      content: "\f11b";
+    }
+    &-cube:before {
+      content: "\f1b2";
+    }
+    &-cubes:before {
+      content: "\f1b3";
+    }
+    &-birthday-cake:before {
+      content: "\f1fd";
+    }
+    &-area-chart:before {
+      content: "\f1fe";
+    }
+    &-pie-chart2:before {
+      content: "\f200";
+    }
+    &-line-chart:before {
+      content: "\f201";
+    }
+    &-venus:before {
+      content: "\f221";
+    }
+    &-mars:before {
+      content: "\f222";
+    }
+    &-mercury:before {
+      content: "\f223";
+    }
+    &-intersex:before {
+      content: "\f224";
+    }
+    &-transgender:before {
+      content: "\f224";
+    }
+    &-transgender-alt:before {
+      content: "\f225";
+    }
+    &-venus-double:before {
+      content: "\f226";
+    }
+    &-mars-double:before {
+      content: "\f227";
+    }
+    &-venus-mars:before {
+      content: "\f228";
+    }
+    &-mars-stroke:before {
+      content: "\f229";
+    }
+    &-mars-stroke-v:before {
+      content: "\f22a";
+    }
+    &-mars-stroke-h:before {
+      content: "\f22b";
+    }
+    &-document-text:before {
+      content: "\e900";
+    }
+    &-document-table:before {
+      content: "\e901";
+    }
+    &-document-text2:before {
+      content: "\e902";
+    }
+    &-lock:before {
+      content: "\e91e";
+    }
+    &-printer-text:before {
+      content: "\e903";
+    }
+    &-cloud-download:before {
+      content: "\e904";
+    }
+    &-user2:before {
+      content: "\e913";
+    }
+    &-settings:before {
+      content: "\e914";
+    }
+    &-news:before {
+      content: "\e915";
+    }
+    &-note:before {
+      content: "\e916";
+    }
+    &-params:before {
+      content: "\e929";
+    }
+    &-banknote:before {
+      content: "\e917";
+    }
+    &-shop:before {
+      content: "\e918";
+    }
+    &-truck:before {
+      content: "\e919";
+    }
+    &-calendar:before {
+      content: "\e905";
+    }
+    &-checkmark:before {
+      content: "\e906";
+    }
+    &-cancel:before {
+      content: "\e907";
+    }
+    &-download:before {
+      content: "\e92a";
+    }
+    &-gamepad2:before {
+      content: "\e92d";
+    }
+    &-alarm:before {
+      content: "\e908";
+    }
+    &-graduate:before {
+      content: "\e92e";
+    }
+    &-radio:before {
+      content: "\e92f";
+    }
+    &-satellite:before {
+      content: "\e930";
+    }
+    &-medal:before {
+      content: "\e931";
+    }
+    &-medal2:before {
+      content: "\e932";
+    }
+    &-cube2:before {
+      content: "\e922";
+    }
+    &-box:before {
+      content: "\e923";
+    }
+    &-box2:before {
+      content: "\e928";
+    }
+    &-moneybag:before {
+      content: "\e933";
+    }
+    &-chat:before {
+      content: "\e909";
+    }
+    &-pencil:before {
+      content: "\e90a";
+    }
+    &-profile:before {
+      content: "\e90b";
+    }
+    &-dollar:before {
+      content: "\e90c";
+    }
+    &-dollar2:before {
+      content: "\e90d";
+    }
+    &-coins:before {
+      content: "\e90e";
+    }
+    &-presentation:before {
+      content: "\e90f";
+    }
+    &-car:before {
+      content: "\e910";
+    }
+    &-game-controller:before {
+      content: "\e934";
+    }
+    &-globe:before {
+      content: "\e935";
+    }
+    &-graduation-cap:before {
+      content: "\e936";
+    }
+    &-help:before {
+      content: "\e91f";
+    }
+    &-info:before {
+      content: "\e920";
+    }
+    &-traffic-cone:before {
+      content: "\e91a";
+    }
+    &-users2:before {
+      content: "\e91b";
+    }
+    &-slideshare:before {
+      content: "\e91c";
+    }
+    &-content_copy:before {
+      content: "\e14d";
+    }
+    &-directions_bike:before {
+      content: "\e52f";
+    }
+    &-directions_run:before {
+      content: "\e566";
+    }
+    &-directions_walk:before {
+      content: "\e536";
+    }
+    &-time_to_leave:before {
+      content: "\e62c";
+    }
+    &-markunread:before {
+      content: "\e159";
+    }
+    &-library_books:before {
+      content: "\e02f";
+    }
+    &-local_parking:before {
+      content: "\e54f";
+    }
+    &-location_city:before {
+      content: "\e7f1";
+    }
+    &-settings2:before {
+      content: "\e8b8";
+    }
+    &-group-outline:before {
+      content: "\e91d";
+    }
+    &-alert:before {
+      content: "\f02d";
+    }
+    &-clippy:before {
+      content: "\f035";
+    }
+    &-device-camera-video:before {
+      content: "\f057";
+    }
+    &-organization:before {
+      content: "\f037";
+    }
+    &-package:before {
+      content: "\f0c4";
+    }
+    &-trashcan:before {
+      content: "\f0d0";
+    }
+    &-home:before {
+      content: "\e911";
+    }
+    &-office:before {
+      content: "\e912";
+    }
+    &-library:before {
+      content: "\e921";
+    }
+    &-file-empty:before {
+      content: "\e924";
+    }
+    &-files-empty:before {
+      content: "\e925";
+    }
+    &-file-text2:before {
+      content: "\e926";
+    }
+    &-file-picture:before {
+      content: "\e927";
+    }
+    &-file-zip:before {
+      content: "\e92b";
+    }
+    &-copy:before {
+      content: "\e92c";
+    }
+    &-user:before {
+      content: "\e971";
+    }
+    &-users:before {
+      content: "\e972";
+    }
+    &-user-plus:before {
+      content: "\e973";
+    }
+    &-user-minus:before {
+      content: "\e974";
+    }
+    &-user-check:before {
+      content: "\e975";
+    }
+    &-key:before {
+      content: "\e98d";
+    }
+    &-pie-chart:before {
+      content: "\e99a";
+    }
+    &-stats-dots:before {
+      content: "\e99b";
+    }
+    &-stats-bars:before {
+      content: "\e99c";
+    }
+    &-plus:before {
+      content: "\ea0a";
+    }
+    &-minus:before {
+      content: "\ea0b";
+    }
+    &-enter:before {
+      content: "\ea13";
+    }
+    &-exit:before {
+      content: "\ea14";
+    }
+    &-backward2:before {
+      content: "\ea1f";
+    }
+    &-forward3:before {
+      content: "\ea20";
+    }
+    &-first:before {
+      content: "\ea21";
+    }
+    &-last:before {
+      content: "\ea22";
+    }
+    &-move-up:before {
+      content: "\ea46";
+    }
+    &-move-down:before {
+      content: "\ea47";
+    }
+    &-file-pdf:before {
+      content: "\eadf";
+    }
+    &-file-openoffice:before {
+      content: "\eae0";
+    }
+    &-file-word:before {
+      content: "\eae1";
+    }
+    &-file-excel:before {
+      content: "\eae2";
+    }
+    &-libreoffice:before {
+      content: "\eae3";
+    }
+}

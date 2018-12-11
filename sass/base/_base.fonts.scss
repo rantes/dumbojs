@@ -1,0 +1,22 @@
+//	_base.fonts.scss
+
+//	-----------------------------------------------------------------------------
+//	Table of Contents (keep up-to-date)
+//	-----------------------------------------------------------------------------
+//
+//	_icomoon
+//	-----------------------------------------------------------------------------
+
+
+//	-----------------------------------------------------------------------------
+//	_icomoon
+//	-----------------------------------------------------------------------------
+    @font-face {
+        font-family: 'icomoon';
+        font-display: fallback;
+        src:url('../fonts/icomoon/icomoon.eot');
+        src:url('../fonts/icomoon/icomoon.eot') format('embedded-opentype'),
+            url('../fonts/icomoon/icomoon.woff') format('woff'),
+            url('../fonts/icomoon/icomoon.ttf') format('truetype'),
+            url('../fonts/icomoon/icomoon.svg') format('svg');
+    }

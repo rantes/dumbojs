@@ -154,6 +154,10 @@
                         select.append(option);
                     }
                 }
+
+                if (scope.dmbSelected.length) {
+                    select.dispatchEvent(new Event('change'));
+                }
             },
             template: template
         };

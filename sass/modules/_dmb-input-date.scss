@@ -1,0 +1,105 @@
+.dmb-input-date {
+    .calendar {
+        @include box-shadow(0 2px 2px $grey-light);
+        background-color: $white;
+        border: solid 1px $grey-light;
+        display: none;
+        left: 0;
+        position: absolute;
+        top: 60px;
+        z-index: 3;
+
+        table {
+            background-color: $white;
+            border-collapse: collapse;
+            display: table;
+            width: 100%;
+
+            thead {
+                display: table-header-group;
+
+                th {
+                    border-top: solid 1px rgba($grey, 0.5);
+                    background-color: rgba($blue, 0.1);
+                    border-bottom: solid 1px $blue;
+                    border-right: solid 1px $white;
+                    display: table-cell;
+                    font-size: 12px;
+                    padding: 5px 0;
+                }
+            }
+
+            tbody {
+                display: table-row-group;
+
+                tr {
+                    display: table-row;
+
+                    &:nth-child(even) {
+                        td {
+                            background-color: rgba($blue, 0.1);
+                        }
+                    }
+
+                    &:nth-child(odd) {
+                        td {
+                            background-color: $white;
+                        }
+                    }
+
+                    &:last-child {
+                        td {
+                            border-bottom: solid 1px rgba($grey, 0.5);
+                        }
+                    }
+                    td {
+                        border-right: solid 1px rgba($grey, 0.5);
+                        display: table-cell;
+                        font-family: sans-serif;
+                        font-size: 12px;
+                        margin: 0;
+                        padding: 5px 0;
+                        text-align: center;
+                        vertical-align: middle;
+
+                        &:not(.empty):hover {
+                            background-color: $blue;
+                            cursor: pointer;
+                            color: white;
+                        }
+
+                        &.selected {
+                            background-color: $blue;
+                            color:white;
+                        }
+                    }
+                }
+
+            }
+        }
+
+        .calendar-selectors {
+            display: inline-block;
+            width: 100%;
+
+            .month {
+                display: inline-block;
+                margin-right: 5px;
+                width: 40%;
+            }
+
+            .year {
+                display: inline-block;
+                width: 50%;
+            }
+        }
+    }
+
+    input {
+        &.activate {
+            &+ .calendar {
+                display: block;
+            }
+        }
+    }
+}

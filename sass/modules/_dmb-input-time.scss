@@ -1,0 +1,40 @@
+.dmb-input-time {
+    .clock {
+        @include box-shadow(0 2px 2px $grey-light);
+        background-color: $white;
+        border: solid 1px $grey-light;
+        box-sizing: border-box;
+        display: none;
+        height: 85px;
+        left: 0;
+        padding: 3px;
+        position: absolute;
+        top: 60px;
+        width: 100%;
+        z-index: 3;
+
+        .hour,
+        .minute {
+            float: left;
+            margin-right: 5px;
+            padding: 5px 2px;
+            width: 45%;
+        }
+
+        .set-time {
+            border-radius: 5px;
+            height: 32px;
+            margin: 5px auto;
+            padding: 3px;
+            width: 100%;
+        }
+    }
+
+    input {
+        &.activate {
+            &+ .clock {
+                display: block;
+            }
+        }
+    }
+}

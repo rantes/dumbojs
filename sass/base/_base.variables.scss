@@ -1,0 +1,81 @@
+//	_base.variables.scss
+
+//	-----------------------------------------------------------------------------
+//	Table of Contents (keep up-to-date)
+//	-----------------------------------------------------------------------------
+//
+//	_colors
+//	_grid layout
+//
+//	-----------------------------------------------------------------------------
+
+//	-----------------------------------------------------------------------------
+//	_colors
+//	-----------------------------------------------------------------------------
+
+	$black: #313131;
+	$black-darkest: #000000;
+
+
+	$white: #fff;
+	$plate: #77BACE;
+
+	$grey-lightest: #f5f5f5;
+	$grey-lighter: #e7e7e7;
+	$grey-light: #dbd8d6;
+	$grey: #999;
+	$grey-medium: #666;
+	$grey-dark: #4b4b4b;
+	$grey-darker: #858585;
+	$grey-darkest: #565655;
+
+	$grey-border-light: #bdbcbc;
+	$grey-border-dark: #2e2b28;
+
+	$grey-button: #c8c6c5;
+	$grey-hover: #888;
+
+	$grey-text-light: #77756f;
+	$grey-text: #646060;
+	$grey-text-dark: #313131;
+
+	$grey-footer: #221d19;
+	$grey-footer-border: #49443e;
+	$grey-footer-border-dark: #2c2724;
+
+	$brown-light: #663200;
+	$brown: #34302b;
+	$brown-dark: #1d1a18;
+
+	$gold: #a89e6f;
+	$gold-light: #c2bb9c;
+	$gold-lighter: #dad6c5;
+
+	$error-light: #f5dbdc;
+	$error-dark: #d95f64;
+
+	$red-light: #FFA9A5;
+	$red: #f00;
+	$red-darkest: #9b0202;
+
+	$green-lighter: #addce6;
+	$green-light: #77bace;
+
+	$blue-lighter: #5D94C2;
+	$blue: #1b66a2;
+	$blue-darker: #063C69;
+
+	$yellow: #ff9901;
+	$yellow-darkest: #cc6600;
+
+	$green-lighter: #addce6;
+	$green-light: #77bace;
+	$green: #20aa73;
+	$green-dark: #069059;
+
+//	-----------------------------------------------------------------------------
+//	_grid layout
+//	-----------------------------------------------------------------------------
+
+	$grid-columns: 12;
+	$grid-margin-horizontal: 1.6%;

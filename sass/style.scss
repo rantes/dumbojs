@@ -1,0 +1,44 @@
+// style.scss
+@import "compass";
+// _base
+@import "_base";
+
+html, body {
+    font-size: 14px;
+    line-height: 1;
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+    width: 100%;
+}
+
+body {
+    &.blur {
+        #page {
+            @include filter(blur(4px));
+        }
+    }
+}
+
+a {
+  color: $black;
+  display: inline-block;
+  text-decoration: none;
+  width: auto;
+
+    &:visited,
+    &:active {
+        color: $black;
+    }
+}
+
+h1,h2,h3,h4 {
+  text-align: center;
+  width: 100%;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+@import "_modules";

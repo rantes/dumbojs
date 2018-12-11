@@ -1,0 +1,101 @@
+.dmb-panel {
+    &-background {
+        @include opacity(0);
+        @include transition(opacity 0.4s ease-in-out);
+        -webkit-overflow-scrolling: touch;
+        background-color: rgba($black, 0.53);
+        bottom: 0;
+        height: 0;
+        left: 0;
+        overflow: hidden;
+        padding: 0;
+        position: fixed;
+        right: 0;
+        top: 0;
+        visibility: hidden;
+        z-index: 99;
+    }
+
+    &-wrapper {
+        @include box-shadow(0 0 5px $grey-light);
+        bottom: 0;
+        background-color: $white;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        z-index: 100;
+
+        &.right {
+            @include transition(right 0.4s ease-in-out);
+
+            &.small {
+                right: -350px;
+            }
+
+            &.large {
+                right: -110vw;
+            }
+        }
+
+        &.left {
+            @include transition(left 0.4s ease-in-out);
+
+            &.small {
+                left: -350px;
+            }
+
+            &.large {
+                left: -110vw;
+            }
+        }
+
+        &.small {
+            width: 320px;
+        }
+
+        &.large {
+            width: 100vw;
+        }
+
+        .header {
+            @include box-shadow(0 0 5px $grey);
+            height: 40px;
+            border-bottom: solid 1px $grey-light;
+            padding: 0 10px;
+            width: 100%;
+
+            .dmb-panel-close {
+                right: 10px;
+                position: absolute;
+                top: 10px;
+            }
+        }
+
+        .footer {
+            @include box-shadow(0 0 5px $grey);
+            height: 64px;
+            border-top: solid 1px $grey-light;
+            padding: 0 10px;
+            width: 100%;
+        }
+    }
+
+    &._active {
+        .dmb-panel-background {
+            @include opacity(1);
+            height: auto;
+            overflow: auto;
+            visibility: visible;
+        }
+
+        .dmb-panel-wrapper {
+            &.right {
+                right: 0;
+            }
+
+            &.left {
+                left: 0;
+            }
+        }
+    }
+}

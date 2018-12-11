@@ -1,0 +1,16 @@
+.dmb-footer {
+    footer & {
+        @include box-shadow(0 -5px 5px $grey);
+        background-color: $yellow;
+        border-top: solid 1px $black;
+        color: $black-darkest;
+        bottom: 0;
+        height: 60px;
+        left: 0;
+        padding: 10px;
+        position: absolute;
+        right: 0;
+        text-align: center;
+        width: 100%;
+    }
+}

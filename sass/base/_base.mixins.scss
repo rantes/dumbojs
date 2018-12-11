@@ -1,0 +1,1252 @@
+//	_base.mixins.scss
+
+//	-----------------------------------------------------------------------------
+//
+//	A set of practical mixins.
+//
+//	-----------------------------------------------------------------------------
+//	Table of Contents (keep up-to-date)
+//	-----------------------------------------------------------------------------
+//
+//	_base.mixins.scss
+//	_media-queries
+//		_webkit-only()
+//	_typography
+//		_font()
+//			_font-face()
+//			_dinpro()
+//			_icomoon()
+//		_word-break()
+//		_text-ellipsis()
+//		_hover()
+//	_layout
+//		_pseudo()
+//		_image-replacement()
+//		_visually-hidden()
+//		_horizontal-center()
+//		_vertical-center()
+//		_vertical-center-relative()
+//		_transform-translateY()
+//		_color-placeholder()
+//		_clearfix()
+//		_full-size()
+//		_background-image()
+//	_columns
+//		_content-wrapper()
+//		_column-border-base()
+//		_column-wrapper()
+//			_column-font-reset()
+//		_column-wrapper-reset()
+//		_column-wrapper-border()
+//		_column-base()
+//		_column-base-reset()
+//		_column()
+//		_column-reset()
+//		_column-offset()
+//		_column-offset-reset()
+//		_column-border()
+//		_column-include-gutter()
+//		_column-auto-height()
+//	_forms
+//		_input()
+//		_placeholder()
+//				_placeholder-fonts()
+//		_submit()
+//	_elements
+//		_carousel()
+//		_caret()
+//			_caret-horizontal()
+//			_caret-veritcal()
+//		_caret-border()
+//			_caret-border-horizontal()
+//			_caret-border-vertical()
+//		_button()
+//			_button-solid-gold()
+//			_button-border-gold()
+//			_button-border-dark()
+//			_button-border-light()
+//		_icobutton()
+//		_button-breakpoint()
+//		_overlay()
+//			_overlay-breakpoint()
+//		_share()
+//			_share-breakpoint()
+//	_patterns
+//		_class-set()
+//		_breakpoint-set()
+//
+//	-----------------------------------------------------------------------------
+
+  //	The base type size for the site.
+  $font-size-base: 16px;
+  //	The font stack used for sans serif.
+  $font-sans-serif: "Helvetica", "Arial", san-serif;
+  //	The font stack used for serif.
+  $font-serif: Times New Roman, "Times New Roman", Times, Baskerville, Georgia, serif;
+
+//	-----------------------------------------------------------------------------
+//	_media-queries
+//	-----------------------------------------------------------------------------
+
+  //	_webkit-only()
+  //	-----------------------------------------------------------------------------
+    //	Targets webkit browsers only. Useful when styling selects since only
+    //	webkit supports some styling there.
+    @mixin webkit-only() {
+      @media screen and (-webkit-min-device-pixel-ratio: 1) {
+        @content;
+      }
+    }
+
+
+//	-----------------------------------------------------------------------------
+//	_typography
+//	-----------------------------------------------------------------------------
+
+  //	_font()
+  //	-----------------------------------------------------------------------------
+    //	This is a warpper to make fonts and font-face inclusion DRY and consistent.
+    @mixin font($font-name, $weight, $style) {
+      font-family: $font-name;
+      font-style: $style;
+      font-weight: $weight;
+    }
+
+    //	_font-face()
+    //	-----------------------------------------------------------------------------
+      @mixin font-face($name, $font-category, $weight, $style: normal) {
+        @include font("#{$name}-#{$font-category}", $weight, $style);
+      }
+
+    //	_icomoon()
+    //	-----------------------------------------------------------------------------
+
+      @mixin icomoon-font() {
+          font-family: 'icomoon';
+          speak: none;
+          font-style: normal;
+          font-weight: normal;
+          font-variant: normal;
+          line-height: 1;
+            /* Better Font Rendering =========== */
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+          text-transform: none;
+      }
+
+  //	_word-break()
+  //	-----------------------------------------------------------------------------
+    //	Breaks long words when then extend past the container.
+    @mixin word-break() {
+      word-break: break-all;
+      -ms-word-break: break-all;
+      word-break: break-word;
+      hyphens: auto;
+      -moz-hyphens: auto;
+      -webkit-hyphens: auto;
+    }
+
+  //	_text-ellipsis()
+  //	-----------------------------------------------------------------------------
+    //	Breaks long words when then extend past the container.
+    @mixin text-ellipsis() {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+  //	_hover()
+  //	-----------------------------------------------------------------------------
+    //	A mixin for adding hover styling that accounds for touch.
+    @mixin hover($hoverClass: false, $htmlClass: false, $content: "     ") {
+      @if ($hoverClass != false) {
+        .#{$htmlClass}.no-touch &:hover,
+        .#{$htmlClass}.no-touch &:focus,
+        .#{$htmlClass} &._active,
+        .#{$htmlClass} &:active {
+          @content;
+
+          &:before,
+          &:after {
+            content: $content;
+          }
+        }
+
+        @if ($hoverClass != false) {
+          .#{$htmlClass} &.#{$hoverClass} {
+            @content;
+
+            &:before,
+            &:after {
+              content: $content;
+            }
+          }
+        }
+      } @else {
+        .no-touch &:hover,
+        .no-touch &:focus,
+        &._active,
+        &:active {
+          @content;
+
+          &:before,
+          &:after {
+            content: $content;
+          }
+        }
+
+        @if ($hoverClass != false) {
+          &.#{$hoverClass} {
+            @content;
+
+            &:before,
+            &:after {
+              content: $content;
+            }
+          }
+        }
+      }
+    }
+
+//	-----------------------------------------------------------------------------
+//	_layout
+//	-----------------------------------------------------------------------------
+
+  //	_pseudo()
+  //	-----------------------------------------------------------------------------
+    //	Use for :before and :after. The parent will need to be
+    //	position relative.
+    @mixin pseudo() {
+      content: "";
+      display: block;
+      position: absolute;
+    }
+
+  //	_image-replacement()
+  //	-----------------------------------------------------------------------------
+    //	Use to hide text when links are only icons.
+    @mixin image-replacement() {
+      display: block;
+      text-indent: -9999em;
+      overflow: hidden;
+    }
+
+  //	_visually-hidden()
+  //	-----------------------------------------------------------------------------
+    //	Use to hide text that needs to be seen by screen readers.
+    @mixin visually-hidden() {
+      border: 0;
+      clip: rect(0 0 0 0);
+      height: 1px;
+      margin: -1px;
+      overflow: hidden;
+      padding: 0;
+      position: absolute;
+      width: 1px;
+    }
+
+  //	_horizontal-center()
+  //	-----------------------------------------------------------------------------
+    //	Use to horizontally center a :before and :after. The parent will need
+    //	to be position relative.
+    @mixin horizontal-center($width, $margin-left: false) {
+      @if ($margin-left == false) {
+        $margin-left: -$width / 2;
+      }
+
+      left: 50%;
+      margin-left: $margin-left;
+      position: absolute;
+      width: $width;
+    }
+
+  //	_vertical-center()
+  //	-----------------------------------------------------------------------------
+    //	Use to vertically center a :before and :after. The parent will need
+    //	to be position relative.
+    @mixin vertical-center($height, $margin-top: false) {
+      @if ($margin-top == false) {
+        $margin-top: -$height / 2;
+      }
+
+      height: $height;
+      margin-top: $margin-top;
+      position: absolute;
+      top: 50%;
+    }
+
+  //	_vertical-center-relative()
+  //	-----------------------------------------------------------------------------
+    //	Use to vertically center dynamic amounts of text in a parent
+    //	container. You will need to add this to the parent element and pass
+    //	the child selector in as a parameter.
+    @mixin vertical-center-relative($child-class) {
+      display: table;
+      height: 100%;
+      width: 100%;
+
+      .#{$child-class} {
+        display: table-cell;
+        vertical-align: middle;
+      }
+    }
+
+  //	_transform-translateY()
+  //	-----------------------------------------------------------------------------
+    //	Use to add transform translate Y, you must send a translation-value
+    //	and unit identifier (eg. 10px, 6em, -20%).
+    @mixin transform-translateY($data) {
+      -moz-transform: translateY($data);
+      -webkit-transform: translateY($data);
+      -o-transform: translateY($data);
+      -ms-transform: translateY($data);
+      transform: translateY($data);
+    }
+
+  //	_color-placeholder()
+  //	-----------------------------------------------------------------------------
+    //	Use to add a color to a placeholder.
+    @mixin color-placeholder($data) {
+      ::-webkit-input-placeholder {
+        color: $data;
+      }
+
+      :-moz-placeholder {
+        color: $data;
+      }
+
+      ::-moz-placeholder {
+        color: $data;
+      }
+
+      :-ms-input-placeholder {
+        color: $data;
+      }
+    }
+
+  //	_clearfix()
+  //	-----------------------------------------------------------------------------
+    //	Generic clearfix to make a parent stretch to contain floated children.
+    @mixin clearfix() {
+      &:before,
+      &:after {
+        content: "\0020";
+        display: block;
+        height: 0;
+        overflow: hidden;
+      }
+
+      &:after {
+        clear: both;
+      }
+    }
+
+  //	_full-size()
+  //	-----------------------------------------------------------------------------
+    //	Useful when you need an absolute positioned child to be maintain the
+    //	dimensions of it's parent.
+    @mixin full-size() {
+      bottom: 0;
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+
+//	-----------------------------------------------------------------------------
+//	_columns
+//	-----------------------------------------------------------------------------
+
+  //	_content-wrapper()
+  //	-----------------------------------------------------------------------------
+    //	Use this wrapper for content that has no columns.
+    @mixin content-wrapper() {
+      padding-left: $column-wrapper-margin;
+      padding-right: $column-wrapper-margin;
+    }
+
+  //	_column-border-base()
+  //	-----------------------------------------------------------------------------
+    //	This base for both column-border() and column-wrapper-border() used
+    //	to add the pseudo element.
+    @mixin column-border-base($top-or-bottom, $height, $color) {
+      &:before {
+        @if ($top-or-bottom == top) {
+          top: 0px;
+        } @else {
+          bottom: 0px;
+        }
+
+        @include pseudo();
+        background: $color;
+        height: $height;
+      }
+    }
+
+  //	_column-wrapper()
+  //	-----------------------------------------------------------------------------
+    //	Use this wrapper when including columns.
+    @mixin column-wrapper($font-size: false, $column-alignment: left) {
+      //	The column margin is the distance from the container to the edge
+      //	of the column. Since the column already includes half of the
+      //	gutter on either side, we need to remove it.
+      $column-half-gutter: $column-gutter * .5;
+
+      @include column-font-reset(true, $font-size);
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: $column-margin;
+      padding-right: $column-margin;
+      text-align: $column-alignment;
+    }
+
+    //	_column-font-reset()
+    //	-----------------------------------------------------------------------------
+      //	Resets the font-size to make inline-block columns work. The
+      //	font-size has to be set to 0 to eliminate the space added
+      //	between inline blocks elements. Android needs the word-spacing
+      //	removed because it misses it's mommy.
+      @mixin column-font-reset($nested, $font-size, $font-reset: 0) {
+        @if ($nested == true and $font-size != false) {
+          font-size: $font-reset;
+
+          > * {
+            font-size: $font-size;
+          }
+
+          .android & {
+            $word-spacing-fix: -4px;
+            $word-spacing-parent: normal;
+            $word-spacing-child: normal;
+
+            @if ($font-reset == 0 or $font-reset == 0px) {
+              $word-spacing-parent: $word-spacing-fix;
+            }
+
+            @if ($font-size == 0 or $font-size == 0px) {
+              $word-spacing-child: $word-spacing-fix;
+            }
+
+            word-spacing: $word-spacing-parent;
+
+            > * {
+              word-spacing: $word-spacing-child;
+            }
+          }
+        }
+      }
+
+  //	_column-wrapper-reset()
+  //	-----------------------------------------------------------------------------
+    //	Use this to remove unwanted properties set by column-wrapper.
+    @mixin column-wrapper-reset() {
+      @include column-font-reset(true, inherit, inherit);
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+  //	_column-wrapper-border()
+  //	-----------------------------------------------------------------------------
+    //	This allows you to add a border to the top or bottom of a column
+    //	since a the padding would make it too wide for the grid.
+    @mixin column-wrapper-border($top-or-bottom, $height, $color, $offset: $column-wrapper-margin) {
+      @include column-border-base($top-or-bottom, $height, $color);
+
+      &:before {
+        left: $offset;
+        right: $offset;
+      }
+    }
+
+  //	_column-base()
+  //	-----------------------------------------------------------------------------
+    //	Base class for column-width and column-offset.
+    @mixin column-base($nested) {
+      //	If we're not nesting columns inside this element, it should have
+      //	half the gutter width on either side. This prevents us from
+      //	needing to remove the gutter from the right column. box-sizing
+      //	allows us to minimize calculations and nest columns.
+
+      $column-half-gutter: $column-gutter * .5;
+
+      @if ($nested != false) {
+        $column-half-gutter: 0;
+      }
+
+      @include box-sizing(border-box);
+      padding-left: $column-half-gutter;
+      padding-right: $column-half-gutter;
+      position: relative;
+    }
+
+  //	_column-base-reset()
+  //	-----------------------------------------------------------------------------
+    //	Base class for reseting column-width and column-offset.
+    @mixin column-base-reset() {
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+  //	_column()
+  //	-----------------------------------------------------------------------------
+    //	Simply adds the width and padding need for the column width.
+    @mixin column($column-count, $column-total, $nested: false, $font-size: false) {
+      @include column-base($nested);
+      @include column-font-reset($nested, $font-size);
+      display: inline-block;
+      vertical-align: top;
+      width: $column-count / $column-total * 100%;
+    }
+
+  //	_column-reset()
+  //	-----------------------------------------------------------------------------
+    //	Resets the padding and width added by column().
+    @mixin column-reset($nested: false) {
+      @include column-base-reset();
+      @include column-font-reset(true, inherit, inherit);
+      width: auto;
+    }
+
+  //	_column-offset()
+  //	-----------------------------------------------------------------------------
+    //	Only adds margin and padding to offset an element in increments of
+    //	the grid.
+    @mixin column-offset($column-count, $column-total, $side, $nested: false) {
+      @include column-base($nested);
+      margin-#{$side}: $column-count / $column-total * 100%;
+    }
+
+  //	_column-offset-reset()
+  //	-----------------------------------------------------------------------------
+    //	Resets the margin and padding added by column-offset().
+    @mixin column-offset-reset($side) {
+      @include column-base-reset();
+      margin-#{$side}: auto;
+    }
+
+  //	_column-border()
+  //	-----------------------------------------------------------------------------
+    //	This allows you to add a border to the top or bottom of a column
+    //	since a the padding would make it too wide for the grid.
+    @mixin column-border($top-or-bottom, $height, $color, $offset: $column-gutter / 2) {
+      @include column-border-base($top-or-bottom, $height, $color);
+
+      &:before {
+        left: $offset;
+        right: $offset;
+      }
+    }
+
+  //	_column-include-gutter()
+  //	-----------------------------------------------------------------------------
+    //	Used inside a column to create an element that spans to the outside
+    //	of the gutter.
+    @mixin column-include-gutter() {
+      //	Should be used inside a column.
+      margin-left: - $column-gutter;
+      margin-right: - $column-gutter;
+    }
+
+  //	_column-auto-height()
+  //	-----------------------------------------------------------------------------
+    //	Makes column backgrounds all appear to be the same height. Parent
+    //	should be overflow hidden. The is-print variable should be included
+    //	to avoid IE from print previewing an infinite number of pages.
+    //	http://css-tricks.com/fluid-width-equal-height-columns/
+    //	One True Layout Method
+    @mixin column-auto-height($is-print: false) {
+      @if ($is-print != true) {
+        margin-bottom: -9999em;
+        padding-bottom: 9999em;
+      } @else {
+        margin-bottom: 0;
+        padding-bottom: 0;
+      }
+    }
+
+//	-----------------------------------------------------------------------------
+//	_forms
+//	-----------------------------------------------------------------------------
+
+  //	_input()
+  //	-----------------------------------------------------------------------------
+    //	Clears default styles and adds box-sizing.
+    @mixin input() {
+      @include border-radius(0);
+      @include box-sizing(border-box);
+      -webkit-appearance: none;
+      -moz-outline: none;
+      font-family: inherit;
+      outline: 0 none;
+    }
+
+  //	_placeholder()
+  //	-----------------------------------------------------------------------------
+    //	Allows you to style placeholder color across various browsers.
+    @mixin placeholder($color, $color-placeholder) {
+      color: $color;
+
+      &._placeholder {
+        @include placeholder-fonts();
+        color: $color-placeholder;
+      }
+
+      &::-webkit-input-placeholder {
+        @include placeholder-fonts();
+        color: $color-placeholder;
+      }
+
+      &:-moz-placeholder { // Firefox 18-
+        @include placeholder-fonts();
+        color: $color-placeholder;
+      }
+
+      &::-moz-placeholder { // Firefox 19+
+        @include placeholder-fonts();
+        color: $color-placeholder;
+      }
+
+      &:-ms-input-placeholder {
+        @include placeholder-fonts();
+        color: $color-placeholder;
+      }
+    }
+
+      //	_placeholder-fonts()
+      //	-----------------------------------------------------------------------------
+        @mixin placeholder-fonts() {
+          @include opacity(1);
+          font-size: inherit;
+          font-weight: inherit;
+        }
+
+  //	_submit()
+  //	-----------------------------------------------------------------------------
+    //	Clears default styles to make submits render and function more like
+    //	links.
+    @mixin submit() {
+      @include border-radius(0);
+      -moz-outline: none;
+      -webkit-appearance: none;
+      background-color: transparent;
+      border: 0 none;
+      cursor: pointer;
+      font-family: inherit;
+      font-style: inherit;
+      font-weight: inherit;
+      outline: 0 none;
+    }
+
+//	-----------------------------------------------------------------------------
+//	_elements
+//	-----------------------------------------------------------------------------
+
+  //	_carousel()
+  //	-----------------------------------------------------------------------------
+    @mixin carousel($class) {
+      .carousel,
+      .carousel-inner,
+      .carousel-slide {
+        height: auto;
+        width: auto;
+      }
+
+      .carousel {
+        overflow: auto;
+        position: relative;
+      }
+
+        .carousel-inner {
+          left: auto;
+          position: relative;
+          top: auto;
+
+          ._draggable &,
+          ._draggable & .card,
+          ._draggable & img {
+            cursor: hand;
+            cursor: grab;
+            cursor: -moz-grab;
+            cursor: -webkit-grab;
+
+            a {
+              cursor: pointer;
+            }
+          }
+
+          ._dragging &,
+          ._dragging & .card,
+          ._dragging & img {
+            cursor: grabbing;
+            cursor: -moz-grabbing;
+            cursor: -webkit-grabbing;
+
+            a {
+              cursor: grabbing;
+              cursor: -moz-grabbing;
+              cursor: -webkit-grabbing;
+            }
+          }
+        }
+
+          .carousel-slide {
+            float: none;
+            cursor: default;
+
+            ._dragging & {
+              cursor: default;
+            }
+          }
+
+      .carousel-#{$class},
+      .carousel-#{$class} .carousel-inner,
+      .carousel-slide-#{$class} {
+        width: 100%;
+      }
+
+      .carousel-#{$class} {
+        overflow: visible;
+        position: relative;
+
+        .carousel-inner {
+          left: 0;
+          position: relative;
+          top: 0;
+        }
+      }
+
+          .carousel-slide-#{$class} {
+            float: left;
+          }
+    }
+
+  //	_caret()
+  //	-----------------------------------------------------------------------------
+    //	Mixin to create carets easily. Should be applied to the parent element.
+    //	Caret will be applied to the pseudo element which can be changed in the
+    //	parameters passed in.
+    //
+    //	Required:
+    //	$color: determines color of the caret.
+    //	$direction: which direction the arrow points
+    //	$location: determines the location the caret points.
+    //	$base: width of base. divided by 2 to create length of sides.
+    //
+    //	Optional:
+    //	$vertex: distance between base and the vertex. Same as base if ignored.
+    //	$position: determines on which side of the parent it will appear.
+    //	$pseudo: determines if caret should be a :before or :after.
+    //	$left: determines the horizontal position of the caret.
+    //	$top: determines the vertical position of the caret.
+    @mixin caret($base, $color, $direction, $location, $offset: 0, $vertex: false, $pseudo: before) {
+      $side: $base / 2;
+      $side-1: top;
+      $side-2: bottom;
+
+      @if ($vertex == false) {
+        $vertex: $base;
+      }
+
+      @if ($direction == top or $direction == bottom) {
+        $side-1: left;
+        $side-2: right;
+      }
+
+      &:#{$pseudo} {
+        @include pseudo();
+        border: 0 solid transparent;
+        height: 0;
+        width: 0;
+        // Sets the location the caret is pointing.
+        border-#{opposite-position($direction)}-color: $color;
+        border-#{opposite-position($direction)}-width: $vertex;
+        #{$location}: 0;
+        // Sets sides not needed to transparent.
+        border-#{$side-1}-width: $side;
+        border-#{$side-2}-width: $side;
+        #{$side-1}: $offset;
+      }
+    }
+
+    //	_caret-horizontal()
+    //	-----------------------------------------------------------------------------
+      //	Mixin to create horizontally centered carets.
+      @mixin caret-horizontal($base, $color, $direction, $location, $vertex: false, $pseudo: before) {
+        @include caret($base, $color, $direction, $location, 50%, $vertex, $pseudo);
+
+        &:#{$pseudo} {
+          margin-left: -$base / 2;
+        }
+      }
+
+    //	_caret-veritcal()
+    //	-----------------------------------------------------------------------------
+      //	Mixin to create veritcally centered carets.
+      @mixin caret-veritcal($base, $color, $direction, $location, $vertex: false, $pseudo: before) {
+        @include caret($base, $color, $direction, $location, 50%, $vertex, $pseudo);
+
+        &:#{$pseudo} {
+          margin-top: -$base / 2;
+        }
+      }
+
+  //	_caret-border()
+  //	-----------------------------------------------------------------------------
+    //	Creates a caret with a border. Integrates caret mixin to create 2 carets
+    //	and layer them on top of each other.
+    //
+    //	Required:
+    //	$color-outer: Determines color of the caret border.
+    //	$color-inner: Determines color of the inner caret.
+    //	$direction: which direction the arrow points
+    //	$location: Determines the location the caret points.
+    //	$outer-base: Width of base. Divided by 2 to create length of sides.
+    //	$border-width: Determines the width of the caret border.
+    //	$position: Determines on which side of the parent it will appear.
+    //
+    //	Optional:
+    //	$outer-vertex: Distance between base and the vertex. Same as base if ignored.
+    //	$left: Determines the horizontal position of the caret.
+    //	$top: Determines the vertical position of the caret.
+    @mixin caret-border($base-outer, $border-width, $color-outer, $color-inner, $direction, $location, $offset: 0, $vertex-outer: false) {
+      $margin-side: top;
+
+      @if ($location == bottom or $location == top) {
+        $margin-side: left;
+      }
+
+      @if ($vertex-outer == false) {
+        $vertex-outer: $base-outer;
+      }
+
+      $ratio: $vertex-outer / $base-outer;
+      $vertex-adjust: $border-width * (1 + floor($ratio));
+      $base-inner: $base-outer - ($border-width * 2);
+      $vertex-inner: $vertex-outer - $vertex-adjust;
+
+      // Caret border
+      @include caret($base-outer, $color-outer, $direction, $location, $offset, $vertex-outer, before);
+      // Caret inner
+      @include caret($base-inner, $color-inner, $direction, $location, $offset, $vertex-inner, after);
+
+      &:before {
+        #{$location}: -$vertex-outer;
+      }
+
+      &:after {
+        #{$location}: -$vertex-inner;
+        margin-#{$margin-side}: $border-width;
+        z-index: 1;
+      }
+    }
+
+    //	_caret-border-horizontal()
+    //	-----------------------------------------------------------------------------
+      //	Mixin to create horizontally centered carets.
+      @mixin caret-border-horizontal($base-outer, $border-width, $color-outer, $color-inner, $direction, $location, $vertex-outer: false) {
+        $base-inner: $base-outer - ($border-width * 2);
+
+        @include caret-border($base-outer, $border-width, $color-outer, $color-inner, $direction, $location, 50%, $vertex-outer);
+
+        &:before {
+          margin-left: -$base-outer / 2;
+        }
+
+        &:after {
+          margin-left: -$base-inner / 2;
+        }
+      }
+
+    //	_caret-border-vertical()
+    //	-----------------------------------------------------------------------------
+      //	Mixin to create vertically centered carets.
+      @mixin caret-border-vertical($base-outer, $border-width, $color-outer, $color-inner, $direction, $location, $vertex-outer: false) {
+        $base-inner: $base-outer - ($border-width * 2);
+
+        @include caret-border($base-outer, $border-width, $color-outer, $color-inner, $direction, $location, 50%, $vertex-outer);
+
+        &:before {
+          margin-top: -$base-outer / 2;
+        }
+
+        &:after {
+          margin-top: -$base-inner / 2;
+        }
+      }
+
+  //	_button()
+  //	-----------------------------------------------------------------------------
+    @mixin button-base() {
+      @include box-sizing(border-box);
+      background-color: transparent;
+      border-style: solid;
+      border-width: 2px;
+      font-size: 12px;
+      font-weight: bold;
+      line-height: 12px;
+      padding-left: 20px;
+      padding-right: 20px;
+      text-align: center;
+      text-transform: uppercase;
+
+      @include hover() {
+        background-color: transparent;
+      }
+    }
+
+    //	_button-solid-red()
+    //	-----------------------------------------------------------------------------
+      @mixin button-solid-red() {
+        @include button-base();
+        background-color: $red;
+        border-color: $red;
+        color: $white;
+
+        @include hover() {
+          background-color: $red-light;
+          border-color: $red;
+        }
+      }
+
+    //	_button-border-gold()
+    //	-----------------------------------------------------------------------------
+      @mixin button-border-gold() {
+        @include button-base();
+        border-color: $gold;
+        color: $gold;
+
+        @include hover() {
+          border-color: $gold-light;
+          color: $gold-light;
+        }
+      }
+    //	_button-border-dark()
+    //	-----------------------------------------------------------------------------
+      @mixin button-border-dark() {
+        @include button-base();
+        border-color: $grey-text-dark;
+        color: $grey-text-dark;
+
+        @include hover() {
+          border-color: $white;
+          color: $white;
+        }
+      }
+
+    //	_button-border-light()
+    //	-----------------------------------------------------------------------------
+      @mixin button-border-light() {
+        @include button-base();
+        border-color: $grey-button;
+        color: $grey-text-dark;
+
+        @include hover() {
+          border-color: $white;
+          color: $white;
+        }
+      }
+  //	_icobutton()
+  //	-----------------------------------------------------------------------------
+    @mixin icobutton($ico, $size: 16px, $background: 'none') {
+      background: $background;
+      color: #000;
+      height: $size;
+      position: relative;
+      width: $size;
+    }
+
+  //	_button-breakpoint()
+  //	-----------------------------------------------------------------------------
+    @mixin button-breakpoint($breakpoint: standard) {
+      $button-padding: 15px;
+
+      @if ($breakpoint == medium) {
+        $button-padding: 13px;
+      } @else if ($breakpoint == small) {
+        $button-padding: 14px;
+      }
+
+      padding-bottom: $button-padding;
+      padding-top: $button-padding;
+    }
+
+  //	_overlay()
+  //	-----------------------------------------------------------------------------
+    //	This styles an overlay assuming you have the DOM structure
+    //		.$overlay-class
+    //			.$overlay-wrapper-class
+    //				.$content-wrapper-class
+    //					.$content-class
+    //						.$overlay-close-class
+    @mixin overlay($overlay-class, $overlay-wrapper-class, $content-wrapper-class, $content-class, $overlay-close-class) {
+      .#{$overlay-class} {
+        @include transition(opacity 0.4s);
+        -webkit-overflow-scrolling: touch;
+        background-image: rgba(0, 0, 0, 0.53);
+        bottom: 0;
+        height: 0;
+        left: 0;
+        overflow: hidden;
+        padding: 0;
+        position: fixed;
+        right: 0;
+        top: 0;
+        z-index: 200;
+
+        .rgba & {
+          background-color: rgba(0, 0, 0, 0.53);
+          background-image: none;
+        }
+
+        .opacity & {
+          @include opacity(0);
+        }
+
+        &._active {
+          height: auto;
+          overflow: auto;
+
+          .opacity & {
+            @include opacity(1);
+          }
+        }
+
+        .#{$overlay-close-class} {
+          @include sprite-replacement(ico-overlay-close-gold);
+          @include submit();
+          padding: 0;
+          position: absolute;
+          z-index: 10;
+
+          @include hover() {
+            @include sprite-replacement(ico-overlay-close-grey);
+          }
+        }
+      }
+
+        .#{$overlay-wrapper-class} {
+          @include vertical-center-relative($content-wrapper-class);
+          margin: 0 auto;
+          max-width: $max-width;
+        }
+
+          .#{$content-class} {
+            @include box-shadow(0 0 10px rgba(0, 0, 0, 0.10));
+            @include transition(top, 0.6s);
+            background-color: $white;
+            border: 1px solid $grey-border-light;
+            position: relative;
+            top: 40px;
+
+            ._active & {
+              top: 0;
+            }
+          }
+    }
+
+    //	_overlay-breakpoint()
+    //	-----------------------------------------------------------------------------
+      //	This should be added to the overlay-class selector
+      @mixin overlay-breakpoint($overlay-close-class) {
+        &._active {
+          padding: ($header-height + $overlay-margin) 0;
+        }
+
+        .#{$overlay-close-class} {
+          right: $overlay-close-offset;
+          top: $overlay-close-offset;
+        }
+      }
+
+  //	_share()
+  //	-----------------------------------------------------------------------------
+    // Colors: grey, gold, white
+    @mixin share($color, $side: left, $page-share: false) {
+      $background: transparent;
+      $ico-spacing: 0;
+      $padding: 0;
+      $sprite: ico-share-gold;
+      $sprite-color: $gold;
+
+      @if ($color == grey) {
+        $sprite: ico-share-grey;
+        $sprite-color: $grey;
+      } @else if ($color != gold) {
+        $sprite: ico-share-white;
+        $sprite-color: $white;
+      }
+
+      @if ($page-share != false) {
+        $background: $white;
+        $ico-spacing: 10px;
+        $padding: 13px 17px 13px 30px;
+      } @else {
+        @if ($side != left) {
+          $padding: 0 20px 0 0;
+        } @else {
+          $padding: 0 0 0 20px;
+        }
+      }
+
+      @include futura(400);
+      @include sprite-pseudo-vertical($sprite);
+      background: $background;
+      color: $sprite-color;
+      font-size: 11px;
+      padding: $padding;
+      position: absolute;
+      z-index: 10;
+
+      &:before {
+        #{$side}: $ico-spacing;
+      }
+
+      @include hover() {
+        @if ($color == gold) {
+          @include sprite-pseudo-vertical(ico-share-grey);
+          color: $grey-hover;
+        } @else {
+          @include sprite-pseudo-vertical(ico-share-gold);
+          color: $gold;
+        }
+      }
+    }
+
+    //	_share-breakpoint()
+    //	-----------------------------------------------------------------------------
+      @mixin share-breakpoint($breakpoint: standard, $page-share: false) {
+        $right: 20px;
+        $top: 46px;
+
+        @if ($page-share != false) {
+          $right: 28px;
+          $top: 33px;
+
+          @if ($breakpoint == small) {
+            $right: 0;
+            $top: 9px;
+          }
+        } @else {
+          @if ($breakpoint == medium) {
+            $right: 26px;
+            $top: 33px;
+          } @else if ($breakpoint == small) {
+            $right: 14px;
+            $top: 16px;
+          }
+        }
+
+        right: $right;
+        top: $top;
+      }
+
+//	-----------------------------------------------------------------------------
+//	_patterns
+//	-----------------------------------------------------------------------------
+
+  //	_class-set()
+  //	-----------------------------------------------------------------------------
+    //	This is useful when a set of classes is consitently tied to a visual
+    //	style, e.g. an icon set. For example, if you had a sprite file when
+    //	the first icon was a phone icon, the second, an email icon, and so
+    //	on. Adding this mixin to ul.contact li would produce:
+    //		ul.contact li {
+    //			background-image: url(/_img/ico-contact.png);
+    //			padding-left: 35px;
+    //		}
+    //
+    //		ul.contact li.phone {
+    //			background-position: center 0;
+    //		}
+    //
+    //		ul.contact li.email {
+    //			background-position: center -25px;
+    //		}
+    //
+    //		ul.contact li.website {
+    //			background-position: center -50px;
+    //		}
+    //
+    //		ul.contact li.location {
+    //			background-position: center -75px;
+    //		}
+    @mixin class-set() {
+      $sprite-increment-count: 0;
+      $sprite-offset: 25px;
+      $contact-types: (
+        phone,
+        email,
+        website,
+        location
+      );
+
+      background-image: url(/_img/ico-contact.png);
+      padding-left: 35px;
+
+      @each $contact-type in $contact-types {
+        &.#{$contact-type} {
+          &:before {
+            background-position: center #{-1 * $sprite-increment-count * $sprite-offset};
+            $sprite-increment-count: $sprite-increment-count + 1;
+          }
+        }
+      }
+    }
+
+  //	_sprite-set()
+  //	-----------------------------------------------------------------------------
+    //	An easy way to absract you srpite sets so your background offset
+    //	isn't littered all over your css. Allowing you to change it's
+    //	dimentsions without a substanial amount of updates.
+    @mixin sprite-set($offset-sprite: 0) {
+      $increment-sprite: -40px;
+      $offset-y: $offset-sprite * $increment-sprite;
+
+      background-image: url(/_img/ico-contact.png);
+      background-position: center $offset-y;
+      padding-left: 35px;
+    }
+
+  //	_breakpoint-set()
+  //	-----------------------------------------------------------------------------
+    //	A way to set up different images for different breakpoints. Assumes
+    //	you have images name fileName-breakpointName.extension.
+    @mixin breakpoint-set($breakpoint-type: standard) {
+      $file-name: ico-sprite-#{$breakpoint-type};
+
+      @include sprite(24px 24px, $file-name);
+    }
+
+  //
+  @mixin keyframes($animation-name) {
+    @-webkit-keyframes #{$animation-name} {
+      @content;
+    }
+    @-moz-keyframes #{$animation-name} {
+      @content;
+    }
+    @keyframes #{$animation-name} {
+      @content;
+    }
+  }
+
+  @mixin animation($str) {
+    -webkit-animation: #{$str};
+    -moz-animation: #{$str};
+    animation: #{$str};
+  }
+
+  @mixin radial-gradient-background() {
+    background:
+      radial-gradient($white 8%, transparent 16%) 1px 1px,
+      radial-gradient($black 15%, transparent 16%) 0 0;
+    background-repeat: repeat;
+    background-size: 8px 8px;
+  }
+
+  @mixin clip-path($clip) {
+    -webkit-clip-path: $clip;
+    -moz-clip-path: $clip;
+    -ms-clip-path: $clip;
+    clip-path: $clip;
+  }

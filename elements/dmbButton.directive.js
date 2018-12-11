@@ -8,7 +8,7 @@
     dumbo.directive('dmbButton', [], Directive);
 
     function Directive() {
-        var template = '<div id="{{dmbId}}" class="dmb-button button-{{dmbClass}}" >' +
+        var template = '<div id="{{dmbId}}" class="dmb-button {{dmbClass}}" >' +
                             '<span class="text">' +
                             '<transclude></transclude>' +
                             '</span>' +

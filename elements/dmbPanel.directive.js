@@ -31,8 +31,8 @@
                         xhttp.open('GET', currentScope.template, true);
                         xhttp.send();
                     } else {
-                        dom.dispatchEvent(dmbEvents.panelOpened.event);
                         dom.classList.add('_active');
+                        dom.dispatchEvent(dmbEvents.panelOpened.event);
                     }
                 };
         return {

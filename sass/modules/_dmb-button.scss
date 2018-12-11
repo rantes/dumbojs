@@ -1,0 +1,88 @@
+.dmb-button {
+    @include border-radius(10px);
+    @include box-shadow(3px 3px 0 0 rgba($black, 0.8) );
+    @include text-shadow(0 -1px 1px $white);
+    border: solid 1px $black;
+    box-sizing: border-box;
+    color: $white;
+    cursor: pointer;
+    display: inline-block;
+    padding: 10px 15px;
+    position: relative;
+    text-align: center;
+
+    .text {
+        display: inline-block;
+    }
+
+    &:focus {
+        outline: 0 none;
+    }
+
+    &:before {
+        color: $black;
+    }
+
+    &:active {
+          @include box-shadow(-1px -1px 1px 0 rgba($black,0.8) );
+    }
+
+    &-standard {
+        @include background-image(linear-gradient(rgba($blue,0.6), $blue-darker));
+        border: none transparent;
+
+        &:hover {
+            background-color: rgba($blue,0.8);
+        }
+    }
+
+    &-green {
+        @include background-image(linear-gradient(rgba($green,0.6), $green-dark));
+        border: none transparent;
+        color: $white;
+
+        &:hover {
+            background-color: rgba($green,0.8);
+        }
+    }
+
+    &-cancel {
+        @include background-image(linear-gradient(rgba($red,0.6), $red));
+        border: none transparent;
+
+        &:hover {
+            background-color: rgba($red,0.3);
+        }
+    }
+
+    .col & {
+        margin: 0 1%;
+        width: 98%;
+    }
+
+    .form-group & {
+        margin-top: 10px;
+    }
+
+    &-tool {
+        margin: 0;
+        padding: 10px 15px 15px 48px;
+        position: relative;
+        text-align: left;
+
+        &:before {
+            @include icomoon-font();
+            content: attr(rel);
+            font-size: 24px;
+            left: 10px;
+            position: absolute;
+            top: 10px;
+        }
+    }
+
+    &.icon {
+        font-family: inherit;
+        font-size: inherit;
+        height: auto;
+    }
+}
