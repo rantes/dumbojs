@@ -1,0 +1,23 @@
+dmb-menu-button {
+    cursor: pointer;
+    height: 24px;
+    left: 30px;
+    position: absolute;
+    top: 20px;
+    vertical-align: middle;
+
+    .legend {
+        display: inline-block;
+        height: 14px;
+        line-height: normal;
+        margin: auto 10px;
+        transform: translateY(-8px);
+        vertical-align: middle;
+    }
+
+    @include breakpoint(small) {
+        .legend {
+            display: none;
+        }
+    }
+}

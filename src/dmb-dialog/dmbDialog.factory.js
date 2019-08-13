@@ -1,0 +1,68 @@
+class DmbDialogService {
+
+    setMessage(dialog, msg) {
+        const message = document.createElement('span');
+
+        message.classList.add('message');
+        message.textContent = msg;
+        dialog.append(message);
+
+        return true;
+    }
+
+    open() {
+        const dialog = document.createElement('dmb-dialog', {is: 'dmb-dialog'});
+
+        document.body.append(dialog);
+        dialog.showModal();
+
+        return dialog;
+    }
+
+    error(msg) {
+        const dialog = document.createElement('dmb-dialog');
+
+        document.body.append(dialog);
+        dialog.error(msg);
+        dialog.showModal();
+
+        return dialog;
+    }
+
+    loader() {
+        const dialog = document.createElement('dmb-dialog', {is: 'dmb-dialog'});
+
+        dialog.classList.add('loader');
+        document.body.append(dialog);
+        dialog.showModal();
+
+        return dialog;
+    }
+
+    drawer(content, size = 'small') {
+        const dialog = document.createElement('dmb-dialog', {is: 'dmb-dialog'});
+
+        dialog.classList.add('drawer');
+        dialog.classList.add(size);
+        document.body.append(dialog);
+        dialog.querySelector('.wrapper').innerHTML = content;
+        dialog.showModal();
+
+        return dialog;
+    }
+
+    closeAll() {
+        const dialogs = document.querySelectorAll('dmb-dialog');
+        const items = dialogs.length;
+
+        if (items) {
+            for (let i = 0; i < items; i++) {
+                dialogs[i].close('cancelled');
+            }
+        }
+
+        return true;
+    }
+}
+
+Window.prototype.dmbDialogService = new DmbDialogService();

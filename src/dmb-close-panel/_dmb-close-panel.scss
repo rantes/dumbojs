@@ -1,0 +1,17 @@
+dmb-close-panel {
+    cursor: pointer;
+    position: absolute;
+    top: 1em;
+
+    &.right {
+        left: 1em;
+    }
+
+    &.left {
+        right: 1em;
+    }
+
+    * {
+        color: $white;
+    }
+}

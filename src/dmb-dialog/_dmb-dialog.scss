@@ -1,0 +1,124 @@
+@keyframes slide-up {
+    0% {
+      top: 150vh;
+    }
+
+    100% {
+      top: 50vh;
+    }
+  }
+
+dmb-dialog {
+    border: 0;
+    bottom: 0;
+    height: 100vh;
+    left: 0;
+    opacity: 0;
+    padding: 0;
+    position: fixed;
+    right: 0;
+    text-align: center;
+    top: 0;
+    transition: opacity 1s ease-in-out;
+    width: 100vw;
+    z-index: 999;
+    
+    & .wrapper {
+        background-color: $white;
+        border-radius: 0.6rem;
+        box-shadow: 0 0 1em $black;
+        display: block;
+        left: 50%;
+        margin: 0;
+        position: absolute;
+        top: 150vh;
+        transform: translate(-50%, -50%);
+        min-width: 300px;
+        z-index: 1000;
+        
+        .dmb-header {
+            border-radius: 0.6rem 0.6rem 0 0;
+        }
+        
+        .dmb-footer {
+            border-radius: 0 0 0.6rem 0.6rem;
+        }
+        
+        .message {
+            left: 50px;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .icon:not(.close-modal-button) {
+            left: 10px;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .close-modal-button {
+            cursor: pointer;
+            position: absolute;
+            right: 10px;
+            top: 10px;
+        }
+    }
+
+    &::before {
+        background-color: rgba($black, 0.4);
+        bottom: 0;
+        content: ' ';
+        left: 0;
+        right: 0;
+        position: fixed;
+        top: 0;
+    }
+
+    &.error {
+        .wrapper {
+            height: 100px;
+        }
+    }
+    
+    &.loader {
+        .wrapper {
+            height: 250px;
+        }
+    }
+
+    &.drawer {
+
+        .wrapper {
+            height: 80vh;
+        }
+
+        &.small {
+            .wrapper {
+                width: 300px;
+            }
+        }
+
+        &.medium {
+            .wrapper {
+                width: 600px;
+            }
+        }
+
+        &.large {
+            .wrapper {
+                width: 90vw;
+            }
+        }
+    }
+    
+    &[open] {
+        opacity: 1;
+
+        .wrapper {
+            animation: slide-up 0.4s ease-out;
+            top: 50vh;
+        }
+    }
+}

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Dumbo UI tests</title>
+    <style type="text/css">
+    
+    </style>
+</head>
+<body>
+        <div class="html-reporter">
+            <div class="banner">
+            </div>
+            <ul class="symbol-summary"></ul>
+            <div class="alert">
+            </div>
+            <div class="results">
+            </div>
+        </div>
+        <script type="text/javascript">
+        </script>
+        <script src="context.js"></script>
+        <script type="text/javascript">
+            // Configure our Karma and set up bindings
+            %CLIENT_CONFIG%
+            window.__karma__.setupContext(window);
+            // All served files with the latest timestamps
+            %MAPPINGS%
+        </script>
+        <!-- Dynamically replaced with <script> tags -->
+        %SCRIPTS%
+        <!-- Since %SCRIPTS% might include modules, the `loaded()` call needs to be in a module too.
+            This ensures all the tests will have been declared before karma tries to run them. -->
+        <script type="module">
+            window.__karma__.loaded();
+        </script>
+        <script nomodule>
+            window.__karma__.loaded();
+        </script>
+</body>
+</html>        
