@@ -4,7 +4,7 @@ module.exports = function(config) {
         // browserNoActivityTimeout: 100000,
         files: [
             {
-                pattern: 'ui-sources/components/**/*.spec.js',
+                pattern: 'src/**/*.spec.js',
                 served: true,
                 watched: true
             }
@@ -31,6 +31,6 @@ module.exports = function(config) {
         },
         reporters: ['progress', 'kjhtml', 'dots'],
         concurrency: Infinity,
-        customContextFile: 'specRunner.html',
+        customContextFile: 'tests.html',
     });
 };

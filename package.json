@@ -14,22 +14,19 @@
   "watch": {
     "sass": {
       "patterns": [
-        "ui-sources",
-        "components"
+        "src"
       ],
       "extensions": "scss"
     },
     "uglify": {
       "patterns": [
-        "ui-sources",
-        "components"
+        "src"
       ],
       "extensions": "js"
     },
     "lint": {
       "patterns": [
-        "ui-sources",
-        "components"
+        "src"
       ],
       "extensions": "js"
     }
@@ -37,12 +34,11 @@
   "scripts": {
     "test": "karma start --single-run --browsers ChromeHeadless karma.conf.js",
     "test-watch": "karma start --auto-watch --browsers Chrome",
-    "sass": "find  \\( -path \"*/ui-sources/*\" -name \"styles.scss\" -o -path \"*/ui-sources/components/*\" -name \"*.scss\" \\) | sort -nr | xargs -I{} sh -c \"cat {}; echo ''\" | sass --stdin app/webroot/css/styles.css -s compressed --no-source-map -I ui-sources/base-sass --trace --no-quiet",
-    "sass-watch": "find  \\( -path \"*/ui-sources/*\" -name \"styles.scss\" -o -path \"*/ui-sources/components/*\" -name \"*.scss\" \\) | sort -nr | xargs -I{} sh -c \"cat {}; echo ''\" | sass --stdin app/webroot/css/styles.css -s compressed --no-source-map -I ui-sources/base-sass --watch",
-    "uglify": "find \\( -path \"*/ui-sources/libs/*\" -name \"dumbo.js\" -o -path \"*/ui-sources/components/*\" -name \"*.js\" ! -name \"*.spec.js\" \\) | xargs -I{} sh -c \"cat {}; echo ''\" | terser -o app/webroot/js/dmb-components.min.js & npm run build-spec",
-    "lint": "eslint ui-sources/components/**/*.js",
+    "sass": "find  \\( -path \"*/src/*\" -name \"styles.scss\" -o -path \"*/src/*\" -name \"*.scss\" \\) | sort -nr | xargs -I{} sh -c \"cat {}; echo ''\" | sass --stdin dist/styles.css -s compressed --no-source-map --trace --no-quiet",
+    "sass-watch": "find  \\( -path \"*/src/*\" -name \"styles.scss\" -o -path \"*/src/*\" -name \"*.scss\" \\) | sort -nr | xargs -I{} sh -c \"cat {}; echo ''\" | sass --stdin dist/styles.css -s compressed --no-source-map --watch",
+    "uglify": "find \\( -path \"*/src/*\" -name \"dumbo.js\" -o -path \"*/src/*\" -name \"*.js\" ! -name \"*.spec.js\" \\) | xargs -I{} sh -c \"cat {}; echo ''\" | terser -o dist/dmb-components.min.js",
+    "lint": "eslint src/components/**/*.js",
     "dev": "npm-watch",
-    "build-spec": "dumbo run background/setspecRunnerPage",
     "build": "npm run lint & npm run sass & npm run uglify & npm run test"
   },
   "dependencies": {
