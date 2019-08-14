@@ -36,10 +36,11 @@
     "test-watch": "karma start --auto-watch --browsers Chrome",
     "sass": "find  \\( -path \"*/src/*\" -name \"styles.scss\" -o -path \"*/src/*\" -name \"*.scss\" \\) | sort -nr | xargs -I{} sh -c \"cat {}; echo ''\" | sass --stdin dist/styles.css -s compressed --no-source-map --trace --no-quiet",
     "sass-watch": "find  \\( -path \"*/src/*\" -name \"styles.scss\" -o -path \"*/src/*\" -name \"*.scss\" \\) | sort -nr | xargs -I{} sh -c \"cat {}; echo ''\" | sass --stdin dist/styles.css -s compressed --no-source-map --watch",
-    "uglify": "find \\( -path \"*/src/*\" -name \"dumbo.js\" -o -path \"*/src/*\" -name \"*.js\" ! -name \"*.spec.js\" \\) | xargs -I{} sh -c \"cat {}; echo ''\" | terser -o dist/dmb-components.min.js",
-    "lint": "eslint src/components/**/*.js",
+    "uglify": "find \\( -path \"./src/*\" -name \"*.js\" ! -name \"dumbo.js\" ! -name \"*.spec.js\" \\) | xargs -I{} sh -c \"cat {}; echo ''\" | terser -o dist/dmb-components.min.js",
+    "uglify-dumbo": "terser src/dumbo.js -o dist/dumbo.min.js",
+    "lint": "eslint src/**/*.js",
     "dev": "npm-watch",
-    "build": "npm run lint & npm run sass & npm run uglify & npm run test"
+    "build": "npm run lint & npm run sass & npm run uglify-dumbo & npm run uglify & npm run test"
   },
   "dependencies": {
     "eslint": "^5.15.1",

@@ -14,10 +14,4 @@ dmb-menu-button {
         transform: translateY(-8px);
         vertical-align: middle;
     }
-
-    @include breakpoint(small) {
-        .legend {
-            display: none;
-        }
-    }
 }

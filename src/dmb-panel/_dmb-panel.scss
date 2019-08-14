@@ -15,10 +15,10 @@ dmb-panel {
     z-index: 999;
 
     & .wrapper {
-        background-color: $white;
+        background-color: white;
         border-radius: 0;
         bottom: 0;
-        box-shadow: 0 0 1em $black;
+        box-shadow: 0 0 1em black;
         display: block;
         height: 100vh;
         margin: 0;
@@ -69,7 +69,7 @@ dmb-panel {
     }
 
     &::before {
-        background-color: rgba($black, 0.4);
+        background-color: rgba(black, 0.4);
         bottom: 0;
         content: ' ';
         left: 0;
@@ -81,9 +81,9 @@ dmb-panel {
     }
 
     .header {
-        box-shadow: 0 0 5px $grey;
+        box-shadow: 0 0 5px grey;
         height: 40px;
-        border-bottom: solid 1px $grey-light;
+        border-bottom: solid 1px grey;
         padding: 0 10px;
         width: 100%;
 
@@ -95,9 +95,9 @@ dmb-panel {
     }
 
     .footer {
-        box-shadow: 0 0 5px $grey;
+        box-shadow: 0 0 5px grey;
         height: 64px;
-        border-top: solid 1px $grey-light;
+        border-top: solid 1px grey;
         padding: 0 10px;
         width: 100%;
     }

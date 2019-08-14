@@ -3,6 +3,9 @@ module.exports = function(config) {
         frameworks: ['jasmine'],
         // browserNoActivityTimeout: 100000,
         files: [
+            'dist/styles.css',
+            'dist/dumbo.min.js',
+            'dist/dmb-components.min.js',
             {
                 pattern: 'src/**/*.spec.js',
                 served: true,

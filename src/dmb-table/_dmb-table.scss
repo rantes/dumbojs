@@ -9,7 +9,7 @@
   width: 100%;
 
   table {
-    border: solid 1px $grey-medium;
+    border: solid 1px grey;
     border-radius: 10px;
     border-spacing: 0;
     clear: both;
@@ -17,15 +17,15 @@
     width: 100%;
 
     thead {
-      background-color: $white;
-      border: solid 1px $grey;
+      background-color: white;
+      border: solid 1px grey;
 
       tr {
-        background-color: $grey-light;
+        background-color: grey;
 
         th {
-          background-color: $white;
-          border-bottom: solid 1px $grey-light;
+          background-color: white;
+          border-bottom: solid 1px grey;
           margin: 0;
           padding: 5px;
           text-transform: uppercase;
@@ -46,8 +46,8 @@
     tbody {
       tr {
         td {
-          border-right: 1px $black dashed;
-          color: $blue;
+          border-right: 1px black dashed;
+          color: blue;
           margin: 0;
           padding: 0 5px 5px 5px;
 
@@ -76,11 +76,11 @@
         }
 
         &:nth-child(odd) {
-          background-color: $grey-light;
+          background-color: grey;
         }
 
         &:hover {
-          background-color: rgba($grey-light,0.6);
+          background-color: rgba(grey,0.6);
         }
       }
     }
@@ -88,7 +88,7 @@
     tfoot {
       tr {
         td {
-          background-color: rgba($grey-light,0.6);
+          background-color: rgba(grey,0.6);
           padding-bottom: 10px;
           text-align: center;
 
@@ -107,14 +107,6 @@
 
     .checker-cell {
       width: 40px;
-    }
-  }
-}
-
-@include breakpoint(small) {
-  .list-model {
-    table {
-      font-size: smaller;
     }
   }
 }

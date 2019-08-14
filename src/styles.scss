@@ -1,12 +1,15 @@
 :root {
-    --primary-200: #FBFDFD;
-    --primary-200-contrast: #000000;
-    --status-error: #E22028;
-    --status-error-contrast: #000000;
-    --status-success: #38A838;
-    --status-success-contrast: #000000;
-    --status-warning: #FFCC00;
-    --status-warning-contrast: #000000;
-    --status-information: #1AA1E2;
-    --status-information-contrast: #000000;
+    --primary: #97A1BF;
+    --primary-contrast: #FFFFFF;
+    --default: #999999;
+    --default-contrast: #FFFFFF;
+    --error: #F44336;
+    --error-contrast: #FFFFFF;
+    --success: #63AB71;
+    --success-contrast: #FFFFFF;
+    --warning: #E09B39;
+    --warning-contrast: #FFFFFF;
+    --information: #51697C;
+    --information-contrast: #FFFFFF;
+    --hover-opacity: 0.5;
 }

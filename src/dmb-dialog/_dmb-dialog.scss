@@ -24,9 +24,9 @@ dmb-dialog {
     z-index: 999;
     
     & .wrapper {
-        background-color: $white;
+        background-color: white;
         border-radius: 0.6rem;
-        box-shadow: 0 0 1em $black;
+        box-shadow: 0 0 1em black;
         display: block;
         left: 50%;
         margin: 0;
@@ -67,7 +67,7 @@ dmb-dialog {
     }
 
     &::before {
-        background-color: rgba($black, 0.4);
+        background-color: rgba(black, 0.4);
         bottom: 0;
         content: ' ';
         left: 0;
