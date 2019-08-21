@@ -4,5 +4,6 @@ Window.prototype.dmbEventsService = {
     panelClosed: {event: new Event('dmb-panel.closed'), listener: 'dmb-panel.closed'},
     panelOpened: {event: new Event('dmb-panel.opened'), listener: 'dmb-panel.opened'},
     resetValidation: {event: new Event('dmb-validation.reset'), listener: 'dmb-validation.reset'},
-    validate: {event: new Event('dmb-validation.validate'), listener: 'dmb-validation.validate'}
+    validate: {event: new Event('dmb-validation.validate'), listener: 'dmb-validation.validate'},
+    pageLoaderClose: {event: new Event('dmb-page-loader.close'), listener: 'dmb-page-loader.close'}
 };
