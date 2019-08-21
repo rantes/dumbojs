@@ -1,6 +1,6 @@
 dmb-menu-button {
     cursor: pointer;
-    height: 24px;
+    height: 1em;
     left: 30px;
     position: absolute;
     top: 20px;
@@ -8,10 +8,9 @@ dmb-menu-button {
 
     .legend {
         display: inline-block;
-        height: 14px;
+        height: 1em;
         line-height: normal;
         margin: auto 10px;
-        transform: translateY(-8px);
         vertical-align: middle;
     }
 }

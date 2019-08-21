@@ -1,25 +1,22 @@
-dmb-text-area {
+dmb-select {
     box-sizing: border-box;
     display: block;
-    min-height: 110px;
-    padding-bottom: 15px;
+    min-height: 5.8em;
+    padding-bottom: 1em;
     position: relative;
 
-    textarea {
-        background-color: white;
-        border: 1px solid grey;
-        border-radius: 10px;
-        box-shadow: 1px 1px 2px 0 rgba(0,0,0,0.5) inset;
+    select {
+        background-color: var(--default-contrast);
+        border: 1px solid var(--default);
+        border-radius: 0.5em;
+        box-shadow: 1px 1px 2px 0 rgba(black,0.5) inset;
         box-sizing: border-box;
-        color: black;
+        color: var(--default);
         display: block;
-        font-size: 12px;
-        height: auto;
-        line-height: 16px;
-        min-height: 85px;
+        line-height: normal;
         margin: 0;
-        padding: 10px 10px 5px;
-        transition: all 0.5s, ease-in-out;
+        padding: 0.5em 0.5em 0.3em;
+        transition: all 0.5s ease-in-out;
         width: 100%;
 
         &:focus {
@@ -27,27 +24,23 @@ dmb-text-area {
             box-shadow: 1px 1px 2px 0 rgba(0,0,0,0.5) inset, 0 1px 1px rgba(black,0.075) inset, 0 0 8px rgba(green,0.6);
             color: black;
             outline: 0 none;
-            transition: all 601ms cubic-bezier(0.68, -0.75, 0.265, 1.75);
         }
 
         ._error & {
-            border: 1px solid red;
-            box-shadow: inset 0 2px 2px grey, 0 1px 0 red;
+            border: 1px solid var(--error);
         }
     }
 
     label {
         box-sizing: border-box;
         display: inline-block;
-        font-size: 12px;
-        font-weight: normal;
         margin-bottom: 5px;
         padding-left: 6px;
         text-align: left;
         width: 99%;
 
         ._error & {
-            color: red;
+            color: var(--error);
         }
     }
 
@@ -56,10 +49,8 @@ dmb-text-area {
     }
 
     .error-container {
-        color: red;
+        color: var(--error);
         display: inline-block;
-        font-size: 12px;
-        height: 12px;
-        line-height: 1;
+        line-height: normal;
     }
 }

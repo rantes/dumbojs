@@ -1,0 +1,103 @@
+.dmb-table {
+  clear: both;
+  float: none;
+  margin: auto;
+  overflow-x: auto;
+  position: relative;
+  width: 100%;
+
+  table {
+    border-radius: 0.5em;
+    border-spacing: 0;
+    clear: both;
+    width: 100%;
+
+    th {
+      padding: 0.5em;
+    }
+  
+    td {
+      text-align: center;
+      padding: 0.5em;
+    }
+
+    thead {
+      tr {
+        th {
+          background-color: var(--default-contrast);
+          text-transform: uppercase;
+
+          &:first-child {
+            border-top-left-radius: 0.5em;
+            border-bottom-left-radius: 0.5em;
+          }
+
+          &:last-child {
+            border-top-right-radius: 0.5em;
+            border-bottom-right-radius: 0.5em;
+          }
+        }
+      }
+    }
+
+    tbody {
+      tr {
+        td {
+          border-right: 1px black dashed;
+          color: blue;
+          margin: 0;
+
+          &:first-child {
+            border-top-left-radius: 0.5em;
+            border-bottom-left-radius: 0.5em;
+          }
+
+          &:last-child {
+            border-top-right-radius: 0.5em;
+            border-bottom-right-radius: 0.5em;
+            border-right: 0 none transparent;
+          }
+
+          &.truncated {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 350px;
+            white-space: nowrap;
+          }
+
+          &.actions {
+            width: 2em;
+            white-space: nowrap;
+          }
+        }
+
+        &:nth-child(odd) {
+          background-color: var(--default);
+        }
+
+        &:hover {
+          background-color: var(--default-hover);
+        }
+      }
+    }
+
+    tfoot {
+      tr {
+        td {
+          background-color: var(--default-hover);
+          text-align: center;
+
+          &:first-child {
+            border-top-left-radius: 0.5em;
+            border-bottom-left-radius: 0.5em;
+          }
+
+          &:last-child {
+            border-top-right-radius: 0.5em;
+            border-bottom-right-radius: 0.5em;
+          }
+        }
+      }
+    }
+  }
+}

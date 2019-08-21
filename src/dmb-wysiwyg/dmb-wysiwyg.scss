@@ -1,0 +1,32 @@
+.dmb-wysiwyg {
+    &__toolbar {
+        display: flex;
+        margin-bottom: 10px;
+        width: 100%;
+
+        &-button {
+            align-items: center;
+            border: solid 1px;
+            border-color: black;
+            border-radius: 3px;
+            box-shadow: 3px 3px 0 0 rgba(black, 0.8);
+            cursor: pointer;
+            display: flex;
+            float: left;
+            height: 32px;
+            justify-content: center;
+            margin: 2px;
+            min-width: 32px;
+            padding-left: 5px;
+            padding-right: 5px;
+
+            &:active {
+                box-shadow: -1px -1px 1px 0 rgba(black,0.8);
+            }
+        }
+
+        .fore-palette {
+            display: none;
+        }
+    }
+}

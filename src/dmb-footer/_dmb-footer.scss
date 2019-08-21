@@ -1,8 +1,7 @@
 .dmb-footer {
-    background-color: yellow;
-    border-top: solid 1px black;
+    background-color: var(--primary);
     box-shadow: 0 -5px 5px grey;
-    color: black;
+    color: var(--primary-contrast);
     bottom: 0;
     height: 5em;
     left: 0;

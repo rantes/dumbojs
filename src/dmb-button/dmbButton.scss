@@ -32,7 +32,52 @@
         color: var(--default-contrast);
 
         &:hover {
-            background-color: rgba(var(--default),var(--hover-opacity));
+            background-color: var(--default-hover);
+        }
+    }
+
+    &-primary {
+        background-color: var(--primary);
+        color: var(--primary-contrast);
+
+        &:hover {
+            background-color: var(--primary-hover);
+        }
+    }
+
+    &-error {
+        background-color: var(--error);
+        color: var(--error-contrast);
+
+        &:hover {
+            background-color: var(--error-hover);
+        }
+    }
+
+    &-success {
+        background-color: var(--success);
+        color: var(--success-contrast);
+
+        &:hover {
+            background-color: var(--success-hover);
+        }
+    }
+
+    &-warning {
+        background-color: var(--warning);
+        color: var(--warning-contrast);
+
+        &:hover {
+            background-color: var(--warning-hover);
+        }
+    }
+
+    &-information {
+        background-color: var(--information);
+        color: var(--information-contrast);
+
+        &:hover {
+            background-color: var(--information-hover);
         }
     }
 }
