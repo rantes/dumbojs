@@ -5,6 +5,7 @@ module.exports = function(config) {
         files: [
             'dist/styles.css',
             'dist/dumbo.min.js',
+            'dist/dmb-factories.min.js',
             'dist/dmb-components.min.js',
             {
                 pattern: 'src/**/*.spec.js',

@@ -34,13 +34,14 @@
   "scripts": {
     "test": "karma start --single-run --browsers ChromeHeadless karma.conf.js",
     "test-watch": "karma start --auto-watch --browsers Chrome",
-    "sass": "find  \\( -path \"*/src/*\" -name \"styles.scss\" -o -path \"*/src/*\" -name \"*.scss\" \\) | sort -nr | xargs -I{} sh -c \"cat {}; echo ''\" | sass --stdin dist/styles.css -s compressed --no-source-map --trace --no-quiet",
-    "sass-watch": "find  \\( -path \"*/src/*\" -name \"styles.scss\" -o -path \"*/src/*\" -name \"*.scss\" \\) | sort -nr | xargs -I{} sh -c \"cat {}; echo ''\" | sass --stdin dist/styles.css -s compressed --no-source-map --watch",
-    "uglify": "find \\( -path \"./src/*\" -name \"*.js\" ! -name \"dumbo.js\" ! -name \"*.spec.js\" \\) | xargs -I{} sh -c \"cat {}; echo ''\" | terser -o dist/dmb-components.min.js",
-    "uglify-dumbo": "terser src/dumbo.js -o dist/dumbo.min.js",
+    "sass": "find  \\( -path \"*/src/*\" -name \"styles.scss\" -o -path \"*/src/*\" -name \"*.scss\" \\) | sort -nr | xargs -I{} sh -c \"cat {}; echo ''\" | sass --stdin dist/dmb-styles.css -s compressed --no-source-map --trace --no-quiet",
+    "sass-watch": "find  \\( -path \"*/src/*\" -name \"styles.scss\" -o -path \"*/src/*\" -name \"*.scss\" \\) | sort -nr | xargs -I{} sh -c \"cat {}; echo ''\" | sass --stdin dist/dmb-styles.css -s compressed --no-source-map --watch",
+    "uglify-directives": "find \\( -path \"./src/*\" -name \"*.directive.js\" ! -name \"*.spec.js\" \\) | xargs -I{} sh -c \"cat {}; echo ''\" | terser -o dist/dmb-components.min.js",
+    "uglify-factories": "find \\( -path \"./src/*\" -name \"*.factory.js\" ! -name \"*.spec.js\" \\) | xargs -I{} sh -c \"cat {}; echo ''\" | terser -c -m -o dist/dmb-factories.min.js",
+    "uglify-dumbo": "terser src/dumbo.js -c -m -o dist/dumbo.min.js",
     "lint": "eslint src/**/*.js",
-    "dev": "npm-watch",
-    "build": "npm run lint & npm run sass & npm run uglify-dumbo & npm run uglify & npm run test"
+    "dev": "npm-watch build",
+    "build": "npm run lint & npm run sass & npm run uglify-dumbo & npm run uglify-factories & npm run uglify-directives & npm run test"
   },
   "dependencies": {
     "eslint": "^5.15.1",
