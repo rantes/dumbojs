@@ -1,32 +1,67 @@
-.dmb-wysiwyg {
-    &__toolbar {
-        display: flex;
-        margin-bottom: 10px;
-        width: 100%;
-
-        &-button {
-            align-items: center;
-            border: solid 1px;
-            border-color: black;
-            border-radius: 3px;
-            box-shadow: 3px 3px 0 0 rgba(black, 0.8);
-            cursor: pointer;
+dmb-wysiwyg {
+    .dmb-wysiwyg {
+        &__toolbar {
             display: flex;
-            float: left;
-            height: 32px;
-            justify-content: center;
-            margin: 2px;
-            min-width: 32px;
-            padding-left: 5px;
-            padding-right: 5px;
+            margin-bottom: 10px;
+            position: relative;
+            width: 100%;
+    
+            &-button {
+                align-items: center;
+                border: solid 1px;
+                border-color: var(--default);
+                border-radius: 3px;
+                box-shadow: 2px 2px 0 0 var(--default-hover);
+                color: var(--default);
+                cursor: pointer;
+                display: flex;
+                float: left;
+                font-size: initial;
+                height: 2em;
+                justify-content: center;
+                margin: 2px;
+                padding-left: 5px;
+                padding-right: 5px;
+                width: 2em;
+    
+                &:active {
+                    box-shadow: -1px -1px 1px 0 var(--default-hover);
+                }
+            }
+    
+            .fore-palette {
+                display: none;
+                position: absolute;
+                top: 2em;
+                width: 10em;
+            }
 
-            &:active {
-                box-shadow: -1px -1px 1px 0 rgba(black,0.8);
+            .palette {
+                position: relative;
+
+                &:hover {
+                    .fore-palette {
+                        display: block;
+                    }
+                }
+            }
+
+            .back-palette {
+                position: relative;
+
+                &:hover {
+                    .fore-palette {
+                        display: block;
+                    }
+                }
             }
         }
 
-        .fore-palette {
-            display: none;
+        &__content-content {
+            border: solid 1px var(--default);
+            min-height: 10em;
+            width: 100%;
         }
     }
+
 }

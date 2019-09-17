@@ -7,22 +7,30 @@ class DmbWysiwyg extends DumboDirective {
 
         const template = '<section id="{{id}}" class="dmb-wysiwyg {{dmbClass}}" >' +
                             '<div class="dmb-wysiwyg__toolbar">' +
-                                '<a href="#" class="dmb-wysiwyg__toolbar-button" data-command="h2">H2</a>' +
-                                '<a href="#" class="dmb-wysiwyg__toolbar-button" data-command="h3">H3</a>' +
-                                '<a href="#" class="dmb-wysiwyg__toolbar-button" data-command="h4">H4</a>' +
-                                '<a href="#" class="dmb-wysiwyg__toolbar-button" data-command="h5">H5</a>' +
-                                '<a href="#" class="dmb-wysiwyg__toolbar-button" data-command="h6">H6</a>' +
-                                '<a href="#" class="dmb-wysiwyg__toolbar-button" data-command="undo"><i class="icon icon-undo"></i></a>' +
-                                '<a href="#" class="dmb-wysiwyg__toolbar-button" data-command="redo"><i class="icon icon-redo"></i></a>' +
-                                '<a href="#" class="dmb-wysiwyg__toolbar-button">' +
+                                '<a href="#" title="Heading 2" class="dmb-wysiwyg__toolbar-button" data-command="h2">H2</a>' +
+                                '<a href="#" title="Heading 3" class="dmb-wysiwyg__toolbar-button" data-command="h3">H3</a>' +
+                                '<a href="#" title="Heading 4" class="dmb-wysiwyg__toolbar-button" data-command="h4">H4</a>' +
+                                '<a href="#" title="Heading 5" class="dmb-wysiwyg__toolbar-button" data-command="h5">H5</a>' +
+                                '<a href="#" title="Heading 6" class="dmb-wysiwyg__toolbar-button" data-command="h6">H6</a>' +
+                                '<a href="#" title="Undo" class="icon icon-undo dmb-wysiwyg__toolbar-button" data-command="undo"></a>' +
+                                '<a href="#" title="Redo" class="icon icon-redo dmb-wysiwyg__toolbar-button" data-command="redo"></a>' +
+                                '<a href="#" title="Paragraph" class="icon icon-pilcrow dmb-wysiwyg__toolbar-button" data-command="p"></a>' +
+                                '<a href="#" title="Link" class="icon icon-link dmb-wysiwyg__toolbar-button" data-command="createlink"></a>' +
+                                '<a href="#" title="Left Align" class="icon icon-paragraph-left dmb-wysiwyg__toolbar-button" data-command="justifyLeft"></a>' +
+                                '<a href="#" title="Center Align" class="icon icon-paragraph-center dmb-wysiwyg__toolbar-button" data-command="justifyCenter"></a>' +
+                                '<a href="#" title="Justify Align" class="icon icon-paragraph-justify dmb-wysiwyg__toolbar-button" data-command="justifyFull"></a>' +
+                                '<a href="#" title="right Align" class="icon icon-paragraph-right dmb-wysiwyg__toolbar-button" data-command="justifyRight"></a>' +
+                                '<a href="#" title="Super" class="icon icon-superscript2 dmb-wysiwyg__toolbar-button" data-command="superscript"></a>' +
+                                '<div title="Font Color" class="dmb-wysiwyg__toolbar-button palette">' +
                                     '<i class="icon icon-brush"></i>' +
-                                    '<a href="#" class="fore-palette"></a>' +
-                                '</a>' +
-                                '<a href="#" class="dmb-wysiwyg__toolbar-button" data-command="createlink"><i class="icon icon-link"></i></a>' +
-                                '<a href="#" class="dmb-wysiwyg__toolbar-button" data-command="justifyLeft"><i class="icon icon-paragraph-left"></i></a>' +
-                                '<a href="#" class="dmb-wysiwyg__toolbar-button" data-command="superscript"><i class="icon icon-superscript2"></i></a>' +
-                                '<a href="#" class="dmb-wysiwyg__toolbar-button source-button" data-command="source">Source</a>' +
-                                '<a href="#" class="dmb-wysiwyg__toolbar-button normal-button" data-command="normal" style="display:none;">Normal</a>' +
+                                    '<div class="fore-palette"></div>' +
+                                '</div>' +
+                                '<div title="Background Color" class="dmb-wysiwyg__toolbar-button back-palette">' +
+                                    '<i class="icon icon-palette"></i>' +
+                                    '<div class="fore-palette"></div>' +
+                                '</div>' +
+                                '<a href="#" title="View Source" class="dmb-wysiwyg__toolbar-button source-button" data-command="source" style="width: 4em;">Source</a>' +
+                                '<a href="#" title="View compiled" class="dmb-wysiwyg__toolbar-button normal-button" data-command="normal" style="display:none;">Normal</a>' +
                             '</div>' +
                             '<section class="dmb-wysiwyg__content-content" contenteditable transclude>' +
                             '</section>' +
@@ -35,24 +43,33 @@ class DmbWysiwyg extends DumboDirective {
     }
 
     init() {
-        const forePalette = this.querySelector('.fore-palette');
+        const forePalette = this.querySelector('.palette .fore-palette');
+        const backPalette = this.querySelector('.back-palette .fore-palette');
         let hideButtons = null;
         let showButtons = null;
         let executeCommand = null;
+        let a = document.createElement('a');
+        let ap = document.createElement('a');
+        
+        a.dataset.command = 'foreColor';
+        ap.dataset.command = 'backColor';
+        a.setAttribute('href','#');
+        ap.setAttribute('href','#');
+        a.classList.add('palette-item');
+        ap.classList.add('palette-item');
+        a.classList.add('dmb-wysiwyg__toolbar-button');
+        ap.classList.add('dmb-wysiwyg__toolbar-button');
 
         for (let i = 0; i < this.colorPalette.length; i++) {
-            let a = document.createElement('div');
-
-            a.dataset.command = 'forecolor';
-            a.dataset.value = `#${this.colorPalette[i]}`;
+            a.dataset.value = `${this.colorPalette[i]}`;
+            ap.dataset.value = `${this.colorPalette[i]}`;
             a.style.backgroundColor = `#${this.colorPalette[i]}`;
-            a.classList.add('palette-item');
-            a.classList.add('dmb-wysiwyg__toolbar-button');
+            ap.style.backgroundColor = `#${this.colorPalette[i]}`;
             forePalette.append(a.cloneNode(true));
-            a = null;
+            backPalette.append(ap.cloneNode(true));
         }
 
-        this.toolbarElements = this.querySelectorAll('.dmb-wysiwyg__toolbar-button');
+        this.toolbarElements = this.querySelectorAll('a.dmb-wysiwyg__toolbar-button');
 
         hideButtons = (toolbarElements) => {
             for (let j = 0; j < toolbarElements.length; j++) {
@@ -74,18 +91,22 @@ class DmbWysiwyg extends DumboDirective {
             let textArea;
             let editArea;
 
+            e.stopImmediatePropagation();
+            e.stopPropagation();
             e.preventDefault();
 
             switch (command) {
             case 'h2':
             case 'h3':
             case 'h4':
+            case 'h5':
+            case 'h6':
             case 'p':
-                document.execCommand('formatBlock', false, command);
+                document.execCommand('formatBlock', true, command);
                 break;
-            case 'forecolor':
-            case 'backcolor':
-                document.execCommand(command, false, value);
+            case 'foreColor':
+            case 'backColor':
+                document.execCommand(command, true, value);
                 break;
             case 'createlink':
             case 'insertimage':
