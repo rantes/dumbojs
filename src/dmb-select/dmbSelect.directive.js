@@ -1,5 +1,5 @@
 class DmbSelect extends DumboDirective {
-    static get observedAttributes() { return ['valid','values', 'validate', 'dmb-name']; }
+    static get observedAttributes() { return ['valid','values', 'validate', 'dmb-name', 'validate']; }
 
     constructor() {
         super();
@@ -38,8 +38,8 @@ class DmbSelect extends DumboDirective {
         select.setAttribute('aria-label',this.getAttribute('label') || '');
         select.setAttribute('class',this.getAttribute('dmb-class') || '');
         select.setAttribute('name',this.getAttribute('dmb-name') || '');
-        select.setAttribute('valid',true);
-        select.setAttribute('validate',this.getAttribute('dmb-name'));
+        select.setAttribute('valid','true');
+        select.setAttribute('validate',this.getAttribute('dmb-validate'));
         select.id = this.getAttribute('dmb-id') || this.generateId();
         select.value = this.getAttribute('value');
 
@@ -144,6 +144,7 @@ class DmbSelect extends DumboDirective {
             }
             break;
         case 'validate':
+            if (select) this.querySelector('select').setAttribute('validate', newValue);
             this.setValidations();
             break;
         case 'dmb-name':
