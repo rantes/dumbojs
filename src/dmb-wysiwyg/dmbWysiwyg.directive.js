@@ -32,6 +32,7 @@ class DmbWysiwyg extends DumboDirective {
                                 '<a href="#" title="View Source" class="dmb-wysiwyg__toolbar-button source-button" data-command="source" style="width: 4em;">Source</a>' +
                                 '<a href="#" title="View compiled" class="dmb-wysiwyg__toolbar-button normal-button" data-command="normal" style="display:none;">Normal</a>' +
                             '</div>' +
+                            '<dmb-text-area dmb-class="dmb-wysiwyg__content-content"></dmb-text-area>' +
                             '<section class="dmb-wysiwyg__content-content" contenteditable transclude>' +
                             '</section>' +
                         '</section>';
@@ -50,6 +51,7 @@ class DmbWysiwyg extends DumboDirective {
         let executeCommand = null;
         let a = document.createElement('a');
         let ap = document.createElement('a');
+        let textArea = this.querySelector('textarea.dmb-wysiwyg__content-content');
         
         a.dataset.command = 'foreColor';
         ap.dataset.command = 'backColor';
@@ -70,6 +72,12 @@ class DmbWysiwyg extends DumboDirective {
         }
 
         this.toolbarElements = this.querySelectorAll('a.dmb-wysiwyg__toolbar-button');
+
+        textArea.setAttribute('hidden', true);
+        textArea.value = this.querySelector('section.dmb-wysiwyg__content-content').innerHTML;
+        textArea.setAttribute('dmb-name',this.getAttribute('dmb-name') || '');
+        textArea.setAttribute('validate',this.getAttribute('validate') || '');
+        textArea.setAttribute('valid','true');
 
         hideButtons = (toolbarElements) => {
             for (let j = 0; j < toolbarElements.length; j++) {
@@ -118,23 +126,32 @@ class DmbWysiwyg extends DumboDirective {
             case 'source':
                 hideButtons(this.toolbarElements);
                 me.parentNode.querySelector('.normal-button').style.display = 'flex';
-                textArea = document.createElement('textarea');
-                editArea = me.parentNode.parentNode.querySelector('.dmb-wysiwyg__content-content');
+                textArea = me.parentNode.parentNode.querySelector('textarea.dmb-wysiwyg__content-content');
+                editArea = me.parentNode.parentNode.querySelector('section.dmb-wysiwyg__content-content');
 
-                textArea.classList.add('dmb-wysiwyg__content-content');
+                // textArea.classList.add('dmb-wysiwyg__content-content');
+                // textArea.value = editArea.innerHTML;
+                // editArea.parentNode.replaceChild(textArea, editArea);
                 textArea.value = editArea.innerHTML;
-                editArea.parentNode.replaceChild(textArea, editArea);
+                textArea.setAttribute('hidden', false);
+                textArea.removeAttribute('hidden');
+                editArea.setAttribute('hidden', true);
                 break;
             case 'normal':
                 showButtons(this.toolbarElements);
                 me.style.display = 'none';
-                editArea = document.createElement('div');
-                textArea = me.parentNode.parentNode.querySelector('.dmb-wysiwyg__content-content');
+                // editArea = document.createElement('div');
+                textArea = me.parentNode.parentNode.querySelector('textarea.dmb-wysiwyg__content-content');
+                editArea = me.parentNode.parentNode.querySelector('section.dmb-wysiwyg__content-content');
 
-                editArea.classList.add('dmb-wysiwyg__content-content');
-                editArea.setAttribute('contenteditable', true);
+                // editArea.classList.add('dmb-wysiwyg__content-content');
+                // editArea.setAttribute('contenteditable', true);
+                // editArea.innerHTML = textArea.value;
+                // textArea.parentElement.replaceChild(editArea, textArea);
                 editArea.innerHTML = textArea.value;
-                textArea.parentElement.replaceChild(editArea, textArea);
+                editArea.setAttribute('hidden', false);
+                editArea.removeAttribute('hidden');
+                textArea.setAttribute('hidden', true);
                 break;
             default:
                 document.execCommand(command, false, null);
@@ -147,5 +164,10 @@ class DmbWysiwyg extends DumboDirective {
             this.toolbarElements[i].addEventListener('click', executeCommand);
         }
     }
+
+    // syncData() {
+    //     let textArea = this.querySelector('textarea.dmb-wysiwyg__content-content');
+    //     let editArea = this.querySelector('textarea.dmb-wysiwyg__content-content');
+    // }
 }
 customElements.define('dmb-wysiwyg', DmbWysiwyg);

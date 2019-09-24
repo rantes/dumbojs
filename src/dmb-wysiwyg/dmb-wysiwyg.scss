@@ -61,6 +61,12 @@ dmb-wysiwyg {
             border: solid 1px var(--default);
             min-height: 10em;
             width: 100%;
+
+            textarea[hidden] {
+                height: 0;
+                visibility: hidden;
+                width: 0;
+            }
         }
     }
 

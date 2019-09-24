@@ -99,7 +99,6 @@ class DmbTextArea extends DumboDirective {
         input.setAttribute('aria-label',this.getAttribute('label') || '');
         input.setAttribute('masked',this.getAttribute('masked') || '');
         input.setAttribute('autocomplete',this.getAttribute('autocomplete') || '');
-        input.setAttribute('type',this.getAttribute('type') || 'text');
         input.setAttribute('class',this.getAttribute('dmb-class') || '');
         input.setAttribute('name',this.getAttribute('dmb-name') || '');
         input.setAttribute('validate',this.getAttribute('validate') || '');
