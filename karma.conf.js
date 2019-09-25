@@ -3,7 +3,7 @@ module.exports = function(config) {
         frameworks: ['jasmine'],
         // browserNoActivityTimeout: 100000,
         files: [
-            'dist/styles.css',
+            'dist/dmb-styles.css',
             'dist/dumbo.min.js',
             'dist/dmb-factories.min.js',
             'dist/dmb-components.min.js',

@@ -1,6 +1,6 @@
 
 class DmbInput extends DumboDirective {
-    static get observedAttributes() { return ['valid','name', 'validate', 'dmb-name', 'validate']; }
+    static get observedAttributes() { return ['valid','name', 'validate', 'dmb-name']; }
 
     constructor() {
         super();
@@ -97,8 +97,12 @@ class DmbInput extends DumboDirective {
             if (input) input.setAttribute('name',newValue);
             break;
         case 'validate':
-            if (input) input.setAttribute('validate',newValue);
-            this.setValidation();
+            if (input) {
+                input.setAttribute('validate',newValue);
+                if (newValue && newValue.length) {
+                    this.setValidation();
+                }
+            }
             break;
         }
     }
@@ -106,9 +110,10 @@ class DmbInput extends DumboDirective {
     buildValidators () {
         let validators = [];
         let validatorList = (this.getAttribute('validate') || '').split(',');
+        let input = null;
 
-        for (var i = 0, len = validatorList.length; i < len; i++) {
-            var keyParam = validatorList[i].split(':');
+        for (let i = 0, len = validatorList.length; i < len; i++) {
+            let keyParam = validatorList[i].split(':');
 
             if (keyParam[0]) {
                 validators.push({
@@ -117,8 +122,9 @@ class DmbInput extends DumboDirective {
                 });
 
                 if (keyParam[0] === 'required') {
-                    this.parentNode.classList.add('required');
-                    this.setAttribute('required','required');
+                    input = this.querySelector('input');
+                    this.classList.add('required');
+                    input.setAttribute('required','required');
                 }
             }
         }
@@ -127,18 +133,18 @@ class DmbInput extends DumboDirective {
     }
 
     _runValidators(element, validators) {
-        var unknownValidator = () => {
-                return {valid: false, error: 'Unknown validator type: "' + (validator || {}).key + '"'};
-            },
-            content = element.value.trim(),
-            valid = true,
-            validator= null,
-            func = null,
-            result = null,
-            message = null;
+        const unknownValidator = () => {
+            return {valid: false, error: 'Unknown validator type: "' + (validator || {}).key + '"'};
+        };
+        let content = element.value.trim();
+        let valid = true;
+        let validator= null;
+        let func = null;
+        let result = null;
+        let message = null;
 
         element.value = content;
-        for (var i = 0, len = validators.length; i < len; i++) {
+        for (let i = 0, len = validators.length; i < len; i++) {
             validator = validators[i];
             func = this.validations['_' + validator.key] || unknownValidator;
 
@@ -164,11 +170,10 @@ class DmbInput extends DumboDirective {
     setValidation() {
         let validators = [];
         const input = this.querySelector('input');
-
         validators = this.buildValidators();
 
-        input.addEventListener('blur', (e) => {
-            this._runValidators(e.target, validators);
+        input.addEventListener('blur', () => {
+            this._runValidators(input, validators);
         }, true);
 
         document.body.addEventListener(window.dmbEventsService.validate.listener, () => {
@@ -185,7 +190,7 @@ class DmbInput extends DumboDirective {
     }
 
     init() {
-        let input = this.getElementsByTagName('input').item(0);
+        const input = this.querySelector('input');
 
         this.querySelector('label').innerText = this.getAttribute('label');
         input.setAttribute('aria-label',this.getAttribute('label') || '');
@@ -220,7 +225,7 @@ class DmbInput extends DumboDirective {
             }
         };
 
-        if (this.getAttribute('validate')) {
+        if (this.getAttribute('validate') && this.getAttribute('validate').length) {
             this.setValidation();
         }
 
@@ -240,4 +245,4 @@ class DmbInput extends DumboDirective {
     }
 }
 
-customElements.define('dmb-input',DmbInput);
+customElements.define('dmb-input', DmbInput);

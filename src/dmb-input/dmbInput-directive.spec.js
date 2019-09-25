@@ -40,7 +40,6 @@ describe('dmbInput Directive', () => {
         input.dispatchEvent(new Event('focusin'));
         input.dispatchEvent(new Event('blur'));
         const errMsg = element.querySelector('span.error-container').innerHTML;
-        console.log(errMsg);
         expect(errMsg).toBe('No es una dirección de email válido');
     });
 
