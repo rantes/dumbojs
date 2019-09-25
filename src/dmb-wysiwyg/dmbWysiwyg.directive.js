@@ -32,7 +32,7 @@ class DmbWysiwyg extends DumboDirective {
                                 '<a href="#" title="View Source" class="dmb-wysiwyg__toolbar-button source-button" data-command="source" style="width: 4em;">Source</a>' +
                                 '<a href="#" title="View compiled" class="dmb-wysiwyg__toolbar-button normal-button" data-command="normal" style="display:none;">Normal</a>' +
                             '</div>' +
-                            '<dmb-text-area dmb-class="dmb-wysiwyg__content-content"></dmb-text-area>' +
+                            '<textarea class="dmb-wysiwyg__content-content"></textarea>' +
                             '<section class="dmb-wysiwyg__content-content" contenteditable transclude>' +
                             '</section>' +
                         '</section>';
@@ -129,9 +129,6 @@ class DmbWysiwyg extends DumboDirective {
                 textArea = me.parentNode.parentNode.querySelector('textarea.dmb-wysiwyg__content-content');
                 editArea = me.parentNode.parentNode.querySelector('section.dmb-wysiwyg__content-content');
 
-                // textArea.classList.add('dmb-wysiwyg__content-content');
-                // textArea.value = editArea.innerHTML;
-                // editArea.parentNode.replaceChild(textArea, editArea);
                 textArea.value = editArea.innerHTML;
                 textArea.setAttribute('hidden', false);
                 textArea.removeAttribute('hidden');
@@ -140,14 +137,9 @@ class DmbWysiwyg extends DumboDirective {
             case 'normal':
                 showButtons(this.toolbarElements);
                 me.style.display = 'none';
-                // editArea = document.createElement('div');
                 textArea = me.parentNode.parentNode.querySelector('textarea.dmb-wysiwyg__content-content');
                 editArea = me.parentNode.parentNode.querySelector('section.dmb-wysiwyg__content-content');
 
-                // editArea.classList.add('dmb-wysiwyg__content-content');
-                // editArea.setAttribute('contenteditable', true);
-                // editArea.innerHTML = textArea.value;
-                // textArea.parentElement.replaceChild(editArea, textArea);
                 editArea.innerHTML = textArea.value;
                 editArea.setAttribute('hidden', false);
                 editArea.removeAttribute('hidden');

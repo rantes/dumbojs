@@ -34,7 +34,7 @@ module.exports = function(config) {
             fixWebpackSourcePaths: true
         },
         reporters: ['progress', 'kjhtml', 'dots'],
-        concurrency: Infinity,
-        customContextFile: 'tests.html',
+        concurrency: Infinity
+        // customContextFile: 'tests.html',
     });
 };

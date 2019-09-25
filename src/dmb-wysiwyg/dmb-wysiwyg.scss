@@ -60,9 +60,9 @@ dmb-wysiwyg {
         &__content-content {
             border: solid 1px var(--default);
             min-height: 10em;
-            width: 100%;
+            width: 90%;
 
-            textarea[hidden] {
+            &[hidden] {
                 height: 0;
                 visibility: hidden;
                 width: 0;
