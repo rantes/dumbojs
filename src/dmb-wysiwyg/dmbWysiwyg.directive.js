@@ -30,9 +30,9 @@ class DmbWysiwyg extends DumboDirective {
                                     '<div class="fore-palette"></div>' +
                                 '</div>' +
                                 '<a href="#" title="View Source" class="dmb-wysiwyg__toolbar-button source-button" data-command="source" style="width: 4em;">Source</a>' +
-                                '<a href="#" title="View compiled" class="dmb-wysiwyg__toolbar-button normal-button" data-command="normal" style="display:none;">Normal</a>' +
+                                '<a href="#" title="View compiled" class="dmb-wysiwyg__toolbar-button normal-button" data-command="normal" style="display:none;width:4em;">Normal</a>' +
                             '</div>' +
-                            '<textarea class="dmb-wysiwyg__content-content"></textarea>' +
+                            '<textarea class="dmb-wysiwyg__content-content" name="" hidden></textarea>' +
                             '<section class="dmb-wysiwyg__content-content" contenteditable transclude>' +
                             '</section>' +
                         '</section>';
@@ -79,13 +79,15 @@ class DmbWysiwyg extends DumboDirective {
         textArea.setAttribute('validate',this.getAttribute('validate') || '');
         textArea.setAttribute('valid','true');
 
-        hideButtons = (toolbarElements) => {
+        hideButtons = () => {
+            let toolbarElements = this.querySelectorAll('.dmb-wysiwyg__toolbar-button');
             for (let j = 0; j < toolbarElements.length; j++) {
                 toolbarElements[j].style.display = 'none';
             }
         };
 
-        showButtons = (toolbarElements) => {
+        showButtons = () => {
+            let toolbarElements = this.querySelectorAll('.dmb-wysiwyg__toolbar-button');
             for (let j = 0; j < toolbarElements.length; j++) {
                 toolbarElements[j].style.display = 'flex';
             }
@@ -124,7 +126,7 @@ class DmbWysiwyg extends DumboDirective {
                 }
                 break;
             case 'source':
-                hideButtons(this.toolbarElements);
+                hideButtons();
                 me.parentNode.querySelector('.normal-button').style.display = 'flex';
                 textArea = me.parentNode.parentNode.querySelector('textarea.dmb-wysiwyg__content-content');
                 editArea = me.parentNode.parentNode.querySelector('section.dmb-wysiwyg__content-content');
@@ -135,7 +137,7 @@ class DmbWysiwyg extends DumboDirective {
                 editArea.setAttribute('hidden', true);
                 break;
             case 'normal':
-                showButtons(this.toolbarElements);
+                showButtons();
                 me.style.display = 'none';
                 textArea = me.parentNode.parentNode.querySelector('textarea.dmb-wysiwyg__content-content');
                 editArea = me.parentNode.parentNode.querySelector('section.dmb-wysiwyg__content-content');
@@ -149,7 +151,6 @@ class DmbWysiwyg extends DumboDirective {
                 document.execCommand(command, false, null);
                 break;
             }
-
         };
 
         for (let i = 0; i < this.toolbarElements.length; i++) {
@@ -157,9 +158,14 @@ class DmbWysiwyg extends DumboDirective {
         }
     }
 
-    // syncData() {
-    //     let textArea = this.querySelector('textarea.dmb-wysiwyg__content-content');
-    //     let editArea = this.querySelector('textarea.dmb-wysiwyg__content-content');
-    // }
+    syncData() {
+        const textArea = this.querySelector('textarea.dmb-wysiwyg__content-content');
+        const editArea = this.parentNode.parentNode.querySelector('section.dmb-wysiwyg__content-content');
+
+        if (textArea.hasAttrobute('hidden')) {
+            textArea.value = editArea.innerHTML;
+        }
+    }
 }
+
 customElements.define('dmb-wysiwyg', DmbWysiwyg);
