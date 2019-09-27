@@ -162,7 +162,7 @@ class DmbWysiwyg extends DumboDirective {
         const textArea = this.querySelector('textarea.dmb-wysiwyg__content-content');
         const editArea = this.parentNode.parentNode.querySelector('section.dmb-wysiwyg__content-content');
 
-        if (textArea.hasAttrobute('hidden')) {
+        if (textArea.hasAttribute('hidden')) {
             textArea.value = editArea.innerHTML;
         }
     }
