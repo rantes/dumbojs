@@ -66,7 +66,6 @@ class DmbWysiwyg extends DumboDirective {
         let a = document.createElement('a');
         let ap = document.createElement('a');
         let textArea = this.querySelector('textarea.dmb-wysiwyg__content-content');
-        // let editArea = this.querySelector('section.dmb-wysiwyg__content-content');
         this.toolbarElements = this.querySelectorAll('.dmb-wysiwyg__toolbar-button');
 
         a.dataset.command = 'foreColor';
@@ -143,8 +142,6 @@ class DmbWysiwyg extends DumboDirective {
                 textArea = me.parentNode.parentNode.querySelector('textarea.dmb-wysiwyg__content-content');
                 editArea = me.parentNode.parentNode.querySelector('section.dmb-wysiwyg__content-content');
 
-                // textArea.classList.add('dmb-wysiwyg__content-content');
-                // editArea.parentNode.replaceChild(textArea, editArea);
                 textArea.value = editArea.innerHTML;
                 textArea.setAttribute('hidden', false);
                 textArea.removeAttribute('hidden');
@@ -153,14 +150,9 @@ class DmbWysiwyg extends DumboDirective {
             case 'normal':
                 showButtons(this.toolbarElements);
                 me.style.display = 'none';
-                // editArea = document.createElement('div');
                 textArea = me.parentNode.parentNode.querySelector('textarea.dmb-wysiwyg__content-content');
                 editArea = me.parentNode.parentNode.querySelector('section.dmb-wysiwyg__content-content');
 
-                // editArea.classList.add('dmb-wysiwyg__content-content');
-                // editArea.setAttribute('contenteditable', true);
-                // editArea.innerHTML = textArea.value;
-                // textArea.parentElement.replaceChild(editArea, textArea);
                 editArea.innerHTML = textArea.value;
                 editArea.setAttribute('hidden', false);
                 editArea.removeAttribute('hidden');
@@ -181,42 +173,6 @@ class DmbWysiwyg extends DumboDirective {
             this.setValidation();
         }
     }
-    ///////////////////// SPECS
-    Click() {
-        document.body.dispatchEvent(window.dmbEventsService.resetValidation.event);
-        document.body.dispatchEvent(window.dmbEventsService.validate.event);
-
-        this.valids = this.querySelectorAll('input[valid]');
-
-        if (this.valids.length === 2) {
-            this.handleClick(this.getAttribute('target'));
-        }
-    }
-
-    handleClick() {
-        const init = {
-            method: 'POST',
-            body: new URLSearchParams(new FormData(this.querySelector('form[name="contactus"]')))
-        };
-        const contactusRequest = new Request('/apiweb/contactus', init);
-
-        fetch(contactusRequest)
-            .then(response => {
-                if (!response.ok) throw new Error('Datos faltantes o con errores');
-                return response.json();
-            })
-            .then((response) => {
-                document.cookie = 'ssid=' + response.id;
-                window.dmbDialogService.closeAll();
-                window.location = '/apiweb/contactus';
-            })
-            .catch(error => {
-                window.dmbDialogService.closeAll();
-                window.dmbDialogService.error(error);
-            });
-    }
-
-    ///////////////////// SPECS ends
 
     buildValidators () {
         let validators = [];
@@ -260,7 +216,6 @@ class DmbWysiwyg extends DumboDirective {
         let result = null;
         let message = null;
 
-        element.value = content;
         for (let i = 0, len = validators.length; i < len; i++) {
             validator = validators[i];
             func = this.validations['_' + validator.key] || unknownValidator;
@@ -286,8 +241,8 @@ class DmbWysiwyg extends DumboDirective {
 
     setValidation() {
         let validators = [];
-        const textarea = this.querySelector('textarea');
-        let editarea = this.querySelector('section.dmb-wysiwyg__content-content');
+        const textarea = this.querySelector('textarea.dmb-wysiwyg__content-content');
+        const editarea = this.querySelector('section.dmb-wysiwyg__content-content');
         validators = this.buildValidators();
 
         textarea.addEventListener('blur', () => {
@@ -320,6 +275,37 @@ class DmbWysiwyg extends DumboDirective {
             textArea.value = editArea.innerHTML;
         } else {
             editArea.innerHTML = textArea.value; 
+        }
+    }
+
+    attributeChangedCallback(attr, oldValue, newValue) {
+        const textarea = this.querySelector('textarea.dmb-wysiwyg__content-content');
+        const editarea = this.querySelector('section.dmb-wysiwyg__content-content');
+
+        switch(attr) {
+        case 'valid':
+            this.isValid = (newValue !== null);
+            break;
+        case 'name':
+            if (textarea) textarea.setAttribute('name',newValue);
+            break;
+        case 'dmb-name':
+            if (textarea) textarea.setAttribute('name',newValue);
+            break;
+        case 'validate':
+            if (textarea) {
+                textarea.setAttribute('validate',newValue);
+                if (newValue && newValue.length) {
+                    this.setValidation();
+                }
+            }
+            if (editarea) {
+                editarea.setAttribute('validate',newValue);
+                if (newValue && newValue.length) {
+                    this.setValidation();
+                }
+            }
+            break;
         }
     }
 }
