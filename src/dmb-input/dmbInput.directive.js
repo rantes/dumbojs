@@ -1,4 +1,3 @@
-
 class DmbInput extends DumboDirective {
     static get observedAttributes() { return ['valid','name', 'validate', 'dmb-name']; }
 

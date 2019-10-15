@@ -9,7 +9,7 @@ dmb-input {
         background-color: var(--default-contrast);
         border: 1px solid var(--default);
         border-radius: 0.5em;
-        box-shadow: 1px 1px 2px 0 rgba(black,0.5) inset;
+        box-shadow: 1px 1px 2px 0 var(--default-hover) inset;
         box-sizing: border-box;
         color: var(--default);
         display: block;
@@ -20,8 +20,8 @@ dmb-input {
         width: 100%;
 
         &:focus {
-            border: 1px solid green;
-            box-shadow: 1px 1px 2px 0 rgba(black,0.5) inset, 0 1px 1px rgba(black,0.075) inset, 0 0 8px rgba(green,0.6);
+            border: 1px solid var(--success);
+            box-shadow: 1px 1px 2px 0 var(--default-hover) inset, 0 1px 1px var(--default-hover) inset, 0 0 8px var(--success);
             color: black;
             outline: 0 none;
         }
