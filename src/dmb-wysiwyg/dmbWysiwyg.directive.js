@@ -88,7 +88,7 @@ class DmbWysiwyg extends DumboDirective {
 
         textArea.setAttribute('hidden', true);
         textArea.value = this.querySelector('textArea.dmb-wysiwyg__content-content').innerHTML;
-        textArea.setAttribute('dmb-name',this.getAttribute('dmb-name') || '');
+        textArea.setAttribute('name',this.getAttribute('dmb-name') || '');
         textArea.setAttribute('validate',this.getAttribute('validate') || '');
         textArea.setAttribute('valid','true');
 
