@@ -1,24 +1,28 @@
 dmb-wysiwyg {
+    
     .dmb-wysiwyg {
+        border-radius: 0.2em;
+        padding: 2.1em 0 0 0;
+        
         &__toolbar {
+            border-left: 1px solid var(--default-hover);
+            border-right: 1px solid var(--default-hover);
+            border-top: 1px solid var(--default-hover);
             display: flex;
-            margin-bottom: 10px;
+            margin: 0;
+            padding: 0;
             position: relative;
     
             &-button {
                 align-items: center;
-                border: 1px solid var(--default);
-                border-color: var(--default);
-                border-radius: 3px;
-                box-shadow: 2px 2px 0 0 var(--default-hover);
-                color: var(--default);
+                color: var(---default);
                 cursor: pointer;
                 display: flex;
                 float: left;
                 font-size: initial;
                 height: 2em;
                 justify-content: center;
-                margin: 2px;
+                margin: 0;
                 padding-left: 5px;
                 padding-right: 5px;
                 width: 2em;
@@ -57,9 +61,10 @@ dmb-wysiwyg {
         }
 
         &__content-content {
+            background-color: var(--default-contrast);
             border: 1px solid var(--default);
             min-height: 10em;
-            width: 90%;
+            width: 100%;
 
             &[hidden] {
                 height: 0;
@@ -90,12 +95,34 @@ dmb-wysiwyg {
             color: var(--default);
             outline: 0 none;
         }
-
     }
-        section:focus {
-            border: 1px solid var(--success);
-            box-shadow: 1px 1px 2px 0 var(--default-hover) inset, 0 1px 1px var(--default-hover) inset, 0 0 8px var(--success);
-            color: var(--default);
-            outline: 0 none;
-        }
+
+    section:focus {
+        border: 1px solid var(--success);
+        box-shadow: 1px 1px 2px 0 var(--default-hover) inset, 0 1px 1px var(--default-hover) inset, 0 0 8px var(--success);
+        color: var(--default);
+        outline: 0 none;
+    }
+
+    .normal-button {
+        border: 1px solid var(--default-hover);
+        border-bottom: 0;
+        position: absolute;
+        right: 4em;
+        top: -2em;
+        width: 4em;
+    }
+
+    .source-button {
+        border: 1px solid var(--default-hover);
+        border-bottom: 0;
+        position: absolute;
+        right: -1px;
+        top: -2em;
+        width: 4em;
+    }
+
+    .icon:before {
+        font-size: 1.5rem;
+    }
 }
