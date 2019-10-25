@@ -4,20 +4,22 @@ class DmbButton extends DumboDirective {
         super();
     }
 
-    init() {
+    _submitter() {
+        const form = this.closest('dmb-form');
+        const type = this.getAttribute('type');
         
-        this.addEventListener('click', () => {
-            const form = this.closest('dmb-form');
-            const type = this.getAttribute('type');
-            
-            if (type === 'submit' && form) {
-                form.submit();
-            }
-        });
+        if (type === 'submit' && form) {
+            form.submit();
+        }
+    }
+
+    init() {
+        this.addEventListener('click', this._submitter);
     }
     
     click(method) {
         if (typeof method === 'function') {
+            this.removeEventListener('click', this._submitter);
             this.addEventListener('click', method);
         }
     }

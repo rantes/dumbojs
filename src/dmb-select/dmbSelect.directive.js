@@ -5,9 +5,8 @@ class DmbSelect extends DumboDirective {
         super();
 
         const template = '<label></label>' +
-                            '<select transclude>' +
-                            '</select>' +
-                            '<span class="error-container"></span>';
+                        '<select transclude></select>' +
+                        '<span class="error-container"></span>';
 
         this.setTemplate(template);
         this.validations = {
@@ -32,16 +31,37 @@ class DmbSelect extends DumboDirective {
     }
 
     init() {
+        // const parser = new DOMParser();
         let select = this.querySelector('select');
+        // let content = select.innerHTML;
+        // let selectParsed = null;
+        // let i = 0;
 
         this.querySelector('label').innerText = this.getAttribute('label');
         select.setAttribute('aria-label',this.getAttribute('label') || '');
         select.setAttribute('class',this.getAttribute('dmb-class') || '');
         select.setAttribute('name',this.getAttribute('dmb-name') || '');
         select.setAttribute('valid','true');
-        select.setAttribute('validate',this.getAttribute('dmb-validate'));
+        select.setAttribute('validate',this.getAttribute('validate'));
         select.id = this.getAttribute('dmb-id') || this.generateId();
         select.value = this.getAttribute('value');
+
+        // if (content.length) {
+        //     for(i = 0; i < select.options.length; i++) {
+        //         select.remove(i);
+        //     }
+
+        //     select.innerHTML = null;
+        //     select.value = null;
+        //     select.dispatchEvent(new Event('change'));
+        //     selectParsed = parser.parseFromString(`<select>${content}</select>`, 'text/html').querySelector('select');
+
+        //     for(i = 0; i < selectParsed.options.length; i++) {
+        //         select.add(selectParsed.options.item(i).cloneNode(true));
+        //     }
+        //     selectParsed = null;
+        //     select.dispatchEvent(new Event('change'));
+        // }
 
         this.setValidations();
     }

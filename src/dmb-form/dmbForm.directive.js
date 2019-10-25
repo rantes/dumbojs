@@ -6,7 +6,7 @@ class DmbForm extends DumboDirective {
     submit() {
         const hasValids = items => {
             for (let i = 0; i < items.length; i++) {
-                if (!items[i].hasAttribute('valid')) {
+                if (!items[i].hasAttribute('valid') && !items[i].hasAttribute('hidden')) {
                     items[i].reportValidity();
                     items[i].focus();
                     return false;
@@ -24,6 +24,11 @@ class DmbForm extends DumboDirective {
         const textAreas = this.querySelectorAll('textarea[validate]');
         const isAsync = this.hasAttribute('async');
         let vForm = null;
+        let allInputs = null;
+        let allSelects = null;
+        let allTextareas = null;
+        let element = null;
+        let newElement = null;
     
         if (hasValids(inputs) && hasValids(selects) && hasValids(textAreas)) {
             this.dispatchEvent(new Event('onsubmit'));
@@ -36,21 +41,30 @@ class DmbForm extends DumboDirective {
                 vForm = document.createElement('form');
                 vForm.method = this.getAttribute('method');
                 vForm.action = this.getAttribute('action');
-                vForm.name = this.getAttribute('name');
-                vForm.style = 'display: none; height: 0; width: 0;';
-    
-                [].forEach.call(this.querySelectorAll('input'), input => {
-                    vForm.append(input);
-                });
-        
-                [].forEach.call(this.querySelectorAll('select'), select => {
-                    vForm.append(select);
-                });
-        
-                [].forEach.call(this.querySelectorAll('textarea'), textarea => {
-                    vForm.append(textarea);
-                });
-    
+                vForm.name = this.getAttribute('dmb-name');
+                vForm.style = 'visibility: hidden; height: 0; width: 0;';
+                allInputs = this.querySelectorAll('input');
+                allSelects = this.querySelectorAll('select');
+                allTextareas = this.querySelectorAll('textarea');
+
+                while((element = allInputs.pop())) {
+                    newElement = element.cloneNode(true);
+                    newElement.value = element.value;
+                    vForm.append(newElement);
+                }
+                
+                while((element = allSelects.pop())) {
+                    newElement = element.cloneNode(true);
+                    newElement.value = element.value;
+                    vForm.append(newElement);
+                }
+
+                while((element = allTextareas.pop())) {
+                    newElement = element.cloneNode(true);
+                    newElement.value = element.value;
+                    vForm.append(newElement);
+                }
+
                 document.body.append(vForm);
                 vForm.submit();
             }
