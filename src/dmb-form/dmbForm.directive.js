@@ -43,9 +43,9 @@ class DmbForm extends DumboDirective {
                 vForm.action = this.getAttribute('action');
                 vForm.name = this.getAttribute('dmb-name');
                 vForm.style = 'visibility: hidden; height: 0; width: 0;';
-                allInputs = this.querySelectorAll('input');
-                allSelects = this.querySelectorAll('select');
-                allTextareas = this.querySelectorAll('textarea');
+                allInputs = [...this.querySelectorAll('input')];
+                allSelects = [...this.querySelectorAll('select')];
+                allTextareas = [...this.querySelectorAll('textarea')];
 
                 while((element = allInputs.pop())) {
                     newElement = element.cloneNode(true);
