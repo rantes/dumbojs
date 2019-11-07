@@ -29,13 +29,16 @@ class DmbForm extends DumboDirective {
         const selects = [...this.querySelectorAll('dmb-select select[validate]')];
         const textAreas = [...this.querySelectorAll('dmb-text-area textarea[validate]')];
         const isAsync = this.hasAttribute('async');
-        const totalvalidations = hasValids(inputs, 'dmb-input') + hasValids(selects, 'dmb-select') + hasValids(textAreas, 'dmb-text-area');
+        let totalvalidations = 0;
         let vForm = null;
         let allInputs = null;
         let allSelects = null;
         let allTextareas = null;
         let element = null;
         let newElement = null;
+
+        this.valids = 0;
+        totalvalidations = hasValids(inputs, 'dmb-input') + hasValids(selects, 'dmb-select') + hasValids(textAreas, 'dmb-text-area');
     
         if (totalvalidations === 3) {
             this.dispatchEvent(new Event('onsubmit'));
