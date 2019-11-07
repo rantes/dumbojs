@@ -1,4 +1,3 @@
-
 class DmbTextArea extends DumboDirective {
     static get observedAttributes() { return ['valid','name', 'validate', 'dmb-name']; }
 
@@ -12,6 +11,63 @@ class DmbTextArea extends DumboDirective {
 
         this.setTemplate(template);
         this.isValid = false;
+        this.validators = [];
+        this._errorInputClass = '_error';
+        this.validations = {
+            _required: function (value) {
+                let response = {
+                    valid: true,
+                    error: null
+                };
+
+                if (typeof value === 'undefined' || value === null || value === '') {
+                    response.valid = false;
+                    response.error = 'Este campo es obligatorio';
+                }
+
+                return response;
+            },
+            _numeric: function (value) {
+                let response = {
+                        valid: true,
+                        error: null
+                    },
+                    re = /^[0-9]\d*/;
+
+                if (value && !re.test(value)) {
+                    response.valid = false;
+                    response.error = 'Este campo debe ser solo num&eacute;rico';
+                }
+
+                return response;
+            },
+            _min: function(value, param) {
+                let response = {
+                    valid: true,
+                    error: null
+                };
+
+                if (value && value.length < param) {
+                    response.valid = false;
+                    response.error = 'Este campo debe ser de ' + param + ' caracteres m&iacute;nimo';
+                }
+
+                return response;
+            },
+            _max: function(value, param) {
+                let response = {
+                    valid: true,
+                    error: null
+                };
+
+                if (value && value.length > param) {
+                    response.valid = false;
+                    response.error = 'Este campo debe ser de ' + param + ' caracteres m&aacute;ximo';
+                }
+
+                return response;
+            }
+        };
     }
 
     attributeChangedCallback(attr, oldValue, newValue) {
@@ -35,65 +91,8 @@ class DmbTextArea extends DumboDirective {
     }
 
     init() {
-        let _errorInputClass = '_error',
-            validations = {
-                _required: function (value) {
-                    let response = {
-                        valid: true,
-                        error: null
-                    };
-    
-                    if (typeof value === 'undefined' || value === null || value === '') {
-                        response.valid = false;
-                        response.error = 'Este campo es obligatorio';
-                    }
-    
-                    return response;
-                },
-                _numeric: function (value) {
-                    let response = {
-                            valid: true,
-                            error: null
-                        },
-                        re = /^[0-9]\d*/;
-    
-                    if (value && !re.test(value)) {
-                        response.valid = false;
-                        response.error = 'Este campo debe ser solo num&eacute;rico';
-                    }
-    
-                    return response;
-                },
-                _min: function(value, param) {
-                    let response = {
-                        valid: true,
-                        error: null
-                    };
-    
-                    if (value && value.length < param) {
-                        response.valid = false;
-                        response.error = 'Este campo debe ser de ' + param + ' caracteres m&iacute;nimo';
-                    }
-    
-                    return response;
-                },
-                _max: function(value, param) {
-                    let response = {
-                        valid: true,
-                        error: null
-                    };
-    
-                    if (value && value.length > param) {
-                        response.valid = false;
-                        response.error = 'Este campo debe ser de ' + param + ' caracteres m&aacute;ximo';
-                    }
-    
-                    return response;
-                }
-            };
         
-        let input = this.getElementsByTagName('textarea').item(0),
-            validators = [];
+        let input = this.getElementsByTagName('textarea').item(0);
 
         this.querySelector('label').innerText = this.getAttribute('label');
         input.setAttribute('aria-label',this.getAttribute('label') || '');
@@ -109,6 +108,14 @@ class DmbTextArea extends DumboDirective {
         const maskInputUppercase = (e) => {
             e.target.value = e.target.value.toUpperCase();
         };
+
+        if (input && this.getAttribute('validate')) {
+            this.validators = this.buildValidators(input, this);
+        }
+
+        input.addEventListener('blur', (e) => {
+            this._runValidators(e.target, this.validators);
+        }, {capture: true, passive: true});
     
         const maskInputAlpha = (e) => {
             var char = e.which || e.keyCode;
@@ -126,81 +133,11 @@ class DmbTextArea extends DumboDirective {
             }
         };
     
-        const _runValidators = (element, validators) => {
-            var unknownValidator = () => {
-                    return {valid: false, error: 'Unknown validator type: "' + (validator || {}).key + '"'};
-                },
-                content = element.value.trim(),
-                valid = true,
-                validator= null,
-                func = null,
-                result = null,
-                message = null;
-    
-            element.value = content;
-            for (var i = 0, len = validators.length; i < len; i++) {
-                validator = validators[i];
-                func = validations['_' + validator.key] || unknownValidator;
-    
-                result = func(content, validator.param);
-                if (result.valid !== true) {
-                    valid = false;
-                    message = result.error;
-                    break;
-                }
-            }
-    
-            if (valid === true) {
-                element.parentNode.classList.remove(_errorInputClass);
-                element.parentNode.querySelectorAll('.error-container').item(0).innerHTML = '';
-            } else {
-                element.parentNode.classList.add(_errorInputClass);
-                element.parentNode.querySelectorAll('.error-container').item(0).innerHTML = message;
-            }
-            this.isValid = valid;
-            valid? element.setAttribute('valid','') : element.removeAttribute('valid');
-        };
-    
-        const buildValidators = (element, scope) => {
-            var validators = [],
-                validatorList = (scope.getAttribute('validate') || '').split(',');
-    
-            for (var i = 0, len = validatorList.length; i < len; i++) {
-                var keyParam = validatorList[i].split(':');
-    
-                if (keyParam[0]) {
-                    validators.push({
-                        key: keyParam[0],
-                        param: keyParam.length === 2 ? keyParam[1] : null
-                    });
-    
-                    if (keyParam[0] === 'required') {
-                        element.parentNode.classList.add('required');
-                        element.setAttribute('required','required');
-                    }
-                }
-            }
-    
-            return validators;
-        };
-
         if (this.getAttribute('validate')) {
-            validators = buildValidators(input, this);
+            this.validators = this.buildValidators(input, this);
 
             input.addEventListener('blur', (e) => {
-                _runValidators(e.target, validators);
-            }, true);
-
-            document.body.addEventListener(window.dmbEventsService.validate.listener, () => {
-                _runValidators(input, validators);
-            }, true);
-
-            document.body.addEventListener(window.dmbEventsService.resetValidation.listener, () => {
-                let elements = this.getElementsByClassName(_errorInputClass);
-
-                for (let i = 0; elements.length; i++) {
-                    elements.item(0).classList.remove(_errorInputClass);
-                }
+                this._runValidators(e.target, this.validators);
             }, true);
         }
 
@@ -217,6 +154,75 @@ class DmbTextArea extends DumboDirective {
                 break;
             }
         }
+    }
+
+    _runValidators (element, validators) {
+        var unknownValidator = () => {
+                return {valid: false, error: 'Unknown validator type: "' + (validator || {}).key + '"'};
+            },
+            content = element.value.trim(),
+            valid = true,
+            validator= null,
+            func = null,
+            result = null,
+            message = null;
+
+        element.value = content;
+        for (var i = 0, len = validators.length; i < len; i++) {
+            validator = validators[i];
+            func = this.validations['_' + validator.key] || unknownValidator;
+
+            result = func(content, validator.param);
+            if (result.valid !== true) {
+                valid = false;
+                message = result.error;
+                break;
+            }
+        }
+
+        if (valid === true) {
+            element.parentNode.classList.remove(this._errorInputClass);
+            element.parentNode.querySelectorAll('.error-container').item(0).innerHTML = '';
+        } else {
+            element.parentNode.classList.add(this._errorInputClass);
+            element.parentNode.querySelectorAll('.error-container').item(0).innerHTML = message;
+        }
+        this.isValid = valid;
+        valid? element.setAttribute('valid','') : element.removeAttribute('valid');
+    }
+
+    buildValidators (element, scope) {
+        var validators = [],
+            validatorList = (scope.getAttribute('validate') || '').split(',');
+
+        for (var i = 0, len = validatorList.length; i < len; i++) {
+            var keyParam = validatorList[i].split(':');
+
+            if (keyParam[0]) {
+                validators.push({
+                    key: keyParam[0],
+                    param: keyParam.length === 2 ? keyParam[1] : null
+                });
+
+                if (keyParam[0] === 'required') {
+                    element.parentNode.classList.add('required');
+                    element.setAttribute('required','required');
+                }
+            }
+        }
+
+        return validators;
+    }
+
+    resetValidation() {
+        let elements = this.getElementsByClassName(this._errorInputClass);
+        for (let i = 0; elements.length; i++) {
+            elements.item(0).classList.remove(this._errorInputClass);
+        }
+    }
+
+    setValidation() {
+        this._runValidators(this.querySelector('textarea'), this.validators);
     }
 }
 

@@ -95,14 +95,14 @@ class DmbInput extends DumboDirective {
         case 'dmb-name':
             if (input) input.setAttribute('name',newValue);
             break;
-        case 'validate':
-            if (input) {
-                input.setAttribute('validate',newValue);
-                if (newValue && newValue.length) {
-                    this.setValidation();
-                }
-            }
-            break;
+        // case 'validate':
+        //     if (input) {
+        //         input.setAttribute('validate',newValue);
+        //         if (newValue && newValue.length) {
+        //             this.setValidation();
+        //         }
+        //     }
+        //     break;
         }
     }
 
@@ -166,26 +166,15 @@ class DmbInput extends DumboDirective {
         valid? element.setAttribute('valid','') : element.removeAttribute('valid');
     }
 
+    resetValidation() {
+        let elements = this.getElementsByClassName(this._errorInputClass);
+        for (let i = 0; elements.length; i++) {
+            elements.item(0).classList.remove(this._errorInputClass);
+        }
+    }
+
     setValidation() {
-        let validators = [];
-        const input = this.querySelector('input');
-        validators = this.buildValidators();
-
-        input.addEventListener('blur', () => {
-            this._runValidators(input, validators);
-        }, true);
-
-        document.body.addEventListener(window.dmbEventsService.validate.listener, () => {
-            this._runValidators(input, validators);
-        }, true);
-
-        document.body.addEventListener(window.dmbEventsService.resetValidation.listener, () => {
-            let elements = this.getElementsByClassName(this._errorInputClass);
-
-            for (let i = 0; elements.length; i++) {
-                elements.item(0).classList.remove(this._errorInputClass);
-            }
-        }, true);
+        this._runValidators(this.querySelector('input'), this.buildValidators());
     }
 
     init() {
@@ -224,9 +213,9 @@ class DmbInput extends DumboDirective {
             }
         };
 
-        if (this.getAttribute('validate') && this.getAttribute('validate').length) {
-            this.setValidation();
-        }
+        // if (this.getAttribute('validate') && this.getAttribute('validate').length) {
+        //     this.setValidation();
+        // }
 
         if (this.getAttribute('masked')) {
             switch (this.getAttribute('masked')) {
@@ -241,6 +230,10 @@ class DmbInput extends DumboDirective {
                 break;
             }
         }
+
+        input.addEventListener('blur', () => {
+            this.setValidation();
+        }, true);
     }
 }
 

@@ -1,5 +1,5 @@
 class DmbSelect extends DumboDirective {
-    static get observedAttributes() { return ['valid','values', 'validate', 'dmb-name', 'validate']; }
+    static get observedAttributes() { return ['valid','values', 'dmb-name']; }
 
     constructor() {
         super();
@@ -31,11 +31,7 @@ class DmbSelect extends DumboDirective {
     }
 
     init() {
-        // const parser = new DOMParser();
         let select = this.querySelector('select');
-        // let content = select.innerHTML;
-        // let selectParsed = null;
-        // let i = 0;
 
         this.querySelector('label').innerText = this.getAttribute('label');
         select.setAttribute('aria-label',this.getAttribute('label') || '');
@@ -46,24 +42,14 @@ class DmbSelect extends DumboDirective {
         select.id = this.getAttribute('dmb-id') || this.generateId();
         select.value = this.getAttribute('value');
 
-        // if (content.length) {
-        //     for(i = 0; i < select.options.length; i++) {
-        //         select.remove(i);
-        //     }
+        if (select && this.getAttribute('validate')) {
+            this.validators = this.buildValidators(select, this.getAttribute('validate'));
+        }
 
-        //     select.innerHTML = null;
-        //     select.value = null;
-        //     select.dispatchEvent(new Event('change'));
-        //     selectParsed = parser.parseFromString(`<select>${content}</select>`, 'text/html').querySelector('select');
+        select.addEventListener('blur', (e) => {
+            this._runValidators(e.target, this.validators);
+        }, {capture: true, passive: true});
 
-        //     for(i = 0; i < selectParsed.options.length; i++) {
-        //         select.add(selectParsed.options.item(i).cloneNode(true));
-        //     }
-        //     selectParsed = null;
-        //     select.dispatchEvent(new Event('change'));
-        // }
-
-        this.setValidations();
     }
 
     _runValidators(element, validators) {
@@ -124,31 +110,6 @@ class DmbSelect extends DumboDirective {
 
         return validators;
     }
-    
-    setValidations() {
-        const select = this.querySelector('select');
-
-        if (select && this.getAttribute('validate')) {
-            this.validators = this.buildValidators(select, this.getAttribute('validate'));
-    
-            select.addEventListener('blur', (e) => {
-                this._runValidators(e.target, this.validators);
-            }, {capture: true, passive: true});
-    
-            document.body.addEventListener(window.dmbEventsService.validate.listener, () => {
-                this._runValidators(select, this.validators);
-            }, {capture: true, passive: true});
-    
-            document.body.addEventListener(window.dmbEventsService.resetValidation.listener, () => {
-                let elements = this.getElementsByClassName(this._errorInputClass);
-    
-                for (let i = 0; elements.length; i++) {
-                    elements.item(0).classList.remove(this._errorInputClass);
-                }
-            }, {capture: true, passive: true});
-        }
-
-    }
 
     attributeChangedCallback(attr, oldValue, newValue) {
         let select = this.querySelector('select');
@@ -162,10 +123,6 @@ class DmbSelect extends DumboDirective {
                 this.buildOptions();
                 this.querySelector('select').dispatchEvent(new Event('change'));
             }
-            break;
-        case 'validate':
-            if (select) this.querySelector('select').setAttribute('validate', newValue);
-            this.setValidations();
             break;
         case 'dmb-name':
             if (select) this.querySelector('select').setAttribute('name', newValue);
@@ -196,6 +153,17 @@ class DmbSelect extends DumboDirective {
         }
 
         this.removeAttribute('values');
+    }
+
+    resetValidation() {
+        let elements = this.getElementsByClassName(this._errorInputClass);
+        for (let i = 0; elements.length; i++) {
+            elements.item(0).classList.remove(this._errorInputClass);
+        }
+    }
+
+    setValidation() {
+        this._runValidators(this.querySelector('select'), this.validators);
     }
 }
 
