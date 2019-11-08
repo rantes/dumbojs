@@ -11,15 +11,18 @@ class DmbForm extends DumboDirective {
             let hasInvalids = false;
 
             while ((item = items.pop())) {
-                parent = item.closest(parentSelector);
-                parent.resetValidation();
-                parent.setValidation();
-                if (!item.hasAttribute('valid') && !item.hasAttribute('hidden')) {
-                    item.reportValidity();
-                    item.focus();
-                    hasInvalids = true;
-                } else {
-                    this.valids++;
+                if (item.closest('.novalidate') === null) {
+                    parent = item.closest(parentSelector);
+                    parent.resetValidation();
+                    parent.setValidation();
+    
+                    if (!item.hasAttribute('valid') && !item.hasAttribute('hidden')) {
+                        item.reportValidity();
+                        item.focus();
+                        hasInvalids = true;
+                    } else {
+                        this.valids++;
+                    }
                 }
             }
             return !hasInvalids;

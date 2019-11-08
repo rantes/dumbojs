@@ -31,8 +31,8 @@ class DmbWysiwyg extends DumboDirective {
                                 '<a href="#" title="View Source" class="dmb-wysiwyg__toolbar-button source-button" data-command="source" style="width: 4em;">Source</a>' +
                                 '<a href="#" title="View compiled" class="dmb-wysiwyg__toolbar-button normal-button" data-command="normal" style="display:none;">Normal</a>' +
                             '</div>' +
-                            '<textarea class="dmb-wysiwyg__content-content"></textarea>' +
-                            '<section class="dmb-wysiwyg__content-content" contenteditable transclude>' +
+                            '<textarea class="dmb-wysiwyg__content-content novalidate"></textarea>' +
+                            '<section class="dmb-wysiwyg__content-content novalidate" contenteditable transclude>' +
                             '</section>' +
                             '<span class="error-container"></span>' +
                         '</section>';
