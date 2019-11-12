@@ -1,4 +1,3 @@
-
 class DmbMenuButton extends DumboDirective {
     constructor() {
         super();
