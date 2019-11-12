@@ -35,7 +35,7 @@ class DumboDirective extends HTMLElement {
 
         this.pre();
 
-        if (this.childrenTemplate) {
+        if (this.childrenTemplate && !this.hasAttribute('rendered')) {
             temp = this.childrenTemplate.content.cloneNode(true);
             transclude = temp.querySelector('[transclude]');
             if (transclude) {
@@ -43,6 +43,7 @@ class DumboDirective extends HTMLElement {
                 this.innerHTML = null;
             }
             this.appendChild(temp);
+            this.setAttribute('rendered', 'true');
         }
 
         this.init();
