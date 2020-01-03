@@ -175,7 +175,7 @@ class DmbInput extends DumboDirective {
         const masked = this.getAttribute('masked') || null;
         const autocomplete = this.getAttribute('autocomplete') || null;
         const classd = this.getAttribute('dmb-class') || null;
-        const name = this.getAttribute('name') || null;
+        const name = this.getAttribute('dmb-name') || null;
         const validate = this.getAttribute('validate') || null;
         const pattern = this.getAttribute('pattern') || null;
         const value = this.getAttribute('value') || null;
@@ -194,7 +194,7 @@ class DmbInput extends DumboDirective {
         if (pattern) input.setAttribute('pattern', pattern);
         if (value) input.value = value;
 
-        input.id = this.getAttribute('dmb-id')|| this.generateId();
+        input.id = this.getAttribute('dmb-id') || this.generateId();
         input.setAttribute('valid','true');
         input.setAttribute('type',this.getAttribute('type') || 'text');
         
