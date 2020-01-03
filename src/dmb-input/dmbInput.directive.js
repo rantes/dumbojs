@@ -95,14 +95,6 @@ class DmbInput extends DumboDirective {
         case 'dmb-name':
             if (input) input.setAttribute('name',newValue);
             break;
-        // case 'validate':
-        //     if (input) {
-        //         input.setAttribute('validate',newValue);
-        //         if (newValue && newValue.length) {
-        //             this.setValidation();
-        //         }
-        //     }
-        //     break;
         }
     }
 
@@ -179,19 +171,33 @@ class DmbInput extends DumboDirective {
 
     init() {
         const input = this.querySelector('input');
+        const label = this.getAttribute('label') || null;
+        const masked = this.getAttribute('masked') || null;
+        const autocomplete = this.getAttribute('autocomplete') || null;
+        const classd = this.getAttribute('dmb-class') || null;
+        const name = this.getAttribute('name') || null;
+        const validate = this.getAttribute('validate') || null;
+        const pattern = this.getAttribute('pattern') || null;
+        const value = this.getAttribute('value') || null;
 
-        this.querySelector('label').innerText = this.getAttribute('label');
-        input.setAttribute('aria-label',this.getAttribute('label') || '');
-        input.setAttribute('masked',this.getAttribute('masked') || '');
-        input.setAttribute('autocomplete',this.getAttribute('autocomplete') || '');
-        input.setAttribute('type',this.getAttribute('type') || 'text');
-        input.setAttribute('class',this.getAttribute('dmb-class') || '');
-        input.setAttribute('name',this.getAttribute('dmb-name') || '');
-        input.setAttribute('validate',this.getAttribute('validate') || '');
-        input.setAttribute('placeholder',this.getAttribute('placeholder') || this.getAttribute('label') || '');
-        input.setAttribute('valid','true');
+        if (label) {
+            this.querySelector('label').innerText = label;
+            input.setAttribute('aria-label', label);
+            input.setAttribute('placeholder', label);
+        }
+
+        if (masked) input.setAttribute('masked', masked);
+        if (autocomplete) input.setAttribute('autocomplete', autocomplete);
+        if (classd) input.setAttribute('class', classd);
+        if (name) input.setAttribute('name', name);
+        if (validate) input.setAttribute('validate', validate);
+        if (pattern) input.setAttribute('pattern', pattern);
+        if (value) input.value = value;
+
         input.id = this.getAttribute('dmb-id')|| this.generateId();
-        input.value = this.getAttribute('value');
+        input.setAttribute('valid','true');
+        input.setAttribute('type',this.getAttribute('type') || 'text');
+        
         
         const maskInputUppercase = (e) => {
             e.target.value = e.target.value.toUpperCase();
@@ -212,10 +218,6 @@ class DmbInput extends DumboDirective {
                 return false;
             }
         };
-
-        // if (this.getAttribute('validate') && this.getAttribute('validate').length) {
-        //     this.setValidation();
-        // }
 
         if (this.getAttribute('masked')) {
             switch (this.getAttribute('masked')) {
