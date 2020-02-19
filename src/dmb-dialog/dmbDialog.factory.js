@@ -29,6 +29,16 @@ class DmbDialogService {
         return dialog;
     }
 
+    info(msg) {
+        const dialog = document.createElement('dmb-dialog');
+
+        document.body.append(dialog);
+        dialog.info(msg);
+        dialog.showModal();
+
+        return dialog;
+    }
+
     loader() {
         const dialog = document.createElement('dmb-dialog', {is: 'dmb-dialog'});
 

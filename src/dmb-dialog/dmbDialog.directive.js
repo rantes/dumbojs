@@ -87,6 +87,19 @@ class DmbDialog extends DumboDirective {
         wrapper.append(message);
     }
 
+    info(msg) {
+        const message = document.createElement('span');
+        const wrapper = this.querySelector('.wrapper');
+        
+        this.setCloseButton();
+        this.setIcon('info');
+        msg = msg || '';
+        this.classList.add('info');
+        message.classList.add('message');
+        message.textContent = msg;
+        wrapper.append(message);
+    }
+
     prompt(options) {
         const message = document.createElement('span');
         const wrapper = this.querySelector('.wrapper');
