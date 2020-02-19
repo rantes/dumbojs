@@ -81,6 +81,12 @@ dmb-dialog {
             height: 100px;
         }
     }
+
+    &.info {
+        .wrapper {
+            min-height: 6em;
+        }
+    }
     
     &.loader {
         .wrapper {
