@@ -35,14 +35,21 @@ class DumboDirective extends HTMLElement {
 
         this.pre();
 
-        if (this.childrenTemplate && !this.hasAttribute('rendered')) {
-            temp = this.childrenTemplate.content.cloneNode(true);
-            transclude = temp.querySelector('[transclude]');
+        if (!this.hasAttribute('rendered')) {
+            if (this.childrenTemplate) {
+                temp = this.childrenTemplate.content.cloneNode(true);
+                transclude = temp.querySelector('[transclude]');
+            }
+
             if (transclude) {
                 transclude.innerHTML = this.innerHTML;
                 this.innerHTML = null;
             }
-            this.appendChild(temp);
+
+            if (temp) {
+                this.appendChild(temp);
+            }
+            
             this.setAttribute('rendered', 'true');
         }
 

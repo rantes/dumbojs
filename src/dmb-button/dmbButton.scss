@@ -30,6 +30,10 @@
         background-color: var(--default);
         color: var(--default-contrast);
 
+        &::before {
+            color: var(--default-contrast);
+        }
+
         &:hover {
             background-color: var(--default-hover);
         }
@@ -38,6 +42,10 @@
     &-primary {
         background-color: var(--primary);
         color: var(--primary-contrast);
+
+        &::before {
+            color: var(--primary-contrast);
+        }
 
         &:hover {
             background-color: var(--primary-hover);
@@ -48,6 +56,10 @@
         background-color: var(--error);
         color: var(--error-contrast);
 
+        &::before {
+            color: var(--error-contrast);
+        }
+
         &:hover {
             background-color: var(--error-hover);
         }
@@ -57,6 +69,10 @@
         background-color: var(--success);
         color: var(--success-contrast);
 
+        &::before {
+            color: var(--success-contrast);
+        }
+
         &:hover {
             background-color: var(--success-hover);
         }
@@ -65,6 +81,10 @@
     &-warning {
         background-color: var(--warning);
         color: var(--warning-contrast);
+
+        &::before {
+            color: var(--warning-contrast);
+        }
 
         &:hover {
             background-color: var(--warning-hover);
