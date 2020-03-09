@@ -9,11 +9,22 @@ class DmbPageLoader extends DumboDirective {
 
         document.addEventListener('readystatechange', () => setTimeout(
             () => {
-                (document.readyState === 'complete') && (this.classList.remove('active'));
-            }, 500
+                (document.readyState === 'complete') && this.classList.contains('active') && this.close();
+            }, 100
         ));
 
-        window.addEventListener(window.dmbEventsService.pageLoaderClose.listener, () => this.classList.remove('active'));
+        document.addEventListener('DOMContentLoaded', () => setTimeout(
+            () => {
+                this.classList.contains('active') && this.close();
+            }, 100
+        ));
+
+        window.addEventListener(window.dmbEventsService.pageLoaderClose.listener, () => this.close());
+    }
+
+    close() {
+        this.classList.remove('active');
+        return true;
     }
 
 }
