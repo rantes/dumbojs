@@ -92,7 +92,7 @@ class DmbForm extends DumboDirective {
         const formObject = new FormData();
 
         [].forEach.call(this.querySelectorAll('input'), input => {
-            formObject.append(input.getAttribute('name'), input.value);
+            formObject.append(input.getAttribute('name'), input.type === 'file' ? input.files : input.value);
         });
 
         [].forEach.call(this.querySelectorAll('select'), select => {
