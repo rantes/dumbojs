@@ -29,6 +29,13 @@
         "src"
       ],
       "extensions": "js"
+    },
+    "build": {
+      "patterns": [
+        "src"
+      ],
+      "extensions": "js,scss",
+      "quiet": false
     }
   },
   "scripts": {
@@ -44,16 +51,16 @@
     "build": "npm run lint & npm run sass & npm run uglify-dumbo & npm run uglify-factories & npm run uglify-directives & npm run test"
   },
   "dependencies": {
-    "eslint": "^5.15.1",
+    "eslint": "^5.16.0",
     "jasmine-core": "^2.99.1",
     "jasmine-spec-reporter": "^4.2.1",
-    "karma": "^4.0.1",
+    "karma": "^4.4.1",
     "karma-chrome-launcher": "^2.2.0",
-    "karma-coverage-istanbul-reporter": "^2.0.1",
+    "karma-coverage-istanbul-reporter": "^2.1.1",
     "karma-jasmine": "^1.1.2",
     "karma-jasmine-html-reporter": "^0.2.2",
     "npm-watch": "^0.6.0",
-    "sass": "^1.17.2",
-    "terser": "^3.16.1"
+    "sass": "^1.26.3",
+    "terser": "^3.17.0"
   }
 }

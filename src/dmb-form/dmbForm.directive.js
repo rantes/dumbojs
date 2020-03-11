@@ -55,30 +55,35 @@ class DmbForm extends DumboDirective {
                 vForm.method = this.getAttribute('method');
                 vForm.action = this.getAttribute('action');
                 vForm.name = this.getAttribute('dmb-name');
+                vForm.enctype = this.getAttribute('enctype');
                 vForm.style = 'visibility: hidden; height: 0; width: 0;';
                 allInputs = [...this.querySelectorAll('input')];
                 allSelects = [...this.querySelectorAll('select')];
                 allTextareas = [...this.querySelectorAll('textarea')];
 
-                while((element = allInputs.pop())) {
+                while((element = allInputs.shift())) {
+                    newElement = element.cloneNode(true);
+                    if(element.type === 'file') {
+                        newElement.files = element.files;
+                    } else {
+                        newElement.value = element.value;
+                    }
+                    vForm.appendChild(newElement);
+                }
+
+                while((element = allSelects.shift())) {
                     newElement = element.cloneNode(true);
                     newElement.value = element.value;
-                    vForm.append(newElement);
+                    vForm.appendChild(newElement);
                 }
                 
-                while((element = allSelects.pop())) {
+                while((element = allTextareas.shift())) {
                     newElement = element.cloneNode(true);
                     newElement.value = element.value;
-                    vForm.append(newElement);
+                    vForm.appendChild(newElement);
                 }
 
-                while((element = allTextareas.pop())) {
-                    newElement = element.cloneNode(true);
-                    newElement.value = element.value;
-                    vForm.append(newElement);
-                }
-
-                document.body.append(vForm);
+                document.body.appendChild(vForm);
                 this.getAttribute('action') && vForm.submit();
             }
 
