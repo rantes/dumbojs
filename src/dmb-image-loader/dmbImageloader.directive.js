@@ -32,10 +32,14 @@ class DmbImageloader extends DumboDirective {
     loadFile (file) {
         let previewimg = this.querySelector('.preview img');
         let reader = new FileReader();
-        reader.onload = () => {
-            previewimg.setAttribute('src', reader.result.toString());
-        };
+        const promise = new Promise((resolve) => {
+            reader.onload = () => {
+                resolve();
+                previewimg.setAttribute('src', reader.result.toString());
+            };
+        });
         reader.readAsDataURL(file);
+        return promise;
     }
 }
 

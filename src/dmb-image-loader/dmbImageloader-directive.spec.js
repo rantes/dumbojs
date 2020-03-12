@@ -47,9 +47,8 @@ describe('DmbImageloader Directive', () => {
 
     it('Should load the image in content preview', () => {
         previewimg.src = '';
-        element.loadFile(imgFile);
-        setTimeout(() => {
+        element.loadFile(imgFile).then(() => {
             expect(previewimg.getAttribute('src')).toBe(`data:image/png;base64,${img1px}`);
-        }, 1000);
+        });
     });
 });

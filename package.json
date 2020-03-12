@@ -40,7 +40,7 @@
   },
   "scripts": {
     "test": "karma start --single-run --browsers ChromeHeadless karma.conf.js",
-    "test-watch": "karma start --auto-watch --browsers Chrome",
+    "test-watch": "npm-watch build & karma start --auto-watch --browsers Chrome",
     "sass": "find  \\( -path \"*/src/*\" -name \"styles.scss\" -o -path \"*/src/*\" -name \"*.scss\" \\) | sort -nr | xargs -I{} sh -c \"cat {}; echo ''\" | sass --stdin dist/dmb-styles.css -s compressed --no-source-map --trace --no-quiet",
     "sass-watch": "find  \\( -path \"*/src/*\" -name \"styles.scss\" -o -path \"*/src/*\" -name \"*.scss\" \\) | sort -nr | xargs -I{} sh -c \"cat {}; echo ''\" | sass --stdin dist/dmb-styles.css -s compressed --no-source-map --watch",
     "uglify-directives": "find \\( -path \"./src/*\" -name \"*.directive.js\" ! -name \"*.spec.js\" \\) | xargs -I{} sh -c \"cat {}; echo ''\" | terser -o dist/dmb-components.min.js",

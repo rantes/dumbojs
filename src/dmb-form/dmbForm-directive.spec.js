@@ -42,9 +42,6 @@ describe('DmbForm Directive', () => {
     });
     
     it('Should validate', () => {
-        button.dispatchEvent(new Event('click'));
-        setTimeout(() => {
-            expect(element.valids).toBe(0);
-        }, 500);
+        expect(element.valids).toBe(0);
     });
 });
