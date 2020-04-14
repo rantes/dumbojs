@@ -14,7 +14,19 @@ class DmbButton extends DumboDirective {
     }
 
     init() {
+        let submitButton = null;
         this.addEventListener('click', this._submitter);
+        if(this.getAttribute('type') === 'submit') {
+            submitButton =  document.createElement('input');
+            submitButton.setAttribute('type', 'submit');
+            submitButton.style.height = 0;
+            submitButton.style.width = 0;
+            submitButton.style.opacity = 0;
+            submitButton.style.border = 0;
+            submitButton.style.padding = 0;
+            submitButton.style.margin = 0;
+            this.appendChild(submitButton);
+        }
     }
     
     click(method) {

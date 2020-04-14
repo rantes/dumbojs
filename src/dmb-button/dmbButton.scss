@@ -37,6 +37,10 @@
         &:hover {
             background-color: var(--default-hover);
         }
+
+        &:visited {
+            color: var(--default-contrast);
+        }
     }
 
     &-primary {
@@ -49,6 +53,10 @@
 
         &:hover {
             background-color: var(--primary-hover);
+        }
+
+        &:visited {
+            color: var(--primary-contrast);
         }
     }
 
@@ -63,6 +71,10 @@
         &:hover {
             background-color: var(--error-hover);
         }
+
+        &:visited {
+            color: var(--error-contrast);
+        }
     }
 
     &-success {
@@ -75,6 +87,10 @@
 
         &:hover {
             background-color: var(--success-hover);
+        }
+
+        &:visited {
+            color: var(--success-contrast);
         }
     }
 
@@ -89,14 +105,26 @@
         &:hover {
             background-color: var(--warning-hover);
         }
+
+        &:visited {
+            color: var(--warning-contrast);
+        }
     }
 
     &-information {
         background-color: var(--information);
         color: var(--information-contrast);
 
+        &::before {
+            color: var(--information-contrast);
+        }
+
         &:hover {
             background-color: var(--information-hover);
+        }
+
+        &:visited {
+            color: var(--information-contrast);
         }
     }
 }

@@ -195,7 +195,6 @@ class DmbInput extends DumboDirective {
         if (value) input.value = value;
 
         input.id = this.getAttribute('dmb-id') || this.generateId();
-        input.setAttribute('valid','true');
         input.setAttribute('type',this.getAttribute('type') || 'text');
         
         

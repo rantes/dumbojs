@@ -1,47 +1,62 @@
 class DmbForm extends DumboDirective {
     constructor() {
         super();
-        this.valids = 0;
-    }
-    
-    submit() {
-        const hasValids = (items, parentSelector) => {
-            let item = null;
-            let parent = null;
-            let hasInvalids = false;
+        this._valids = 0;
 
-            while ((item = items.pop())) {
-                if (item.closest('.novalidate') === null) {
-                    parent = item.closest(parentSelector);
-                    parent.resetValidation();
-                    parent.setValidation();
-    
-                    if (!item.hasAttribute('valid') && !item.hasAttribute('hidden')) {
-                        item.reportValidity();
-                        item.focus();
-                        hasInvalids = true;
-                    } else {
-                        this.valids++;
-                    }
+        this.setTemplate('<form arial-role="form" transclude></form>');
+    }
+
+    get valids() {
+        return this._valids;
+    }
+
+    init() {
+        const form = this.querySelector('form');
+
+        form.setAttribute('method', this.getAttribute('method') || 'POST');
+        form.setAttribute('action', this.getAttribute('action') || '#');
+        form.setAttribute('dmb-name', this.getAttribute('name') || '');
+        form.setAttribute('dmb-id', this.getAttribute('id') || null);
+        form.setAttribute('enctype', this.getAttribute('enctype') || 'text/plain');
+
+        form.onSubmit = e => {
+            e.preventDefault();
+            return this.submit();
+        };
+    }
+
+    validate(formElements, parentSelector) {
+        let item = null;
+        let parent = null;
+        let hasInvalids = false;
+
+        while ((item = formElements.shift())) {
+            if (item.closest('.novalidate') === null) {
+                parent = item.closest(parentSelector);
+                parent.resetValidation();
+                parent.setValidation();
+
+                if (!item.hasAttribute('valid') && !item.hasAttribute('hidden')) {
+                    item.reportValidity();
+                    item.focus();
+                    hasInvalids = true;
+                } else {
+                    this._valids++;
                 }
             }
-            return !hasInvalids;
-        };
+        }
+        return !hasInvalids;
+    }
 
+    submit() {
         const inputs = [...this.querySelectorAll('dmb-input input[validate]')];
         const selects = [...this.querySelectorAll('dmb-select select[validate]')];
         const textAreas = [...this.querySelectorAll('dmb-text-area textarea[validate]')];
         const isAsync = this.hasAttribute('async');
         let totalvalidations = 0;
-        let vForm = null;
-        let allInputs = null;
-        let allSelects = null;
-        let allTextareas = null;
-        let element = null;
-        let newElement = null;
 
-        this.valids = 0;
-        totalvalidations = hasValids(inputs, 'dmb-input') + hasValids(selects, 'dmb-select') + hasValids(textAreas, 'dmb-text-area');
+        this._valids = 0;
+        totalvalidations = this.validate(inputs, 'dmb-input') + this.validate(selects, 'dmb-select') + this.validate(textAreas, 'dmb-text-area');
     
         if (totalvalidations === 3) {
             this.dispatchEvent(new Event('onsubmit'));
@@ -49,42 +64,8 @@ class DmbForm extends DumboDirective {
             if (isAsync) {
                 if (typeof this.callback === 'function') {
                     this.callback();
+                    return false;
                 } 
-            } else {
-                vForm = document.createElement('form');
-                vForm.method = this.getAttribute('method');
-                vForm.action = this.getAttribute('action');
-                vForm.name = this.getAttribute('dmb-name');
-                vForm.enctype = this.getAttribute('enctype');
-                vForm.style = 'visibility: hidden; height: 0; width: 0;';
-                allInputs = [...this.querySelectorAll('input')];
-                allSelects = [...this.querySelectorAll('select')];
-                allTextareas = [...this.querySelectorAll('textarea')];
-
-                while((element = allInputs.shift())) {
-                    newElement = element.cloneNode(true);
-                    if(element.type === 'file') {
-                        newElement.files = element.files;
-                    } else {
-                        newElement.value = element.value;
-                    }
-                    vForm.appendChild(newElement);
-                }
-
-                while((element = allSelects.shift())) {
-                    newElement = element.cloneNode(true);
-                    newElement.value = element.value;
-                    vForm.appendChild(newElement);
-                }
-                
-                while((element = allTextareas.shift())) {
-                    newElement = element.cloneNode(true);
-                    newElement.value = element.value;
-                    vForm.appendChild(newElement);
-                }
-
-                document.body.appendChild(vForm);
-                this.getAttribute('action') && vForm.submit();
             }
 
             return true;
@@ -116,7 +97,11 @@ class DmbForm extends DumboDirective {
         });
 
         [].forEach.call(this.querySelectorAll('select'), select => {
-            formObject.append(select.getAttribute('name'), select.value);
+            if(select.multiple) {
+                formObject.append(select.getAttribute('name'), [...select.querySelectorAll('option')].filter(x=>x.selected).map(x=>x.value.trim()));
+            } else {
+                formObject.append(select.getAttribute('name'), select.value);
+            }
         });
 
         [].forEach.call(this.querySelectorAll('textarea'), textarea => {

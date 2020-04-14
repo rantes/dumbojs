@@ -32,6 +32,10 @@ class DmbSelect extends DumboDirective {
 
     init() {
         let select = this.querySelector('select');
+        let value = null;
+        let options = null;
+        let option = null;
+        let opval = null;
 
         this.querySelector('label').innerText = this.getAttribute('label');
         select.setAttribute('aria-label',this.getAttribute('label') || '');
@@ -40,7 +44,18 @@ class DmbSelect extends DumboDirective {
         select.setAttribute('valid','true');
         select.setAttribute('validate',this.getAttribute('validate'));
         select.id = this.getAttribute('dmb-id') || this.generateId();
-        select.value = this.getAttribute('value');
+
+        if (select && this.hasAttribute('value')) {
+            value = this.getAttribute('value').trim();
+            try {
+                value = JSON.parse(value);
+            } catch (e) {
+                console.log(e.message);
+            }
+        }
+
+        select.multiple = this.hasAttribute('multiple');
+        select.value = value;
 
         if (select && this.getAttribute('validate')) {
             this.validators = this.buildValidators(select, this.getAttribute('validate'));
@@ -50,20 +65,29 @@ class DmbSelect extends DumboDirective {
             this._runValidators(e.target, this.validators);
         }, {capture: true, passive: true});
 
+        options = [...select.querySelectorAll('option')];
+        if(options.length){
+            while((option = options.shift())) {
+                opval = isNaN(option.value) ? option.value : parseInt(option.value);
+                option.selected = select.multiple ? value.includes(opval) : (option.value === value);
+            }
+        }
+
     }
 
     _runValidators(element, validators) {
         let unknownValidator = () => {
-                return {valid: false, error: 'Unknown validator type: "' + (validator || {}).key + '"'};
-            },
-            content = (element.value || '').trim(),
-            valid = true,
+            return {valid: false, error: 'Unknown validator type: "' + (validator || {}).key + '"'};
+        };
+        let options = element.querySelectorAll('option');
+        let content = [...options].filter(x=>x.selected).map(x=>x.value.trim());
+        let valid = true,
             validator= null,
             func = null,
             result = null,
             message = null;
 
-        element.value = content;
+        !element.multiple && (element.value = content[0]);
         for (var i = 0, len = validators.length; i < len; i++) {
             validator = validators[i];
             func = this.validations['_' + validator.key] || unknownValidator;
@@ -139,15 +163,15 @@ class DmbSelect extends DumboDirective {
         const select = this.querySelector('select');
 
         select.innerHTML = '';
-        select.value = '';
+        if(!select.multiple) select.value = null;
 
         for (i = 0; i < total; i++) {
             option = document.createElement('option');
             option.setAttribute('value',this.values[i].value);
             option.innerHTML = this.values[i].text;
-            if (this.values[i].selected || this.values[i] === select.value) {
+            if (this.values[i].selected || this.values[i] === select.value || (Array.isArray(select.value) && select.value.includes(this.values[i]))) {
                 option.setAttribute('selected',true);
-                select.value = this.values[i].value;
+                if(!select.multiple) select.value = this.values[i].value;
             }
             select.append(option);
         }
