@@ -15,8 +15,8 @@ class DmbForm extends DumboDirective {
 
         form.setAttribute('method', this.getAttribute('method') || 'POST');
         form.setAttribute('action', this.getAttribute('action') || '#');
-        form.setAttribute('dmb-name', this.getAttribute('name') || '');
-        form.setAttribute('dmb-id', this.getAttribute('id') || null);
+        form.setAttribute('name', this.getAttribute('dmb-name') || '');
+        form.setAttribute('id', this.getAttribute('dmb-id') || null);
         form.setAttribute('enctype', this.getAttribute('enctype') || 'text/plain');
 
         form.onSubmit = e => {

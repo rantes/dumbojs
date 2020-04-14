@@ -69,7 +69,7 @@ class DmbSelect extends DumboDirective {
         if(options.length){
             while((option = options.shift())) {
                 opval = isNaN(option.value) ? option.value : parseInt(option.value);
-                option.selected = select.multiple ? value.includes(opval) : (option.value === value);
+                option.selected = select.multiple ? value.includes(opval) : (option.value == value);
             }
         }
 
