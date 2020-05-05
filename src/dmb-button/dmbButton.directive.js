@@ -1,4 +1,9 @@
-
+/**
+ * @dmbdoc Directive
+ * @name dmbButton
+ * @description Will render a button
+ * @attribute type posible values: submit
+ */
 class DmbButton extends DumboDirective {
     constructor() {
         super();
@@ -28,7 +33,10 @@ class DmbButton extends DumboDirective {
             this.appendChild(submitButton);
         }
     }
-    
+    /**
+     * Attach a method to run when event click is fired.
+     * @param {function} method
+     */
     click(method) {
         if (typeof method === 'function') {
             this.removeEventListener('click', this._submitter);

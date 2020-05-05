@@ -61,16 +61,14 @@ class DmbForm extends DumboDirective {
         if (totalvalidations === 3) {
             this.dispatchEvent(new Event('onsubmit'));
 
-            if (isAsync) {
-                if (typeof this.callback === 'function') {
-                    this.callback();
-                    return false;
-                } 
+            if (isAsync &&typeof this.callback === 'function') {
+                this.callback();
+                return false;
             }
 
             return true;
         }
-    
+
         return false;
     }
 

@@ -3,16 +3,13 @@ class DmbMenuButton extends DumboDirective {
         super();
         
         let template = '<i class="icon icon-bars"></i>' +
-                        '<span class="legend"></span>';
+                        '<span class="legend" transclude></span>';
 
         this.setTemplate(template);
 
     }
     
     init() {
-        const legend = this.getAttribute('legend');
-
-        this.querySelector('.legend').textContent = legend;
         this.addEventListener('click', () => {
             let menu = this.getAttribute('menu');
     
