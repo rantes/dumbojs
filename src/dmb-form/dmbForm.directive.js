@@ -4,6 +4,7 @@ class DmbForm extends DumboDirective {
         this._valids = 0;
 
         this.setTemplate('<form arial-role="form" transclude></form>');
+        this.form = null;
     }
 
     get valids() {
@@ -11,15 +12,15 @@ class DmbForm extends DumboDirective {
     }
 
     init() {
-        const form = this.querySelector('form');
+        this.form = this.querySelector('form');
 
-        form.setAttribute('method', this.getAttribute('method') || 'POST');
-        form.setAttribute('action', this.getAttribute('action') || '#');
-        form.setAttribute('name', this.getAttribute('dmb-name') || '');
-        form.setAttribute('id', this.getAttribute('dmb-id') || null);
-        form.setAttribute('enctype', this.getAttribute('enctype') || 'text/plain');
+        this.form.setAttribute('method', this.getAttribute('method') || 'POST');
+        this.form.setAttribute('action', this.getAttribute('action') || '#');
+        this.form.setAttribute('name', this.getAttribute('dmb-name') || '');
+        this.form.setAttribute('id', this.getAttribute('dmb-id') || null);
+        this.form.setAttribute('enctype', this.getAttribute('enctype') || 'text/plain');
 
-        form.onSubmit = e => {
+        this.form.onSubmit = e => {
             e.preventDefault();
             return this.submit();
         };
@@ -61,9 +62,11 @@ class DmbForm extends DumboDirective {
         if (totalvalidations === 3) {
             this.dispatchEvent(new Event('onsubmit'));
 
-            if (isAsync &&typeof this.callback === 'function') {
+            if (isAsync && typeof this.callback === 'function') {
                 this.callback();
                 return false;
+            } else {
+                this.form.submit();
             }
 
             return true;

@@ -1,13 +1,18 @@
 .button {
     border-radius: 0.5em;
-    box-shadow: 3px 3px 0 0 rgba(black, 0.8);
+    box-shadow: 3px 3px 0 0 #000000bb;
     box-sizing: border-box;
     color: var(--default);
     cursor: pointer;
     display: inline-block;
+    overflow: hidden;
     padding: 0.5em 1em;
     position: relative;
     text-align: center;
+
+    .col & {
+        width: 100%;
+    }
 
     .text {
         display: inline-block;
@@ -22,7 +27,7 @@
     }
 
     &:active {
-        box-shadow: -1px -1px 1px 0 rgba(black,0.8);
+        box-shadow: -1px -1px 1px 0 #000000bb;
         transform: translate(3px, 3px);
     }
 
@@ -57,6 +62,23 @@
 
         &:visited {
             color: var(--primary-contrast);
+        }
+    }
+
+    &-secondary {
+        background-color: var(--secondary);
+        color: var(--secondary-contrast);
+
+        &::before {
+            color: var(--secondary-contrast);
+        }
+
+        &:hover {
+            background-color: var(--secondary-hover);
+        }
+
+        &:visited {
+            color: var(--secondary-contrast);
         }
     }
 

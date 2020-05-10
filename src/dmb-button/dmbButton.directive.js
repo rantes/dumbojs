@@ -13,8 +13,15 @@ class DmbButton extends DumboDirective {
         const form = this.closest('dmb-form');
         const type = this.getAttribute('type');
         
-        if (type === 'submit' && form) {
-            form.submit();
+        if (form) {
+            switch (type) {
+            case 'submit':
+                form.submit();
+                break;
+            case 'reset':
+                form.reset();
+                break;
+            }
         }
     }
 

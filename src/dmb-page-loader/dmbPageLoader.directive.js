@@ -22,8 +22,13 @@ class DmbPageLoader extends DumboDirective {
         window.addEventListener(window.dmbEventsService.pageLoaderClose.listener, () => this.close());
     }
 
+    open() {
+        !this.classList.contains('active') && this.classList.add('active');
+        return true;
+    }
+
     close() {
-        this.classList.remove('active');
+        this.classList.contains('active') && this.classList.remove('active');
         return true;
     }
 

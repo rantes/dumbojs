@@ -135,8 +135,7 @@ class DmbInput extends DumboDirective {
         let message = null;
 
         element.value = content;
-        for (let i = 0, len = validators.length; i < len; i++) {
-            validator = validators[i];
+        while((validator = validators.shift())) {
             func = this.validations['_' + validator.key] || unknownValidator;
 
             result = func(content, validator.param);
@@ -154,6 +153,7 @@ class DmbInput extends DumboDirective {
             element.parentNode.classList.add(this._errorInputClass);
             element.parentNode.querySelectorAll('.error-container').item(0).innerHTML = message;
         }
+
         this.isValid = valid;
         valid? element.setAttribute('valid','') : element.removeAttribute('valid');
     }
@@ -231,6 +231,8 @@ class DmbInput extends DumboDirective {
                 break;
             }
         }
+
+        this.buildValidators();
 
         input.addEventListener('blur', () => {
             this.setValidation();
