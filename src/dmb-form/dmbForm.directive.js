@@ -26,6 +26,10 @@ class DmbForm extends DumboDirective {
         };
     }
 
+    reset() {
+        this.form.reset();
+    }
+
     validate(formElements, parentSelector) {
         let item = null;
         let parent = null;
@@ -62,9 +66,8 @@ class DmbForm extends DumboDirective {
         if (totalvalidations === 3) {
             this.dispatchEvent(new Event('onsubmit'));
 
-            if (isAsync && typeof this.callback === 'function') {
-                this.callback();
-                return false;
+            if (isAsync) {
+                if(typeof this.callback === 'function') this.callback();
             } else {
                 this.form.submit();
             }
