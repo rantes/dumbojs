@@ -54,15 +54,15 @@ class DmbForm extends DumboDirective {
     }
 
     submit() {
-        const inputs = [...this.querySelectorAll('dmb-input input[validate]')];
-        const selects = [...this.querySelectorAll('dmb-select select[validate]')];
-        const textAreas = [...this.querySelectorAll('dmb-text-area textarea[validate]')];
+        const inputs = [...this.querySelectorAll('dmb-input[validate] input')];
+        const selects = [...this.querySelectorAll('dmb-select[validate] select')];
+        const textAreas = [...this.querySelectorAll('dmb-text-area[validate] textarea')];
         const isAsync = this.hasAttribute('async');
         let totalvalidations = 0;
 
         this._valids = 0;
         totalvalidations = this.validate(inputs, 'dmb-input') + this.validate(selects, 'dmb-select') + this.validate(textAreas, 'dmb-text-area');
-    
+
         if (totalvalidations === 3) {
             this.dispatchEvent(new Event('onsubmit'));
 
@@ -79,40 +79,7 @@ class DmbForm extends DumboDirective {
     }
 
     getFormData() {
-        let name = '';
-        let i = 0;
-        let inputLength = 0;
-        const formObject = new FormData();
-
-        [].forEach.call(this.querySelectorAll('input'), input => {
-            name = input.getAttribute('name');
-            if(input.type === 'file') {
-                inputLength = input.files.length;
-                if(inputLength === 1) {
-                    formObject.append(`${name}`, input.files[0], input.files[0].name);
-                } else if(inputLength > 1) {
-                    for(i = 0; i < inputLength; i++) {
-                        formObject.append(`${name}[]`, input.files[i], input.files[i].name);
-                    }
-                }
-            } else {
-                formObject.append(name, input.value);
-            }
-        });
-
-        [].forEach.call(this.querySelectorAll('select'), select => {
-            if(select.multiple) {
-                formObject.append(select.getAttribute('name'), [...select.querySelectorAll('option')].filter(x=>x.selected).map(x=>x.value.trim()));
-            } else {
-                formObject.append(select.getAttribute('name'), select.value);
-            }
-        });
-
-        [].forEach.call(this.querySelectorAll('textarea'), textarea => {
-            formObject.append(textarea.getAttribute('name'), textarea.value);
-        });
-
-        return formObject;
+        return new FormData(this.form);
     }
 }
 

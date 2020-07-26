@@ -22,4 +22,8 @@ dmb-page-loader {
         top: 50%;
         width: 164px;
     }
+
+    &.transparent {
+        background-color: #00000066;
+    }
 }

@@ -1,4 +1,4 @@
-describe('DmbImageloader Directive', () => {
+describe('DmbImageUploader Directive', () => {
     let element = null;
     // eslint-disable-next-line no-unused-vars
     let loadFile = null; // this var is actually used for spy purposes
@@ -6,7 +6,7 @@ describe('DmbImageloader Directive', () => {
     const contentType = 'image/png';
     const img1px = 'iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==';
 
-    element = document.createElement('dmb-imageloader');
+    element = document.createElement('dmb-image-uploader');
     document.body.append(element);
 
     const dataURLtoFile = (b64Data, contentType='', sliceSize=512) => {

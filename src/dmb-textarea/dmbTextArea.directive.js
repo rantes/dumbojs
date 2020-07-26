@@ -6,8 +6,7 @@ class DmbTextArea extends DumboDirective {
 
         const template = '<label></label>' +
                         '<textarea transclude>' +
-                        '</textarea>' +
-                        '<span class="error-container"></span>';
+                        '</textarea>';
 
         this.setTemplate(template);
         this.isValid = false;
@@ -22,7 +21,6 @@ class DmbTextArea extends DumboDirective {
 
                 if (typeof value === 'undefined' || value === null || value === '') {
                     response.valid = false;
-                    response.error = 'Este campo es obligatorio';
                 }
 
                 return response;
@@ -36,7 +34,6 @@ class DmbTextArea extends DumboDirective {
 
                 if (value && !re.test(value)) {
                     response.valid = false;
-                    response.error = 'Este campo debe ser solo num&eacute;rico';
                 }
 
                 return response;
@@ -49,7 +46,6 @@ class DmbTextArea extends DumboDirective {
 
                 if (value && value.length < param) {
                     response.valid = false;
-                    response.error = 'Este campo debe ser de ' + param + ' caracteres m&iacute;nimo';
                 }
 
                 return response;
@@ -62,7 +58,6 @@ class DmbTextArea extends DumboDirective {
 
                 if (value && value.length > param) {
                     response.valid = false;
-                    response.error = 'Este campo debe ser de ' + param + ' caracteres m&aacute;ximo';
                 }
 
                 return response;
@@ -157,15 +152,14 @@ class DmbTextArea extends DumboDirective {
     }
 
     _runValidators (element, validators) {
-        var unknownValidator = () => {
-                return {valid: false, error: 'Unknown validator type: "' + (validator || {}).key + '"'};
-            },
-            content = element.value.trim(),
-            valid = true,
-            validator= null,
-            func = null,
-            result = null,
-            message = null;
+        let unknownValidator = () => {
+            return {valid: false, error: 'Unknown validator type: "' + (validator || {}).key + '"'};
+        };
+        let content = element.value.trim();
+        let valid = true;
+        let validator= null;
+        let func = null;
+        let result = null;
 
         element.value = content;
         for (var i = 0, len = validators.length; i < len; i++) {
@@ -175,17 +169,14 @@ class DmbTextArea extends DumboDirective {
             result = func(content, validator.param);
             if (result.valid !== true) {
                 valid = false;
-                message = result.error;
                 break;
             }
         }
 
         if (valid === true) {
             element.parentNode.classList.remove(this._errorInputClass);
-            element.parentNode.querySelectorAll('.error-container').item(0).innerHTML = '';
         } else {
             element.parentNode.classList.add(this._errorInputClass);
-            element.parentNode.querySelectorAll('.error-container').item(0).innerHTML = message;
         }
         this.isValid = valid;
         valid? element.setAttribute('valid','') : element.removeAttribute('valid');

@@ -26,8 +26,7 @@ describe('DmbInput Directive', () => {
         input.value = null;
         input.dispatchEvent(new Event('focusin'));
         input.dispatchEvent(new Event('blur'));
-        const errMsg = element.querySelector('span.error-container').innerHTML;
-        expect(errMsg).toBe('Este campo es obligatorio');
+        expect(input.hasAttribute('valid')).toBe(false);
     });
 
     it('Should validate email', () => {
@@ -35,7 +34,6 @@ describe('DmbInput Directive', () => {
         input.value = 'anything but email address';
         input.dispatchEvent(new Event('focusin'));
         input.dispatchEvent(new Event('blur'));
-        const errMsg = element.querySelector('span.error-container').innerHTML;
-        expect(errMsg).toBe('No es una dirección de email válido');
+        expect(input.hasAttribute('valid')).toBe(false);
     });
 });

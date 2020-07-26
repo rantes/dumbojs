@@ -1,7 +1,6 @@
 dmb-select {
     box-sizing: border-box;
     display: block;
-    min-height: 5.8em;
     padding-bottom: 1em;
     position: relative;
 
@@ -25,10 +24,6 @@ dmb-select {
             color: black;
             outline: 0 none;
         }
-
-        ._error & {
-            border: 1px solid var(--error);
-        }
     }
 
     label {
@@ -50,7 +45,17 @@ dmb-select {
 
     .error-container {
         color: var(--error);
-        display: inline-block;
+        display: none;
         line-height: normal;
+    }
+
+    &._error {
+        select {
+            border: 1px solid var(--error);
+        }
+
+        .error-container {
+            display: inline-block;
+        }
     }
 }

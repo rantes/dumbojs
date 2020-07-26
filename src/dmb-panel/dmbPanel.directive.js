@@ -4,8 +4,8 @@ class DmbPanel extends DumboDirective {
 
     constructor() {
         super();
-        const template = '<section class="dmb-view wrapper" transclude>' +
-                        '</section>';
+        const template = '<dmb-view class="wrapper" transclude>' +
+                        '</dmb-view>';
 
         this.setTemplate(template);
         this.returnValue = null;

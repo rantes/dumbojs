@@ -10,8 +10,8 @@ dmb-content, .dmb-content {
     position: absolute;
     right: 0;
     top: 4em;
+}
 
-    .padded-footer & {
-        height: calc(100% - 9em);
-    }
+.padded-footer > dmb-content, .padded-footer > .dmb-content {
+    height: calc(100% - 9em);
 }

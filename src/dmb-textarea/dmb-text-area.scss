@@ -1,7 +1,6 @@
 dmb-text-area {
     box-sizing: border-box;
     display: block;
-    min-height: 5.8em;
     padding-bottom: 1em;
     position: relative;
 
@@ -25,10 +24,6 @@ dmb-text-area {
             color: black;
             outline: 0 none;
         }
-
-        ._error & {
-            border: 1px solid var(--error);
-        }
     }
 
     label {
@@ -51,7 +46,17 @@ dmb-text-area {
 
     .error-container {
         color: var(--error);
-        display: inline-block;
+        display: none;
         line-height: 1;
+    }
+
+    &._error {
+        textarea {
+            border: 1px solid var(--error);
+        }
+
+        .error-container {
+            display: inline-block;
+        }
     }
 }

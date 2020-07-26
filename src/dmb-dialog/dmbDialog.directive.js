@@ -27,11 +27,11 @@ class DmbDialog extends DumboDirective {
     open() {
         this.setAttribute('open','');
         this.dispatchEvent(new Event('open'));
-        this.addEventListener('click', (e) => {
-            if (this.openValue && e.target === this) {
-                this.close('cancelled');
-            }
-        },true);
+        // this.addEventListener('click', (e) => {
+        //     if (this.openValue && e.target === this) {
+        //         this.close('cancelled');
+        //     }
+        // },true);
     }
 
     showModal() {

@@ -1,5 +1,6 @@
 const vDom = document.cloneNode(true);
 
+// eslint-disable-next-line no-unused-vars
 class DumboFactory {
     setTemplate(template) {
         this.childrenTemplate = vDom.querySelector(`#${this.constructor.name}-template`);
@@ -13,6 +14,7 @@ class DumboFactory {
     }
 }
 
+// eslint-disable-next-line no-unused-vars
 class DumboDirective extends HTMLElement {
     constructor () {
         super();

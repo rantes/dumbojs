@@ -1,12 +1,15 @@
 class DmbSelect extends DumboDirective {
-    static get observedAttributes() { return ['valid','values', 'dmb-name']; }
+    static get observedAttributes() { 
+        return [
+            'valid','values', 'dmb-name', 'label', 'dmb-class', 'validate', 'dmb-value'
+        ]; 
+    }
 
     constructor() {
         super();
 
         const template = '<label></label>' +
-                        '<select transclude></select>' +
-                        '<span class="error-container"></span>';
+                        '<select transclude></select>';
 
         this.setTemplate(template);
         this.validations = {
@@ -18,16 +21,21 @@ class DmbSelect extends DumboDirective {
 
                 if (typeof value === 'undefined' || value === null || value === '') {
                     response.valid = false;
-                    response.error = 'Este campo es obligatorio';
+                    response.error = '';
                 }
 
                 return response;
             }
         };
         this.isValid = false;
-        this.values = [];
+        this.valueList = [];
         this.validators = [];
         this._errorInputClass = '_error';
+    }
+
+    set values(newValues = []) {
+        this.valueList = newValues;
+        this.buildOptions();
     }
 
     init() {
@@ -37,25 +45,18 @@ class DmbSelect extends DumboDirective {
         let option = null;
         let opval = null;
 
-        this.querySelector('label').innerText = this.getAttribute('label');
-        select.setAttribute('aria-label',this.getAttribute('label') || '');
-        select.setAttribute('class',this.getAttribute('dmb-class') || '');
-        select.setAttribute('name',this.getAttribute('dmb-name') || '');
-        select.setAttribute('valid','true');
-        select.setAttribute('validate',this.getAttribute('validate'));
+        this.hasAttribute('label') && (this.querySelector('label').innerText = this.getAttribute('label'));
+        this.hasAttribute('label') && select.setAttribute('aria-label',this.getAttribute('label') || '');
+        this.hasAttribute('dmb-class') && select.setAttribute('dmb-class',this.getAttribute('dmb-class') || '');
+        select.setAttribute('name', this.getAttribute('dmb-name') || '');
+        this.hasAttribute('validate') && select.setAttribute('validate',this.getAttribute('validate'));
         select.id = this.getAttribute('dmb-id') || this.generateId();
-
-        if (select && this.hasAttribute('value')) {
-            value = this.getAttribute('value').trim();
-            try {
-                value = JSON.parse(value);
-            } catch (e) {
-                console.log(e.message);
-            }
-        }
-
         select.multiple = this.hasAttribute('multiple');
-        select.value = value;
+
+        if (this.hasAttribute('dmb-value')) {
+            value = this.getAttribute('dmb-value').trim();
+            value = select.multiple ? JSON.parse(value) : value;
+        }
 
         if (select && this.getAttribute('validate')) {
             this.validators = this.buildValidators(select, this.getAttribute('validate'));
@@ -68,11 +69,17 @@ class DmbSelect extends DumboDirective {
         options = [...select.querySelectorAll('option')];
         if(options.length){
             while((option = options.shift())) {
+                option.value = (option.getAttribute('value') || '').trim();
                 opval = isNaN(option.value) ? option.value : parseInt(option.value);
-                option.selected = select.multiple ? value.includes(opval) : (option.value == value);
+                value = isNaN(value) ? value : parseInt(value);
+
+                if ((!option.hasAttribute('selected') && (opval && opval == value)) || (Array.isArray(value) && value.includes(opval))) {
+                    option.setAttribute('selected',true);
+                    option.selected = true;
+                }
+
             }
         }
-
     }
 
     _runValidators(element, validators) {
@@ -80,14 +87,13 @@ class DmbSelect extends DumboDirective {
             return {valid: false, error: 'Unknown validator type: "' + (validator || {}).key + '"'};
         };
         let options = element.querySelectorAll('option');
-        let content = [...options].filter(x=>x.selected).map(x=>x.value.trim());
-        let valid = true,
-            validator= null,
-            func = null,
-            result = null,
-            message = null;
+        let content = [...options].filter(x=>x.selected).map(x=>x.value.trim() || '');
+        let valid = true;
+        let validator= null;
+        let func = null;
+        let result = null;
 
-        !element.multiple && (element.value = content[0]);
+        !element.multiple && (content = content[0]);
         for (var i = 0, len = validators.length; i < len; i++) {
             validator = validators[i];
             func = this.validations['_' + validator.key] || unknownValidator;
@@ -95,20 +101,17 @@ class DmbSelect extends DumboDirective {
             result = func(content, validator.param);
             if (result.valid !== true) {
                 valid = false;
-                message = result.error;
                 break;
             }
         }
 
         if (valid === true) {
             element.parentNode.classList.remove(this._errorInputClass);
-            element.parentNode.querySelectorAll('.error-container').item(0).innerHTML = '';
         } else {
             element.parentNode.classList.add(this._errorInputClass);
-            element.parentNode.querySelectorAll('.error-container').item(0).innerHTML = message;
         }
         this.isValid = valid;
-        valid? element.setAttribute('valid',true) : element.removeAttribute('valid');
+        valid? element.setAttribute('valid','') : element.removeAttribute('valid');
     }
 
     buildValidators(element, validations) {
@@ -136,7 +139,8 @@ class DmbSelect extends DumboDirective {
     }
 
     attributeChangedCallback(attr, oldValue, newValue) {
-        let select = this.querySelector('select');
+        const select = this.querySelector('select');
+        const label = this.querySelector('label');
 
         switch(attr) {
         case 'valid':
@@ -144,34 +148,49 @@ class DmbSelect extends DumboDirective {
             break;
         case 'values':
             if (!oldValue && newValue) {
+                this.valueList = JSON.parse(newValue);
                 this.buildOptions();
-                this.querySelector('select').dispatchEvent(new Event('change'));
             }
             break;
         case 'dmb-name':
-            if (select) this.querySelector('select').setAttribute('name', newValue);
+            if (select) select.setAttribute('name', newValue);
+            break;
+        case 'validate':
+            if (select) this.validators = this.buildValidators(select, newValue);
+            break;
+        case 'dmb-value':
+            if (!oldValue && newValue && select) {
+                this.buildOptions();
+            }
+            break;
+        case 'label':
+            if (label) label.innerText = newValue;
             break;
         }
+
     }
     /**
      * Build the inner options for the select
      */
     buildOptions() {
         let i = 0;
-        let total = this.values.length || 0;
+        let total = this.valueList.length || 0;
         let option = null;
+        let value = this.getAttribute('dmb-value') || null;
         const select = this.querySelector('select');
 
         select.innerHTML = '';
-        if(!select.multiple) select.value = null;
+        select.multiple && value && (value = JSON.parse(value));
 
         for (i = 0; i < total; i++) {
             option = document.createElement('option');
-            option.setAttribute('value',this.values[i].value);
-            option.innerHTML = this.values[i].text;
-            if (this.values[i].selected || this.values[i] === select.value || (Array.isArray(select.value) && select.value.includes(this.values[i]))) {
+            option.value, this.valueList[i].value;
+            option.setAttribute('value',this.valueList[i].value);
+            option.innerHTML = this.valueList[i].text;
+            
+            if (this.valueList[i].selected || (option.value.length && option.value == value) || (Array.isArray(value) && value.includes(option.value))) {
                 option.setAttribute('selected',true);
-                if(!select.multiple) select.value = this.values[i].value;
+                option.selected = true;
             }
             select.append(option);
         }
@@ -180,9 +199,11 @@ class DmbSelect extends DumboDirective {
     }
 
     resetValidation() {
-        let elements = this.getElementsByClassName(this._errorInputClass);
-        for (let i = 0; elements.length; i++) {
-            elements.item(0).classList.remove(this._errorInputClass);
+        let elements = [...this.querySelectorAll(this._errorInputClass)];
+        let element = null;
+
+        while ((element = elements.shift())) {
+            element.classList.remove(this._errorInputClass);
         }
     }
 

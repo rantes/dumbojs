@@ -1,12 +1,11 @@
 class DmbInput extends DumboDirective {
-    static get observedAttributes() { return ['valid','name', 'validate', 'dmb-name']; }
+    static get observedAttributes() { return ['valid','name', 'validate', 'dmb-name', 'label']; }
 
     constructor() {
         super();
 
         const template = '<label></label>' +
-                        '<input type="text" placeholder="" />' +
-                        '<span class="error-container"></span>';
+                        '<input type="text" placeholder="" />';
 
         this.setTemplate(template);
         this.isValid = false;
@@ -20,7 +19,6 @@ class DmbInput extends DumboDirective {
 
                 if (typeof value === 'undefined' || value === null || value === '') {
                     response.valid = false;
-                    response.error = 'Este campo es obligatorio';
                 }
 
                 return response;
@@ -34,7 +32,6 @@ class DmbInput extends DumboDirective {
 
                 if (value && !re.test(value)) {
                     response.valid = false;
-                    response.error = 'No es una direcci&oacute;n de email v&aacute;lido';
                 }
 
                 return response;
@@ -48,7 +45,6 @@ class DmbInput extends DumboDirective {
 
                 if (value && !re.test(value)) {
                     response.valid = false;
-                    response.error = 'Este campo debe ser solo num&eacute;rico';
                 }
 
                 return response;
@@ -61,7 +57,6 @@ class DmbInput extends DumboDirective {
 
                 if (value && value.length < param) {
                     response.valid = false;
-                    response.error = 'Este campo debe ser de ' + param + ' caracteres m&iacute;nimo';
                 }
 
                 return response;
@@ -74,7 +69,6 @@ class DmbInput extends DumboDirective {
 
                 if (value && value.length > param) {
                     response.valid = false;
-                    response.error = 'Este campo debe ser de ' + param + ' caracteres m&aacute;ximo';
                 }
 
                 return response;
@@ -90,10 +84,18 @@ class DmbInput extends DumboDirective {
             this.isValid = (newValue !== null);
             break;
         case 'name':
-            if (input) input.setAttribute('name',newValue);
-            break;
         case 'dmb-name':
-            if (input) input.setAttribute('name',newValue);
+            if (input) input.setAttribute('name', newValue);
+            break;
+        case 'validate':
+            this.buildValidators();
+            break;
+        case 'label':
+            if (input) {
+                this.querySelector('label').innerText = newValue;
+                input.setAttribute('aria-label', newValue);
+                input.setAttribute('placeholder', newValue);
+            }
             break;
         }
     }
@@ -101,7 +103,7 @@ class DmbInput extends DumboDirective {
     buildValidators () {
         let validators = [];
         let validatorList = (this.getAttribute('validate') || '').split(',');
-        let input = null;
+        const input = this.querySelector('input');
 
         for (let i = 0, len = validatorList.length; i < len; i++) {
             let keyParam = validatorList[i].split(':');
@@ -112,8 +114,7 @@ class DmbInput extends DumboDirective {
                     param: keyParam.length === 2 ? keyParam[1] : null
                 });
 
-                if (keyParam[0] === 'required') {
-                    input = this.querySelector('input');
+                if (keyParam[0] === 'required' && input) {
                     this.classList.add('required');
                     input.setAttribute('required','required');
                 }
@@ -127,31 +128,28 @@ class DmbInput extends DumboDirective {
         const unknownValidator = () => {
             return {valid: false, error: 'Unknown validator type: "' + (validator || {}).key + '"'};
         };
+        const type = element.getAttribute('type');
         let content = element.value.trim();
         let valid = true;
         let validator= null;
         let func = null;
         let result = null;
-        let message = null;
 
-        element.value = content;
+        if (type !== 'file') element.value = content;
         while((validator = validators.shift())) {
             func = this.validations['_' + validator.key] || unknownValidator;
 
             result = func(content, validator.param);
             if (result.valid !== true) {
                 valid = false;
-                message = result.error;
                 break;
             }
         }
 
         if (valid === true) {
             element.parentNode.classList.remove(this._errorInputClass);
-            element.parentNode.querySelectorAll('.error-container').item(0).innerHTML = '';
         } else {
             element.parentNode.classList.add(this._errorInputClass);
-            element.parentNode.querySelectorAll('.error-container').item(0).innerHTML = message;
         }
 
         this.isValid = valid;
@@ -179,6 +177,7 @@ class DmbInput extends DumboDirective {
         const validate = this.getAttribute('validate') || null;
         const pattern = this.getAttribute('pattern') || null;
         const value = this.getAttribute('value') || null;
+        const type = this.getAttribute('type') || 'text';
 
         if (label) {
             this.querySelector('label').innerText = label;
@@ -195,8 +194,9 @@ class DmbInput extends DumboDirective {
         if (value) input.value = value;
 
         input.id = this.getAttribute('dmb-id') || this.generateId();
-        input.setAttribute('type',this.getAttribute('type') || 'text');
-        
+        input.setAttribute('type', type);
+
+        type === 'file' && this.hasAttribute('accept') && input.setAttribute('accept', this.getAttribute('accept'));
         
         const maskInputUppercase = (e) => {
             e.target.value = e.target.value.toUpperCase();
