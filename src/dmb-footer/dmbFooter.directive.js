@@ -4,13 +4,12 @@ class DmbFooter extends DumboDirective {
     }
     
     init() {
-        let dmbview = null;
+        const dmbview = this.parentNode.querySelector('dmb-content');
 
-        dmbview = this.closest('dmb-view');
-        if(!dmbview) {
-            dmbview = this.closest('.dmb-view');
+        if(dmbview) {
+            dmbview.classList.add('padded-footer');
         }
-        dmbview.classList.add('padded-footer');
     }
 }
+
 customElements.define('dmb-footer', DmbFooter);
