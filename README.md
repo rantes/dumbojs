@@ -17,6 +17,8 @@ class DmbExample extends DumboDirective {
     }
 }
 
+customElements.define('dmb-example', DmbExample);
+
 ```
 
 ## Sample of implementation
