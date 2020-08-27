@@ -34,26 +34,33 @@ describe('DmbVideoUploader Directive', () => {
     };
   
     const imgFile = dataURLtoFile(vid1sec, contentType);
-    const previewvideo = element.querySelector('.preview video');
+    let previewvideo = null;
+    beforeAll((done) => {
+        previewvideo = element.querySelector('.preview video');
+        done();
+    });
 
-    it('Should render element', () => {
+    it('Should render element', (done) => {
         expect(element).toBeDefined();
+        done();
     });
 
     loadFile = function(target) {
         console.log(`trying to send data to ${target}`);
     };
 
-    it('Should check if element was render', () => {
+    it('Should check if element was render', (done) => {
         spyOn(element, 'loadFile');
         element.querySelector('input[type="file"]').dispatchEvent(new Event('change'));
         expect(element.loadFile).toHaveBeenCalled();
+        done();
     });
 
-    it('Should load the image in content preview', () => {
+    it('Should load the image in content preview', (done) => {
         previewvideo.src = '';
         element.loadFile(imgFile).then(() => {
             expect(previewvideo.getAttribute('src')).toBe(`data:video/ogg;base64,${vid1sec}`);
+            done();
         });
     });
 });

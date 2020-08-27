@@ -29,26 +29,29 @@ describe('DmbImageUploader Directive', () => {
     };
   
     const imgFile = dataURLtoFile(img1px, contentType);
-    let previewimg = element.querySelector('.preview img');
 
-    it('Should render element', () => {
+    it('Should render element', (done) => {
         expect(element).toBeDefined();
+        done();
     });
 
     loadFile = function(target) {
         console.log(`trying to send data to ${target}`);
     };
 
-    it('Should check if element was render', () => {
+    it('Should check if element was render', (done) => {
         spyOn(element, 'loadFile');
         element.querySelector('input[type="file"]').dispatchEvent(new Event('change'));
         expect(element.loadFile).toHaveBeenCalled();
+        done();
     });
 
-    it('Should load the image in content preview', () => {
+    it('Should load the image in content preview', (done) => {
+        const previewimg = element.querySelector('.preview img');
         previewimg.src = '';
         element.loadFile(imgFile).then(() => {
             expect(previewimg.getAttribute('src')).toBe(`data:image/png;base64,${img1px}`);
+            done();
         });
     });
 });

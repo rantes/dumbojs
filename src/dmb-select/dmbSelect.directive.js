@@ -39,7 +39,7 @@ class DmbSelect extends DumboDirective {
     }
 
     init() {
-        let select = this.querySelector('select');
+        const select = this.querySelector('select');
         let value = null;
         let options = null;
         let option = null;
@@ -179,20 +179,22 @@ class DmbSelect extends DumboDirective {
         let value = this.getAttribute('dmb-value') || null;
         const select = this.querySelector('select');
 
-        select.innerHTML = '';
-        select.multiple && value && (value = JSON.parse(value));
-
-        for (i = 0; i < total; i++) {
-            option = document.createElement('option');
-            option.value, this.valueList[i].value;
-            option.setAttribute('value',this.valueList[i].value);
-            option.innerHTML = this.valueList[i].text;
-            
-            if (this.valueList[i].selected || (option.value.length && option.value == value) || (Array.isArray(value) && value.includes(option.value))) {
-                option.setAttribute('selected',true);
-                option.selected = true;
+        if (select) {
+            select.innerHTML = '';
+            select.multiple && value && (value = JSON.parse(value));
+    
+            for (i = 0; i < total; i++) {
+                option = document.createElement('option');
+                option.value, this.valueList[i].value;
+                option.setAttribute('value',this.valueList[i].value);
+                option.innerHTML = this.valueList[i].text;
+                
+                if (this.valueList[i].selected || (option.value.length && option.value == value) || (Array.isArray(value) && value.includes(option.value))) {
+                    option.setAttribute('selected',true);
+                    option.selected = true;
+                }
+                select.append(option);
             }
-            select.append(option);
         }
 
         this.removeAttribute('values');

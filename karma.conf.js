@@ -24,7 +24,7 @@ module.exports = function(config) {
         logLevel: config.LOG_INFO,
         browsers: ['Chrome'],
         autoWatch: false,
-        singleRun: false, // Karma captures browsers, runs the tests and exits
+        singleRun: true, // Karma captures browsers, runs the tests and exits
         client: {
             clearContext: false // leave Jasmine Spec Runner output visible in browser
         },

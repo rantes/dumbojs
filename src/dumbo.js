@@ -51,7 +51,7 @@ class DumboDirective extends HTMLElement {
             if (temp) {
                 this.appendChild(temp);
             }
-            
+
             this.setAttribute('rendered', 'true');
         }
 

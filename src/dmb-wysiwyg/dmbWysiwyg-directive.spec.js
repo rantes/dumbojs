@@ -6,19 +6,24 @@ describe('dmbWYSIWYG Directive', () => {
     
     element = document.createElement('dmb-wysiwyg');
     document.body.append(element);
-    textarea = element.querySelector('textarea.dmb-wysiwyg__content-content');
-    editarea = element.querySelector('section.dmb-wysiwyg__content-content');
+
+    beforeAll((done) => {
+        textarea = element.querySelector('textarea.dmb-wysiwyg__content-content');
+        editarea = element.querySelector('section.dmb-wysiwyg__content-content');
+        done();
+    });
     
     beforeEach(() => {
         textarea.value = '';
         editarea.innerHTML = '';
     });
 
-    it('Should render element', () => {
+    it('Should render element', (done) => {
         expect(element).toBeDefined();
+        done();
     });
 
-    it('Should check fields if have data', () => {
+    it('Should check fields if have data', (done) => {
         element.setAttribute('validate', 'required');
         textarea.value = 'prueba';
         editarea.innerHTML = 'prueba';
@@ -26,27 +31,30 @@ describe('dmbWYSIWYG Directive', () => {
         editarea.dispatchEvent(new Event('blur'));
         const errMsg = element.querySelector('span.error-container').innerHTML;
         expect(errMsg).toBe('');
+        done();
     });
 
-    it('Should sync data from textarea to editarea', () => {
+    it('Should sync data from textarea to editarea', (done) => {
         editarea.setAttribute('hidden', true);
         textarea.removeAttribute('hidden');
         editarea.innerHTML = '';
         textarea.value = 'texto';
         element.syncData();
         expect(editarea.innerHTML).toBe('texto');
+        done();
     });
 
-    it('Should sync data from editarea to textarea', () => {
+    it('Should sync data from editarea to textarea', (done) => {
         textarea.setAttribute('hidden', true);
         editarea.removeAttribute('hidden');
         textarea.value = '';
         editarea.innerHTML = 'texto';
         element.syncData();
         expect(textarea.value).toBe('texto');
+        done();
     });
 
-    it('Should validate required in textarea', () => {
+    it('Should validate required in textarea', (done) => {
         element.setAttribute('validate', 'required');
         editarea.setAttribute('hidden',true);
         textarea.removeAttribute('hidden');
@@ -55,9 +63,10 @@ describe('dmbWYSIWYG Directive', () => {
         textarea.dispatchEvent(new Event('blur'));
         const errMsg = element.querySelector('span.error-container').innerHTML;
         expect(errMsg).toBe('Este campo es obligatorio');
+        done();
     });
 
-    it('Should validate required in editarea', () => {
+    it('Should validate required in editarea', (done) => {
         element.setAttribute('validate', 'required');
         textarea.setAttribute('hidden',true);
         editarea.removeAttribute('hidden');
@@ -66,5 +75,6 @@ describe('dmbWYSIWYG Directive', () => {
         editarea.dispatchEvent(new Event('blur'));
         const errMsg = element.querySelector('span.error-container').innerHTML;
         expect(errMsg).toBe('Este campo es obligatorio');
+        done();
     });
 });

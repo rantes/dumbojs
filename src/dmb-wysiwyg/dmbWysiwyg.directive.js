@@ -309,4 +309,5 @@ class DmbWysiwyg extends DumboDirective {
         }
     }
 }
+
 customElements.define('dmb-wysiwyg', DmbWysiwyg);

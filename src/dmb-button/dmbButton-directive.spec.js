@@ -5,11 +5,11 @@ describe('dmbButton Directive', () => {
     element = document.createElement('dmb-button');
     element.classList.add('button');
     element.classList.add('button-primary');
-    element.innerHTML = 'Button';
     document.body.append(element);
 
-    it('Should render element', () => {
+    it('Should render element', (done) => {
         expect(element).toBeDefined();
+        done();
     });
 
 });

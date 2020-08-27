@@ -13,6 +13,10 @@ class DmbToggle extends DumboDirective {
         this.setStatus();
     }
 
+    get value() {
+        return this.val;
+    }
+
     attributeChangedCallback(attr, oldValue, newValue) {
         switch(attr) {
         case 'value':
@@ -37,6 +41,16 @@ class DmbToggle extends DumboDirective {
             this.classList.add('on');
         } else {
             this.classList.remove('on');
+        }
+    }
+
+    /**
+     * Attach a method to run when event click is fired.
+     * @param {function} method
+     */
+    click(method) {
+        if (typeof method === 'function') {
+            this.addEventListener('click', method);
         }
     }
 }
