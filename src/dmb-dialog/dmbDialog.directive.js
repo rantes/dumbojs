@@ -83,7 +83,11 @@ class DmbDialog extends DumboDirective {
         msg = msg || '';
         this.classList.add('error');
         message.classList.add('message');
-        message.textContent = msg;
+        if (typeof msg === 'string') {
+            message.innerHTML = msg;
+        } else {
+            message.append(msg);
+        }
         wrapper.append(message);
     }
 
@@ -96,7 +100,11 @@ class DmbDialog extends DumboDirective {
         msg = msg || '';
         this.classList.add('info');
         message.classList.add('message');
-        message.textContent = msg;
+        if (typeof msg === 'string') {
+            message.innerHTML = msg;
+        } else {
+            message.append(msg);
+        }
         wrapper.append(message);
     }
 
@@ -107,7 +115,11 @@ class DmbDialog extends DumboDirective {
 
         this.classList.add('question');
         message.classList.add('message');
-        message.textContent = msg;
+        if (typeof msg === 'string') {
+            message.innerHTML = msg;
+        } else {
+            message.append(msg);
+        }
         wrapper.append(message);
     }
 
