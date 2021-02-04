@@ -169,9 +169,7 @@ class DmbSelect extends DumboDirective {
         }
 
     }
-    /**
-     * Build the inner options for the select
-     */
+
     buildOptions() {
         let i = 0;
         let total = this.valueList.length || 0;

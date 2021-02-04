@@ -21,7 +21,7 @@ dmb-info-pop {
         }
     }
 
-    &:hover {
+    &:hover, &:active {
         .float-content {
             opacity: 1;
             visibility: visible;

@@ -18,12 +18,13 @@ class DmbVideoUploader extends DumboDirective {
     init() {
         const dmbVideoInput = this.querySelector('dmb-input[type="file"]');
         const videoInput = dmbVideoInput.querySelector('input[type="file"]');
+        const willPreview = this.hasAttribute('preview') && !!this.getAttribute('preview').length;
 
         this.hasAttribute('validate') && dmbVideoInput.setAttribute('validate', this.getAttribute('validate'));
         this.hasAttribute('dmb-name') && dmbVideoInput.setAttribute('dmb-name', this.getAttribute('dmb-name'));
         this.hasAttribute('label') && dmbVideoInput.setAttribute('label', this.getAttribute('label'));
 
-        videoInput.addEventListener('change', e => {
+        willPreview && videoInput.addEventListener('change', e => {
             this.loadFile(e.target.files[0]);
         });
     }

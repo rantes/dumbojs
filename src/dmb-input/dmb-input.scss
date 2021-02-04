@@ -24,6 +24,16 @@ dmb-input {
             color: black;
             outline: 0 none;
         }
+
+        &[type="checkbox"] {
+            float: left;
+            width: auto;
+            
+            &~label {
+                float: left;
+                width: auto;
+            }
+        }
     }
 
     label {

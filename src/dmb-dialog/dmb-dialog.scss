@@ -61,8 +61,13 @@ dmb-dialog {
         .close-modal-button {
             cursor: pointer;
             position: absolute;
-            right: 10px;
-            top: 10px;
+            right: 2em;
+            top: 1em;
+            z-index: 1;
+
+            &:before {
+                font-size: 2em;
+            }
         }
     }
 
@@ -114,6 +119,7 @@ dmb-dialog {
 
         &.large {
             .wrapper {
+                height: 80vh;
                 width: 90vw;
             }
         }

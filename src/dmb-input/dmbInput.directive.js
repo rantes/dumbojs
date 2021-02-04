@@ -169,6 +169,7 @@ class DmbInput extends DumboDirective {
 
     init() {
         const input = this.querySelector('input');
+        const labelElement = this.querySelector('label');
         const label = this.getAttribute('label') || null;
         const masked = this.getAttribute('masked') || null;
         const autocomplete = this.getAttribute('autocomplete') || null;
@@ -179,10 +180,21 @@ class DmbInput extends DumboDirective {
         const value = this.getAttribute('value') || null;
         const type = this.getAttribute('type') || 'text';
 
+        input.id = this.getAttribute('dmb-id') || this.generateId();
+        input.setAttribute('type', type);
+
         if (label) {
             this.querySelector('label').innerText = label;
             input.setAttribute('aria-label', label);
             input.setAttribute('placeholder', label);
+        }
+        
+        if (labelElement) {
+            labelElement.setAttribute('for', input.id);
+        }
+
+        if (type === 'checkbox') {
+            this.insertBefore(input, labelElement);
         }
 
         if (masked) input.setAttribute('masked', masked);
@@ -192,9 +204,6 @@ class DmbInput extends DumboDirective {
         if (validate) input.setAttribute('validate', validate);
         if (pattern) input.setAttribute('pattern', pattern);
         if (value) input.value = value;
-
-        input.id = this.getAttribute('dmb-id') || this.generateId();
-        input.setAttribute('type', type);
 
         type === 'file' && this.hasAttribute('accept') && input.setAttribute('accept', this.getAttribute('accept'));
         
