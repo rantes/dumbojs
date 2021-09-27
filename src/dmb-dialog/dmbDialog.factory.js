@@ -55,12 +55,13 @@ class DmbDialogService {
         dialog.classList.add('drawer');
         dialog.classList.add(size);
         document.body.append(dialog);
-
+        
         if (typeof content === 'string') {
             dialog.querySelector('.wrapper').innerHTML = content;
         } else {
             dialog.querySelector('.wrapper').append(content);
         }
+        dialog.setCloseButton();
 
         dialog.showModal();
 

@@ -86,7 +86,6 @@ class DmbTextArea extends DumboDirective {
     }
 
     init() {
-        
         let input = this.getElementsByTagName('textarea').item(0);
 
         this.querySelector('label').innerText = this.getAttribute('label');
@@ -99,7 +98,7 @@ class DmbTextArea extends DumboDirective {
         input.setAttribute('placeholder',this.getAttribute('placeholder') || '');
         input.setAttribute('valid','true');
         input.id = this.getAttribute('dmb-id')|| this.generateId();
-        
+
         const maskInputUppercase = (e) => {
             e.target.value = e.target.value.toUpperCase();
         };
@@ -111,23 +110,23 @@ class DmbTextArea extends DumboDirective {
         input.addEventListener('blur', (e) => {
             this._runValidators(e.target, this.validators);
         }, {capture: true, passive: true});
-    
+
         const maskInputAlpha = (e) => {
-            var char = e.which || e.keyCode;
-    
+            let char = e.which || e.keyCode;
+
             if ((char < 65 || char > 90) && (char < 97 || char > 122)) {
                 return false;
             }
         };
-    
+
         const maskInputNumeric = (e) => {
-            var char = e.which || e.keyCode;
-    
+            let char = e.which || e.keyCode;
+
             if (char < 48 || char > 57) {
                 return false;
             }
         };
-    
+
         if (this.getAttribute('validate')) {
             this.validators = this.buildValidators(input, this);
 
@@ -183,11 +182,11 @@ class DmbTextArea extends DumboDirective {
     }
 
     buildValidators (element, scope) {
-        var validators = [],
+        let validators = [],
             validatorList = (scope.getAttribute('validate') || '').split(',');
 
-        for (var i = 0, len = validatorList.length; i < len; i++) {
-            var keyParam = validatorList[i].split(':');
+        for (let i = 0, len = validatorList.length; i < len; i++) {
+            let keyParam = validatorList[i].split(':');
 
             if (keyParam[0]) {
                 validators.push({
@@ -217,4 +216,4 @@ class DmbTextArea extends DumboDirective {
     }
 }
 
-customElements.define('dmb-text-area', DmbTextArea);
+customElements.define('dmb-textarea', DmbTextArea);

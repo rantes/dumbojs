@@ -1,13 +1,3 @@
-@keyframes slide-up {
-    0% {
-      top: 150vh;
-    }
-
-    100% {
-      top: 50vh;
-    }
-  }
-
 dmb-dialog {
     border: 0;
     bottom: 0;
@@ -19,10 +9,10 @@ dmb-dialog {
     right: 0;
     text-align: center;
     top: 0;
-    transition: opacity 1s ease-in-out;
+    transition: opacity 0.5s ease-in-out;
     width: 100vw;
     z-index: 999;
-    
+
     & .wrapper {
         background-color: white;
         border-radius: 0.6rem;
@@ -30,27 +20,29 @@ dmb-dialog {
         display: block;
         left: 50%;
         margin: 0;
+        min-width: 300px;
         position: absolute;
         top: 150vh;
         transform: translate(-50%, -50%);
-        min-width: 300px;
+        transition: transform 0.5s ease-in-out;
+        will-change: transform;
         z-index: 1000;
-        
+
         .dmb-header {
             border-radius: 0.6rem 0.6rem 0 0;
         }
-        
+
         .dmb-footer {
             border-radius: 0 0 0.6rem 0.6rem;
         }
-        
+
         .message {
             left: 50px;
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
         }
-        
+
         .icon:not(.close-modal-button) {
             left: 10px;
             position: absolute;
@@ -92,7 +84,7 @@ dmb-dialog {
             min-height: 6em;
         }
     }
-    
+
     &.loader {
         .wrapper {
             height: 250px;
@@ -124,13 +116,12 @@ dmb-dialog {
             }
         }
     }
-    
+
     &[open] {
         opacity: 1;
 
         .wrapper {
-            animation: slide-up 0.4s ease-out;
-            top: 50vh;
+            transform: translate(-50%, -140vh);
         }
     }
 }

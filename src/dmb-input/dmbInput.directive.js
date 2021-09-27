@@ -178,6 +178,7 @@ class DmbInput extends DumboDirective {
         const validate = this.getAttribute('validate') || null;
         const pattern = this.getAttribute('pattern') || null;
         const value = this.getAttribute('value') || null;
+        const step = this.getAttribute('step') || null;
         const type = this.getAttribute('type') || 'text';
 
         input.id = this.getAttribute('dmb-id') || this.generateId();
@@ -188,7 +189,7 @@ class DmbInput extends DumboDirective {
             input.setAttribute('aria-label', label);
             input.setAttribute('placeholder', label);
         }
-        
+
         if (labelElement) {
             labelElement.setAttribute('for', input.id);
         }
@@ -204,24 +205,25 @@ class DmbInput extends DumboDirective {
         if (validate) input.setAttribute('validate', validate);
         if (pattern) input.setAttribute('pattern', pattern);
         if (value) input.value = value;
+        if (step) input.setAttribute('step', step);
 
         type === 'file' && this.hasAttribute('accept') && input.setAttribute('accept', this.getAttribute('accept'));
-        
+
         const maskInputUppercase = (e) => {
             e.target.value = e.target.value.toUpperCase();
         };
-    
+
         const maskInputAlpha = (e) => {
-            var char = e.which || e.keyCode;
-    
+            const char = e.which || e.keyCode;
+
             if ((char < 65 || char > 90) && (char < 97 || char > 122)) {
                 return false;
             }
         };
-    
+
         const maskInputNumeric = (e) => {
-            var char = e.which || e.keyCode;
-    
+            const char = e.which || e.keyCode;
+
             if (char < 48 || char > 57) {
                 return false;
             }

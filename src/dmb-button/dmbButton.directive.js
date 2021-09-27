@@ -12,7 +12,7 @@ class DmbButton extends DumboDirective {
     _submitter() {
         const form = this.closest('dmb-form');
         const type = this.getAttribute('type');
-        
+
         if (form) {
             switch (type) {
             case 'submit':
@@ -26,9 +26,11 @@ class DmbButton extends DumboDirective {
     }
 
     init() {
+        const alreadyHaveSubmit = this.querySelector('input[type="submit"]');
         let submitButton = null;
+
         this.addEventListener('click', this._submitter);
-        if(this.getAttribute('type') === 'submit') {
+        if(this.getAttribute('type') === 'submit' && !alreadyHaveSubmit) {
             submitButton =  document.createElement('input');
             submitButton.setAttribute('type', 'submit');
             submitButton.style.height = 0;

@@ -27,6 +27,8 @@ class DmbVideoUploader extends DumboDirective {
         willPreview && videoInput.addEventListener('change', e => {
             this.loadFile(e.target.files[0]);
         });
+
+        willPreview || this.querySelector('.preview video').remove();
     }
     
     loadFile (file) {
