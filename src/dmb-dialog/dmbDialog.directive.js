@@ -27,12 +27,12 @@ class DmbDialog extends DumboDirective {
 
     open() {
         this.hasAttribute('open') || this.setAttribute('open','');
-        this.dispatchEvent(new Event('open'));
+        this.dispatchEvent(window.DmbEvents.dialogOpen.event);
     }
 
     showModal() {
         const buttons = this.querySelectorAll('[type="modal-answer"]');
-        
+
         [].forEach.call(buttons, button => {
             button.addEventListener('click', e => {
                 this.close(e.target.getAttribute('value'));
@@ -60,10 +60,10 @@ class DmbDialog extends DumboDirective {
                 icon.classList.add('icon');
                 icon.classList.add('icon-cancel');
                 icon.classList.add('close-modal-button');
+                this.querySelector('.wrapper').prepend(icon);
                 icon.addEventListener('click', (e) => {
                     e.target.closest('dmb-dialog').close('cancelled');
                 });
-                this.querySelector('.wrapper').prepend(icon);
             }
         }
     }
@@ -85,8 +85,7 @@ class DmbDialog extends DumboDirective {
     error(msg) {
         const message = document.createElement('span');
         const wrapper = this.querySelector('.wrapper');
-        
-        this.setCloseButton();
+
         this.setIcon('alert');
         msg = msg || '';
         this.classList.add('error');
@@ -102,7 +101,7 @@ class DmbDialog extends DumboDirective {
     info(msg) {
         const message = document.createElement('span');
         const wrapper = this.querySelector('.wrapper');
-        
+
         this.setCloseButton();
         this.setIcon('info');
         msg = msg || '';

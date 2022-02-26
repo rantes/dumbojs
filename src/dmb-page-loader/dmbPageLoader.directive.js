@@ -2,7 +2,7 @@
 class DmbPageLoader extends DumboDirective {
     constructor() {
         super();
-        
+
         window.addEventListener('beforeunload', () => {
             this.classList.add('active');
         });
@@ -19,7 +19,7 @@ class DmbPageLoader extends DumboDirective {
             }, 100
         ));
 
-        window.addEventListener(window.dmbEventsService.pageLoaderClose.listener, () => this.close());
+        window.addEventListener(window.DmbEvents.pageLoaderClose.listener, () => this.close());
         window.addEventListener('load', () => this.close());
     }
 

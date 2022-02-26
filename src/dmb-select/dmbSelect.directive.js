@@ -46,8 +46,8 @@ class DmbSelect extends DumboDirective {
         let opval = null;
 
         this.hasAttribute('label') && (this.querySelector('label').innerText = this.getAttribute('label'));
-        this.hasAttribute('label') && select.setAttribute('aria-label',this.getAttribute('label') || '');
-        this.hasAttribute('dmb-class') && select.setAttribute('dmb-class',this.getAttribute('dmb-class') || '');
+        this.hasAttribute('label') && select.setAttribute('aria-label',this.getAttribute('label'));
+        this.hasAttribute('dmb-class') && select.setAttribute('class', this.getAttribute('dmb-class'));
         select.setAttribute('name', this.getAttribute('dmb-name') || '');
         this.hasAttribute('validate') && select.setAttribute('validate',this.getAttribute('validate'));
         select.id = this.getAttribute('dmb-id') || this.generateId();

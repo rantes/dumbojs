@@ -3,7 +3,7 @@ describe('dmbWYSIWYG Directive', () => {
     let element = null;
     let textarea = null;
     let editarea = null;
-    
+
     element = document.createElement('dmb-wysiwyg');
     document.body.append(element);
 
@@ -12,7 +12,7 @@ describe('dmbWYSIWYG Directive', () => {
         editarea = element.querySelector('section.dmb-wysiwyg__content-content');
         done();
     });
-    
+
     beforeEach(() => {
         textarea.value = '';
         editarea.innerHTML = '';

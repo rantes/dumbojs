@@ -14,12 +14,12 @@ class DmbPanel extends DumboDirective {
     attributeChangedCallback(attr, oldValue, newValue) {
         !!newValue && newValue.length && this.loadExternalSource();
     }
-    
+
     loadExternalSource() {
         const url = this.getAttribute('source');
         let wrapper = null;
         let sourceRequest = null;
-        
+
         if (url && url.length) {
             sourceRequest = new Request(url);
             fetch(sourceRequest)
@@ -36,14 +36,14 @@ class DmbPanel extends DumboDirective {
     close(value) {
         this.returnValue = value;
         this.removeAttribute('open');
-        this.dispatchEvent(new Event('close'));
+        this.dispatchEvent(window.DmbEvents.panelClose.event);
         (this.localName === 'dmb-dialog') && this.remove();
-        this.dispatchEvent(new Event('close-dialog'));
+        this.dispatchEvent(window.DmbEvents.dialogClose.event);
     }
 
     open() {
         this.setAttribute('open','');
-        this.dispatchEvent(new Event('open'));
+        this.dispatchEvent(window.DmbEvents.panelOpened.event);
         this.addEventListener('click', (e) => {
             if (this.openValue && e.target === this) {
                 this.close('cancelled');
@@ -53,7 +53,7 @@ class DmbPanel extends DumboDirective {
 
     showModal() {
         const buttons = this.querySelectorAll('[type="modal-answer"]');
-        
+
         [].forEach.call(buttons, button => {
             button.addEventListener('click', e => {
                 this.close(e.target.getAttribute('value'));
@@ -94,7 +94,7 @@ class DmbPanel extends DumboDirective {
     error(msg) {
         const message = document.createElement('span');
         const wrapper = this.querySelector('.wrapper');
-        
+
         this.setCloseButton();
         this.setIcon('alert');
         msg = msg || '';

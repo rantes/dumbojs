@@ -253,12 +253,12 @@ class DmbWysiwyg extends DumboDirective {
             this._runValidators(editarea, validators);
         }, true);
 
-        document.body.addEventListener(window.dmbEventsService.validate.listener, () => {
+        document.body.addEventListener(window.DmbEvents.validate.listener, () => {
             this._runValidators(textarea, validators);
             this._runValidators(editarea, validators);
         }, true);
 
-        document.body.addEventListener(window.dmbEventsService.resetValidation.listener, () => {
+        document.body.addEventListener(window.DmbEvents.resetValidation.listener, () => {
             let elements = this.getElementsByClassName(this._errorWysiwygClass);
 
             for (let i = 0; elements.length; i++) {
@@ -274,7 +274,7 @@ class DmbWysiwyg extends DumboDirective {
         if (textArea.hasAttribute('hidden')) {
             textArea.value = editArea.innerHTML;
         } else {
-            editArea.innerHTML = textArea.value; 
+            editArea.innerHTML = textArea.value;
         }
     }
 

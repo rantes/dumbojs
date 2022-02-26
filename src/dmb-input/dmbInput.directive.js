@@ -11,13 +11,14 @@ class DmbInput extends DumboDirective {
         this.isValid = false;
         this._errorInputClass = '_error';
         this.validations = {
-            _required: function (value) {
+            _required: function (value, param, input) {
                 let response = {
                     valid: true,
                     error: null
                 };
+                param = null;
 
-                if (typeof value === 'undefined' || value === null || value === '') {
+                if (typeof value === 'undefined' || value === null || value === '' || (input.getAttribute('type') === 'checkbox' && !input.checked)) {
                     response.valid = false;
                 }
 
@@ -76,6 +77,11 @@ class DmbInput extends DumboDirective {
         };
     }
 
+    set value(val) {
+        const input = this.querySelector('input');
+        input.value = val;
+    }
+
     attributeChangedCallback(attr, oldValue, newValue) {
         const input = this.querySelector('input');
 
@@ -111,7 +117,8 @@ class DmbInput extends DumboDirective {
             if (keyParam[0]) {
                 validators.push({
                     key: keyParam[0],
-                    param: keyParam.length === 2 ? keyParam[1] : null
+                    param: keyParam.length === 2 ? keyParam[1] : null,
+                    input
                 });
 
                 if (keyParam[0] === 'required' && input) {
@@ -139,7 +146,7 @@ class DmbInput extends DumboDirective {
         while((validator = validators.shift())) {
             func = this.validations['_' + validator.key] || unknownValidator;
 
-            result = func(content, validator.param);
+            result = func(content, validator.param, validator.input);
             if (result.valid !== true) {
                 valid = false;
                 break;
@@ -171,15 +178,17 @@ class DmbInput extends DumboDirective {
         const input = this.querySelector('input');
         const labelElement = this.querySelector('label');
         const label = this.getAttribute('label') || null;
+        const placeholder = this.getAttribute('placeholder') || label;
         const masked = this.getAttribute('masked') || null;
         const autocomplete = this.getAttribute('autocomplete') || null;
         const classd = this.getAttribute('dmb-class') || null;
         const name = this.getAttribute('dmb-name') || null;
         const validate = this.getAttribute('validate') || null;
         const pattern = this.getAttribute('pattern') || null;
-        const value = this.getAttribute('value') || null;
+        const value = this.getAttribute('value') || this.getAttribute('dmb-value') || null;
         const step = this.getAttribute('step') || null;
         const type = this.getAttribute('type') || 'text';
+        const checked = this.hasAttribute('checked');
 
         input.id = this.getAttribute('dmb-id') || this.generateId();
         input.setAttribute('type', type);
@@ -187,15 +196,19 @@ class DmbInput extends DumboDirective {
         if (label) {
             this.querySelector('label').innerText = label;
             input.setAttribute('aria-label', label);
-            input.setAttribute('placeholder', label);
         }
-
+        if (placeholder) {
+            input.setAttribute('placeholder', placeholder);
+        }
         if (labelElement) {
             labelElement.setAttribute('for', input.id);
         }
 
         if (type === 'checkbox') {
             this.insertBefore(input, labelElement);
+            if (checked) {
+                input.setAttribute('checked', 'on');
+            }
         }
 
         if (masked) input.setAttribute('masked', masked);

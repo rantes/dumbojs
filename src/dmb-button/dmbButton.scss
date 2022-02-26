@@ -5,7 +5,6 @@
     color: var(--default);
     cursor: pointer;
     display: inline-block;
-    overflow: hidden;
     padding: 0.5em 1em;
     position: relative;
     text-align: center;
@@ -16,6 +15,7 @@
 
     .text {
         display: inline-block;
+		pointer-events: none;
     }
 
     &:focus {

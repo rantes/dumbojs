@@ -1,124 +1,35 @@
+#!/usr/bin/php -d display_errors
 <?php
-
-class JSObfuscator {
-    private $code;
-    private $mask;
-    private $interval;
-    private $option = 0;
-    private $expireTime = 0;
-    private $domainNames = [];
-
-    function __construct($Code, $html = false) {
-        ($html and ($this->code = $this->_html2Js($this->_cleanHtml($Code)))) or ($this->code = $this->_cleanJS($Code));
-
-        $this->mask = $this->_getMask();
-        $this->interval = rand(1, 50);
-        $this->option = rand(2, 8);
-    }
-
-    private function _getMask() {
-        return substr(str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, 9);
-    }
-
-    private function _hashIt($s) {
-        for ($i = 0; $i < strlen($this->mask); ++$i)
-            $s = str_replace("$i", $this->mask[$i], $s);
-        return $s;
-    }
-
-    private function _prepare() {
-        if (count($this->domainNames) > 0) {
-            $code = "if(window.location.hostname==='" . $this->domainNames[0] . "' ";
-            for ($i = 1; $i < count($this->domainNames); $i++)
-                $code .= "|| window.location.hostname==='" . $this->domainNames[$i] . "' ";
-            $this->code = $code . "){" . $this->code . "}";
-        }
-        if ($this->expireTime > 0)
-            $this->code = 'if((Math.round(+new Date()/1000)) < ' . $this->expireTime . '){' . $this->code . '}';
-    }
-
-    private function _encodeIt() {
-        $this->_prepare();
-        $str = "";
-        for ($i = 0; $i < strlen($this->code); ++$i)
-            $str .= $this->_hashIt(base_convert(ord($this->code[$i]) + $this->interval, 10, $this->option)) . $this->mask[$this->option];
-        return $str;
-    }
-
-    public function Obfuscate() {
-        $rand = rand(0,99);
-        $rand1 = rand(0,99);
-        return "var _0xc{$rand}e=[\"\",\"\x73\x70\x6C\x69\x74\",\"\x30\x31\x32\x33\x34\x35\x36\x37\x38\x39\x61\x62\x63\x64\x65\x66\x67\x68\x69\x6A\x6B\x6C\x6D\x6E\x6F\x70\x71\x72\x73\x74\x75\x76\x77\x78\x79\x7A\x41\x42\x43\x44\x45\x46\x47\x48\x49\x4A\x4B\x4C\x4D\x4E\x4F\x50\x51\x52\x53\x54\x55\x56\x57\x58\x59\x5A\x2B\x2F\",\"\x73\x6C\x69\x63\x65\",\"\x69\x6E\x64\x65\x78\x4F\x66\",\"\",\"\",\"\x2E\",\"\x70\x6F\x77\",\"\x72\x65\x64\x75\x63\x65\",\"\x72\x65\x76\x65\x72\x73\x65\",\"\x30\"];function _0xe{$rand1}c(d,e,f){var g=_0xc{$rand}e[2][_0xc{$rand}e[1]](_0xc{$rand}e[0]);var h=g[_0xc{$rand}e[3]](0,e);var i=g[_0xc{$rand}e[3]](0,f);var j=d[_0xc{$rand}e[1]](_0xc{$rand}e[0])[_0xc{$rand}e[10]]()[_0xc{$rand}e[9]](function(a,b,c){if(h[_0xc{$rand}e[4]](b)!==-1)return a+=h[_0xc{$rand}e[4]](b)*(Math[_0xc{$rand}e[8]](e,c))},0);var k=_0xc{$rand}e[0];while(j>0){k=i[j%f]+k;j=(j-(j%f))/f}return k||_0xc{$rand}e[11]}eval(function (r, a, n, t, e, s) { let x='',len=r.length,i=0,j=0;s='';for(i=0;i<len;i++){x='';while(r[i]!==n[e]){x+=r[i];i++;} for(j=0;j<n.length;j++) x=x.replace(new RegExp(n[j],'g'),j); s+=String.fromCharCode(_0xe{$rand1}c(x,e,10)-t);} return decodeURIComponent(escape(s));}(\"" . $this->_encodeIt() . "\"," . rand(1, 100) . ",\"" . $this->mask . "\"," . $this->interval . "," . $this->option . "," . rand(1, 60) . "))";
-    }
-
-    public function setExpiration($expireTime) {
-        if (strtotime($expireTime)) {
-            $this->expireTime = strtotime($expireTime);
-            return true;
-        }
-        return false;
-    }
-
-    public function addDomainName($domainName) {
-        if ($this->_isValidDomain($domainName)) {
-            $this->domainNames[] = $domainName;
-            return true;
-        }
-        return false;
-    }
-
-    private function _isValidDomain($domain_name) {
-        return (preg_match("/^([a-z\d](-*[a-z\d])*)(\.([a-z\d](-*[a-z\d])*))*$/i", $domain_name)
-            && preg_match("/^.{1,253}$/", $domain_name)
-            && preg_match("/^[^\.]{1,63}(\.[^\.]{1,63})*$/", $domain_name));
-    }
-
-    private function _html2Js($code) {
-        $search = array(
-            '/\>[^\S ]+/s',     // strip whitespaces after tags, except space
-            '/[^\S ]+\</s',     // strip whitespaces before tags, except space
-            '/(\s)+/s',         // shorten multiple whitespace sequences
-            '/<!--(.|\s)*?-->/' // Remove HTML comments
-        );
-        $replace = array(
-            '>',
-            '<',
-            '\\1',
-            ''
-        );
-        $code = preg_replace($search, $replace, $code);
-        $code = "document.write('" . addslashes($code . " ") . "');";
-        return $code;
-    }
-
-    private function _cleanHtml($code) {
-        return preg_replace('/<!--(.|\s)*?-->/', '', $code);
-    }
-
-    private function _cleanJS($code) {
-        $pattern = '/(?:(?:\/\*(?:[^*]|(?:\*+[^*\/]))*\*+\/)|(?:(?<!\:|\\\|\')\/\/.*))/';
-        $code = preg_replace($pattern, '', $code);
-        $search = array(
-            '/\>[^\S ]+/s',     // strip whitespaces after tags, except space
-            '/[^\S ]+\</s',     // strip whitespaces before tags, except space
-            '/(\s)+/s',         // shorten multiple whitespace sequences
-            '/<!--(.|\s)*?-->/' // Remove HTML comments
-        );
-        $replace = array(
-            '>',
-            '<',
-            '\\1',
-            ''
-        );
-        return preg_replace($search, $replace, $code);
-    }
-}
+$dir = dirname(realpath(__FILE__));
+$pathArray = explode('/', $dir);
+define('INST_PATH', implode('/',$pathArray).'/');
 
 class Builder {
-    public $srcPath = '';
-    public $distPath = '';
+    private $_configs = null;
+    public $shellOutput = true;
+    private $_command = null;
+    private $_commands = [
+        'watch',
+        'build',
+        'test'
+    ];
 
-    private function _readFiles($path, $pattern) {
+    private function _logger($source, $message) {
+        if (empty($source) or empty($message) or !is_string($source) or !is_string($message)):
+            return false;
+        endif;
+        $logdir = INST_PATH.'tmp/logs/';
+        is_dir($logdir) or mkdir($logdir, 0777, true);
+        $file = "{$source}.log";
+        $stamp = date('d-m-Y i:s:H');
+
+        file_exists("{$logdir}{$file}") and filesize("{$logdir}{$file}") >= 524288000 and rename("{$logdir}{$file}", "{$logdir}{$stamp}_{$file}");
+        $this->shellOutput and fwrite(STDOUT, "{$message}\n");
+        file_put_contents("{$logdir}{$file}", "[{$stamp}] - {$message}\n", FILE_APPEND);
+        return true;
+    }
+
+    private function _readFiles($path, $pattern, $goUnder = true) {
         $files = [];
         $dir = opendir($path);
         //first level, not subdirectories
@@ -127,28 +38,50 @@ class Builder {
         endwhile;
         closedir($dir);
         //Second level, subdirectories
-        $dir = opendir($path);
-        while(false !== ($file = readdir($dir))):
-            if ($file !== '.' and $file !== '..' and is_dir("{$path}{$file}")):
-                $dir1 = opendir("{$path}{$file}");
-                while(false !== ($file1 = readdir($dir1))):
-                    is_file("{$path}{$file}/{$file1}") and preg_match($pattern, $file1, $matches) === 1 and ($files[] = "{$path}{$file}/{$file1}");
-                endwhile;
-                closedir($dir1);
-            endif;
-        endwhile;
-        closedir($dir);
+        if ($goUnder):
+            $dir = opendir($path);
+            while(false !== ($file = readdir($dir))):
+                $npath = "{$path}{$file}";
+                if ($file !== '.' and $file !== '..' and is_dir($npath) and is_readable($npath)):
+                    $dir1 = opendir("{$path}{$file}");
+                    if(false !== $dir1):
+                        while(false !== ($file1 = readdir($dir1))):
+                            is_file("{$path}{$file}/{$file1}") and preg_match($pattern, $file1, $matches) === 1 and ($files[] = "{$path}{$file}/{$file1}");
+                        endwhile;
+                        closedir($dir1);
+                    endif;
+                endif;
+            endwhile;
+            closedir($dir);
+        endif;
         sort($files);
 
         return $files;
     }
 
+    private function _cleanJS($code) {
+        $pattern = '/(?:(?:\/\*(?:[^*]|(?:\*+[^*\/]))*\*+\/)|(?:(?<!\:|\\\|\')\/\/.*))/';
+        $code = preg_replace($pattern, '', $code);
+        $search = [
+            '/\>[^\S ]+/s',     // strip whitespaces after tags, except space
+            '/[^\S ]+\</s',     // strip whitespaces before tags, except space
+           '/(\s)+/s',         // shorten multiple whitespace sequences
+            '/<!--(.|\s)*?-->/' // Remove HTML comments
+        ];
+        $replace = [
+            '>',
+            '<',
+           '\\1',
+            ''
+        ];
+        return preg_replace($search, $replace, $code);
+    }
+
     public function sass() {
         $sass = new Sass();
         $sass->setStyle(Sass::STYLE_EXPANDED);
-        // $sass->setIncludePath("{$this->srcPath}");
-        $files = $this->_readFiles($this->srcPath, '/(.+)\.scss/');
-        array_unshift($files, "{$this->srcPath}/styles.scss");
+        $files = $this->_readFiles($this->_configs->source, '/(.+)\.scss/');
+        array_unshift($files, "{$this->_configs->source}/styles.scss");
         $bigFile = '';
         if(sizeof($files) > 0):
             while (null !== ($file = array_shift($files))):
@@ -157,48 +90,59 @@ class Builder {
             endwhile;
         endif;
         $css = $sass->compile($bigFile);
-        file_put_contents("{$this->distPath}dmb-styles.css", $css);
+        file_put_contents("{$this->_configs->target}dmb-styles.css", $css);
         $this->render = ['text' => 'done', 'layout'=>false];
+    }
+
+    public function setspecs() {
+        $files = $this->_readFiles($this->_configs->source, '/^(?=.*\.spec).+\.js$/');
+
+        $bigFile = '';
+        if(sizeof($files) > 0):
+            while (null !== ($file = array_shift($files))):
+                $name = basename($file);
+                $bigFile .= file_get_contents($file)."\n";
+            endwhile;
+        endif;
+
+        file_put_contents("{$this->_configs->tests}specs.min.js", $bigFile);
     }
 
     public function obfuscate() {
         $this->buildDirectives();
 
-        $bigFile = file_get_contents("{$this->distPath}dmb-components.min.js");
+        $bigFile = file_get_contents("{$this->_configs->target}dmb-components.min.js");
         $obfuscator = new JSObfuscator($bigFile);
         $js = $obfuscator->Obfuscate();
-        file_put_contents("{$this->distPath}dmb-components.min.js", $js);
+        file_put_contents("{$this->_configs->target}dmb-components.min.js", $js);
         unset($obfuscator);
 
         $this->buildFactories();
-        $bigFile = file_get_contents("{$this->distPath}dmb-factories.min.js");
+        $bigFile = file_get_contents("{$this->_configs->target}dmb-factories.min.js");
         $obfuscator = new JSObfuscator($bigFile);
         $js = $obfuscator->Obfuscate();
-        file_put_contents("{$this->distPath}dmb-factories.min.js", $js);
-        $this->render = ['text' => 'done', 'layout'=>false];
+        file_put_contents("{$this->_configs->target}dmb-factories.min.js", $js);
 
-        $bigFile = file_get_contents("{$this->srcPath}dumbo.js");
+        $bigFile = file_get_contents("{$this->_configs->source}dumbo.js");
         $obfuscator = new JSObfuscator($bigFile);
         $js = $obfuscator->Obfuscate();
-        file_put_contents("{$this->distPath}dumbo.min.js", $js);
-        $this->render = ['text' => 'done', 'layout'=>false];
+        file_put_contents("{$this->_configs->target}dumbo.min.js", $js);
     }
 
     public function buildDirectives() {
-        $this->render = ['text' => 'done', 'layout'=>false];
-        $files = $this->_readFiles($this->srcPath, '/^(?=.*\.directive)(?!.*?\.spec).+\.js$/');
-        file_exists("{$this->distPath}dmb-components.min.js") and unlink("{$this->distPath}dmb-components.min.js");
+        $files = $this->_readFiles($this->_configs->source, '/^(?=.*\.directive)(?!.*?\.spec).+\.js$/');
+        file_exists("{$this->_configs->target}dmb-components.min.js") and unlink("{$this->_configs->target}dmb-components.min.js");
         if(sizeof($files) > 0):
             while (null !== ($file = array_shift($files))):
-                file_put_contents("{$this->distPath}dmb-components.min.js", file_get_contents($file)."\n", FILE_APPEND);
+                $file = $this->_cleanJS($file);
+                file_put_contents("{$this->_configs->target}dmb-components.min.js", file_get_contents($file)."\n", FILE_APPEND);
             endwhile;
         endif;
     }
 
     public function buildFactories() {
-        $this->render = ['text' => 'done', 'layout'=>false];
-        $files = $this->_readFiles($this->srcPath, '/^(?=.*\.factory)(?!.*?\.spec).+\.js$/');
-        file_exists("{$this->distPath}dmb-factories.min.js") and unlink("{$this->distPath}dmb-factories.min.js");
+        $files = $this->_readFiles($this->_configs->source, '/^(?=.*\.factory)(?!.*?\.spec).+\.js$/');
+        file_exists("{$this->_configs->target}dmb-factories.min.js") and unlink("{$this->_configs->target}dmb-factories.min.js");
         $classes = [];
         $requires = [];
         $fileClases = [];
@@ -236,19 +180,217 @@ class Builder {
             endforeach;
 
             while (null !== ($file = array_shift($filesToBuild))):
-                file_put_contents("{$this->distPath}dmb-factories.min.js", file_get_contents($file)."\n", FILE_APPEND);
+                file_put_contents("{$this->_configs->target}dmb-factories.min.js", file_get_contents($file)."\n", FILE_APPEND);
             endwhile;
         endif;
     }
 
-    public function __construct() {
-        $this->srcPath = dirname(__FILE__).'/src/';
-        $this->distPath = dirname(__FILE__).'/dist/';
+    private function _buildConfigs() {
+        $this->_configs = new stdClass();
+        $confs = new stdClass();
 
+        $this->_configs->source = INST_PATH.'src/';
+        $this->_configs->target = INST_PATH.'dist/';
+        $this->_configs->tests = INST_PATH.'tests/';
+    }
+
+    public function __construct() {
+        $this->_buildConfigs();
+    }
+    public function buildUI() {
         $this->sass();
-        $this->obfuscate();
+        $this->buildDirectives();
+        $this->buildFactories();
+        $this->setspecs();
+        $this->setTestPage();
+    }
+    public function setTestPage() {
+        $this->_logger('dumbo_ui_builder', 'Building files...');
+        $start = microtime(true);
+
+        $dumbojs = file_get_contents("{$this->_configs->source}dumbo.js");
+        $dmbfactsjs = file_get_contents("{$this->_configs->target}dmb-factories.min.js");
+        $dmbcompsjs = file_get_contents("{$this->_configs->target}dmb-components.min.js");
+        $specsjs = file_get_contents("{$this->_configs->tests}specs.min.js");
+        $dumbocss = file_get_contents("{$this->_configs->target}dmb-styles.css");
+        $jasminelib = file_get_contents('jasmine/jasmine.js');
+        $jasminehtml = file_get_contents('jasmine/jasmine-html.js');
+        $jasmineboot = file_get_contents('jasmine/jasmine-boot.js');
+        $jasminecss = file_get_contents('jasmine/jasmine.css');
+        $page = <<<DUMBO
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Dumbo UI tests</title>
+    <style type="text/css">
+    :root {
+        --primary: #2e1241;
+        --primary-contrast: #FFFFFF;
+        --primary-hover: #2e124199;
+        --secondary: #f7f7f9;
+        --secondary-contrast: #FFFFFF;
+        --secondary-hover: #f7f7f999;
+        --default: #e6e7e8;
+        --default-contrast: #FFFFFF;
+        --default-hover: #e6e7e899;
+        --success: #46d45e;
+        --success-contrast: #FFFFFF;
+        --success-hover: #46d45e33;
+        --information: #17a2b8;
+        --information-contrast: #FFFFFF;
+        --information-hover: #17a2b899;
+        --warning: #ffc107;
+        --warning-contrast: #FFFFFF;
+        --warning-hover: #ffc10799;
+        --error: #d6162d;
+        --error-contrast: #FFFFFF;
+        --error-hover: #d6162d55;
+        --hover-opacity: 0.5;
+    }
+
+    {$dumbocss}
+
+    {$jasminecss}
+    </style>
+</head>
+<body>
+        <div class="html-reporter">
+            <div class="banner">
+            </div>
+            <ul class="symbol-summary"></ul>
+            <div class="alert">
+            </div>
+            <div class="results">
+            </div>
+        </div>
+        <div id="components">
+        </div>
+        <script type="text/javascript">
+            {$dumbojs}
+        </script>
+        <script type="text/javascript">
+            {$dmbfactsjs}
+        </script>
+        <script type="text/javascript">
+            {$dmbcompsjs}
+        </script>
+
+        <script type="text/javascript">
+        {$jasminelib}
+        </script>
+        <script type="text/javascript">
+        {$jasminehtml}
+        </script>
+        <script type="text/javascript">
+        {$jasmineboot}
+        </script>
+        <script type="text/javascript">
+            {$specsjs}
+        </script>
+</body>
+</html>
+DUMBO;
+
+        file_put_contents("{$this->_configs->tests}test.html",$page);
+        $total = microtime(true) - $start;
+        $this->_logger('dumbo_ui_builder', "Jobs finished, took {$total} seconds.");
+    }
+
+    public function testUI() {
+        $descriptorspec = [
+            ['pipe', 'r'],
+            ['pipe', 'w'],
+            ['file', '/tmp/error-output.txt', 'a'],
+        ];
+        $cwd = '/tmp';
+        $env = [];
+        $command = "/opt/google/chrome/chrome --headless --disable-gpu --repl --run-all-compositor-stages-before-draw --virtual-time-budget=10000 file://{$this->_configs->tests}test.html";
+
+        $this->_logger('dumbo_ui_unit_testing', "Executing: {$command}");
+        $process = proc_open($command, $descriptorspec, $pipes, $cwd, $env);
+        if(is_resource($process)):
+            $script = <<<DUMBO
+let results = document.querySelector('.jasmine_html-reporter'), duration = results.querySelector('.jasmine-duration'), overall = results.querySelector('.jasmine-overall-result'), data = `\${duration.innerHTML} - \${overall.innerText}`; data;
+DUMBO;
+
+            fwrite($pipes[0], $script);
+            fclose($pipes[0]);
+            $output = stream_get_contents($pipes[1]);
+            fclose($pipes[1]);
+            $rvalue = proc_close($process);
+            preg_match('@\{(?:.)+\}@', $output, $matches);
+            $result = json_decode($matches[0])->result->value;
+            preg_match('@((?:\d)+)\sfailures@', $result, $matches);
+            $this->render['text'] = $result;
+            $errors = !empty($errors);
+            $this->_logger('dumbo_ui_unit_testing', $result);
+            !!$errors and fwrite(STDERR, "{$matches[0]}\n");
+        endif;
+    }
+
+    public function watchUI() {
+        $this->_logger('dumbo_ui_watcher', 'Setting up files for watch...');
+        $files = new ArrayObject();
+        $list = [
+            ...$this->_readFiles("{$this->_configs->source}", '/^(?=.*\.directive)(?!.*?\.spec).+\.js$/'),
+            ...$this->_readFiles("{$this->_configs->source}", '/^(?=.*\.factory)(?!.*?\.spec).+\.js$/'),
+            ...$this->_readFiles("{$this->_configs->source}", '/(.+)\.scss/'),
+            ...$this->_readFiles($this->_configs->source, '/(.+)\.scss/', false)
+        ];
+        $this->_logger('dumbo_ui_watcher', "Watching for changes in files: \n".implode("\n", $list));
+
+        foreach($list as $file):
+            $stats = stat($file);
+            $files[] = ['path'=> $file, 'mtime' => $stats['mtime']];
+        endforeach;
+        $this->_logger('dumbo_ui_watcher', 'Watching files...');
+        while(true):
+            foreach($files as  $index => $file):
+                $stats = stat($file['path']);
+                if($stats['size'] > 0 and $file['mtime'] !== $stats['mtime']):
+                    $this->_logger('dumbo_ui_watcher', "File changed {$file['path']}");
+                    $files[$index]['mtime'] = $stats['mtime'];
+                    $this->_logger('dumbo_ui_watcher', 'Runing tasks...');
+                    $start = microtime(true);
+                    $this->setTestPage();
+                    $this->testUI();
+                    $total = microtime(true) - $start;
+                    $this->_logger('dumbo_ui_watcher', "Jobs finished, took {$total} seconds.");
+                    break;
+                endif;
+            endforeach;
+        endwhile;
+    }
+
+    public function run($argv) {
+        if(empty($argv[1])):
+            die('Error: Option not valid.');
+        endif;
+
+        array_shift($argv);
+        $this->_command = array_shift($argv);
+
+        if(in_array($this->_command, $this->_commands)):
+            switch($this->_command):
+                case 'watch':
+                    $this->watchUI();
+                break;
+                case 'build':
+                    $this->buildUI();
+                break;
+                case 'test':
+                    $this->testUI();
+                break;
+            endswitch;
+        else:
+            die('Error: Option not valid.');
+        endif;
+
     }
 }
-new Builder();
 
+$builder = new Builder();
+$builder->run($argv);
 ?>

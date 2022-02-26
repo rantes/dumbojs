@@ -49,19 +49,19 @@ class DmbDialogService {
         return dialog;
     }
 
-    drawer(content, size = 'small') {
+    drawer(content, size = 'small', setCloseButton = true) {
         const dialog = document.createElement('dmb-dialog', {is: 'dmb-dialog'});
 
         dialog.classList.add('drawer');
         dialog.classList.add(size);
         document.body.append(dialog);
-        
+
         if (typeof content === 'string') {
             dialog.querySelector('.wrapper').innerHTML = content;
         } else {
             dialog.querySelector('.wrapper').append(content);
         }
-        dialog.setCloseButton();
+        setCloseButton && dialog.setCloseButton();
 
         dialog.showModal();
 
