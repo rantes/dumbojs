@@ -1,9 +1,9 @@
 dmb-wysiwyg {
-    
+
     .dmb-wysiwyg {
         border-radius: 0.2em;
         padding: 2.1em 0 0 0;
-        
+
         &__toolbar {
             border-left: 1px solid var(--default-hover);
             border-right: 1px solid var(--default-hover);
@@ -12,9 +12,10 @@ dmb-wysiwyg {
             margin: 0;
             padding: 0;
             position: relative;
-    
+
             &-button {
                 align-items: center;
+                box-sizing: border-box;
                 color: var(---default);
                 cursor: pointer;
                 display: flex;
@@ -25,18 +26,24 @@ dmb-wysiwyg {
                 margin: 0;
                 padding-left: 5px;
                 padding-right: 5px;
+                padding-top: 5px;
                 width: 2em;
-    
+
                 &:active {
                     box-shadow: -1px -1px 1px 0 var(--default-hover);
                 }
+
+                & svg {
+                    pointer-events: none;
+                }
             }
-    
+
             .fore-palette {
                 display: none;
                 position: absolute;
                 top: 2em;
                 width: 10em;
+                z-index: 10;
             }
 
             .palette {

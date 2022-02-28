@@ -900,6 +900,7 @@ dmb-wysiwyg .dmb-wysiwyg__toolbar {
 
 dmb-wysiwyg .dmb-wysiwyg__toolbar-button {
   align-items: center;
+  box-sizing: border-box;
   color: var(---default);
   cursor: pointer;
   display: flex;
@@ -910,6 +911,7 @@ dmb-wysiwyg .dmb-wysiwyg__toolbar-button {
   margin: 0;
   padding-left: 5px;
   padding-right: 5px;
+  padding-top: 5px;
   width: 2em;
 }
 
@@ -917,11 +919,16 @@ dmb-wysiwyg .dmb-wysiwyg__toolbar-button:active {
   box-shadow: -1px -1px 1px 0 var(--default-hover);
 }
 
+dmb-wysiwyg .dmb-wysiwyg__toolbar-button svg {
+  pointer-events: none;
+}
+
 dmb-wysiwyg .dmb-wysiwyg__toolbar .fore-palette {
   display: none;
   position: absolute;
   top: 2em;
   width: 10em;
+  z-index: 10;
 }
 
 dmb-wysiwyg .dmb-wysiwyg__toolbar .palette {

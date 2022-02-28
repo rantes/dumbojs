@@ -226,27 +226,27 @@ class Builder {
     <title>Dumbo UI tests</title>
     <style type="text/css">
     :root {
-        --primary: #2e1241;
+        --primary: #16253F;
         --primary-contrast: #FFFFFF;
-        --primary-hover: #2e124199;
-        --secondary: #f7f7f9;
-        --secondary-contrast: #FFFFFF;
-        --secondary-hover: #f7f7f999;
-        --default: #e6e7e8;
+        --primary-hover: #16253F99;
+        --secondary: #182517;
+        --secondary-contrast: #E7DAE7;
+        --secondary-hover: #E8EBEF;
+        --default: #27401D;
         --default-contrast: #FFFFFF;
-        --default-hover: #e6e7e899;
-        --success: #46d45e;
-        --success-contrast: #FFFFFF;
-        --success-hover: #46d45e33;
-        --information: #17a2b8;
-        --information-contrast: #FFFFFF;
-        --information-hover: #17a2b899;
-        --warning: #ffc107;
-        --warning-contrast: #FFFFFF;
-        --warning-hover: #ffc10799;
-        --error: #d6162d;
+        --default-hover: #99999999;
+        --error: #F44336;
         --error-contrast: #FFFFFF;
-        --error-hover: #d6162d55;
+        --error-hover: #F4433699;
+        --success: #63AB71;
+        --success-contrast: #15253E;
+        --success-hover: #63AB7199;
+        --warning: #E09B39;
+        --warning-contrast: #FFFFFF;
+        --warning-hover: #E09B3999;
+        --information: #51697C;
+        --information-contrast: #B8E2F5;
+        --information-hover: #51697C;
         --hover-opacity: 0.5;
     }
 
@@ -354,7 +354,7 @@ DUMBO;
                     $files[$index]['mtime'] = $stats['mtime'];
                     $this->_logger('dumbo_ui_watcher', 'Runing tasks...');
                     $start = microtime(true);
-                    $this->setTestPage();
+                    $this->buildUI();
                     $this->testUI();
                     $total = microtime(true) - $start;
                     $this->_logger('dumbo_ui_watcher', "Jobs finished, took {$total} seconds.");
