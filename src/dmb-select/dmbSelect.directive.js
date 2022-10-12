@@ -1,8 +1,8 @@
 class DmbSelect extends DumboDirective {
-    static get observedAttributes() { 
+    static get observedAttributes() {
         return [
             'valid','values', 'dmb-name', 'label', 'dmb-class', 'validate', 'dmb-value'
-        ]; 
+        ];
     }
 
     constructor() {
@@ -73,7 +73,7 @@ class DmbSelect extends DumboDirective {
                 opval = isNaN(option.value) ? option.value : parseInt(option.value);
                 value = isNaN(value) ? value : parseInt(value);
 
-                if ((!option.hasAttribute('selected') && (opval && opval == value)) || (Array.isArray(value) && value.includes(opval))) {
+                if ((!option.hasAttribute('selected') && opval == value) || (Array.isArray(value) && value.includes(opval))) {
                     option.setAttribute('selected',true);
                     option.selected = true;
                 }

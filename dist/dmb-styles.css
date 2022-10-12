@@ -10,13 +10,16 @@
   text-align: center;
 }
 
+.button * {
+  pointer-events: none;
+}
+
 .col .button {
   width: 100%;
 }
 
 .button .text {
   display: inline-block;
-  pointer-events: none;
 }
 
 .button:focus {
@@ -456,6 +459,51 @@ dmb-menu-button .legend {
   vertical-align: middle;
 }
 
+dmb-notification {
+  border: 2px solid;
+  float: left;
+  margin-bottom: 0.5em;
+  min-height: 1em;
+  padding: 1em;
+  position: relative;
+  width: 100%;
+}
+
+dmb-notification .wrapper {
+  height: 100%;
+  width: 100%;
+}
+
+dmb-notification .close-notification-button {
+  cursor: pointer;
+  position: absolute;
+  right: 2em;
+  top: 1em;
+  z-index: 1;
+}
+
+dmb-notification .close-notification-button:before {
+  font-size: 2em;
+}
+
+dmb-notification.success {
+  border-color: var(--success);
+  background-color: var(--success-hover);
+  color: var(--success-contrast);
+}
+
+dmb-notification.error {
+  border-color: var(--error);
+  background-color: var(--error-hover);
+  color: var(--error-contrast);
+}
+
+dmb-notification.warning {
+  border-color: var(--warning);
+  background-color: var(--warning-hover);
+  color: var(--warning-contrast);
+}
+
 dmb-page-loader {
   background-color: white;
   bottom: 0;
@@ -495,6 +543,10 @@ dmb-pagination .paginate, .dmb-pagination .paginate {
 
 dmb-pagination .paginate-page, .dmb-pagination .paginate-page {
   display: inline-block;
+}
+
+dmb-pagination .paginate-page-active, .dmb-pagination .paginate-page-active {
+  border-bottom: solid 1px var(--default);
 }
 
 dmb-pagination .paginate-active-page, .dmb-pagination .paginate-active-page {
@@ -757,14 +809,14 @@ dmb-select._error .error-container {
   border-bottom-right-radius: 0.5em;
 }
 
-dmb-text-area {
+dmb-textarea {
   box-sizing: border-box;
   display: block;
   padding-bottom: 1em;
   position: relative;
 }
 
-dmb-text-area textarea {
+dmb-textarea textarea {
   background-color: var(--default-contrast);
   border: 1px solid var(--default);
   border-radius: 0.5em;
@@ -779,14 +831,14 @@ dmb-text-area textarea {
   width: 100%;
 }
 
-dmb-text-area textarea:focus {
+dmb-textarea textarea:focus {
   border: 1px solid green;
   box-shadow: 1px 1px 2px 0 rgba(0, 0, 0, 0.5) inset, 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(0, 128, 0, 0.6);
   color: black;
   outline: 0 none;
 }
 
-dmb-text-area label {
+dmb-textarea label {
   box-sizing: border-box;
   display: inline-block;
   margin-bottom: 5px;
@@ -796,25 +848,25 @@ dmb-text-area label {
   width: 99%;
 }
 
-._error dmb-text-area label {
+._error dmb-textarea label {
   color: var(--error);
 }
 
-dmb-text-area.required label:after {
+dmb-textarea.required label:after {
   content: "*";
 }
 
-dmb-text-area .error-container {
+dmb-textarea .error-container {
   color: var(--error);
   display: none;
   line-height: 1;
 }
 
-dmb-text-area._error textarea {
+dmb-textarea._error textarea {
   border: 1px solid var(--error);
 }
 
-dmb-text-area._error .error-container {
+dmb-textarea._error .error-container {
   display: inline-block;
 }
 

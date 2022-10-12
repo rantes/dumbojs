@@ -9,13 +9,16 @@
     position: relative;
     text-align: center;
 
+    * {
+        pointer-events: none;
+    }
+
     .col & {
         width: 100%;
     }
 
     .text {
         display: inline-block;
-		pointer-events: none;
     }
 
     &:focus {

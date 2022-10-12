@@ -141,7 +141,14 @@ class DmbWysiwyg extends DumboDirective {
         let a = document.createElement('a');
         let ap = document.createElement('a');
         let textArea = this.querySelector('textarea.dmb-wysiwyg__content-content');
+        let form = this.closest('dmb-form') || this.closest('form');
+
         this.toolbarElements = this.querySelectorAll('.dmb-wysiwyg__toolbar-button');
+        if (form) {
+            form.addEventListener('submit', () => {
+                this.syncData();
+            });
+        }
 
         a.dataset.command = 'foreColor';
         ap.dataset.command = 'backColor';
@@ -186,6 +193,7 @@ class DmbWysiwyg extends DumboDirective {
             let url;
             let textArea;
             let editArea;
+            let selection = null;
 
             e.stopImmediatePropagation();
             e.stopPropagation();

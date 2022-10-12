@@ -8,6 +8,10 @@ dmb-pagination, .dmb-pagination {
 
         &-page {
             display: inline-block;
+
+            &-active {
+                border-bottom: solid 1px var(--default);
+            }
         }
 
         &-active-page {

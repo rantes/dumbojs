@@ -108,27 +108,6 @@ class Builder {
         file_put_contents("{$this->_configs->tests}specs.min.js", $bigFile);
     }
 
-    public function obfuscate() {
-        $this->buildDirectives();
-
-        $bigFile = file_get_contents("{$this->_configs->target}dmb-components.min.js");
-        $obfuscator = new JSObfuscator($bigFile);
-        $js = $obfuscator->Obfuscate();
-        file_put_contents("{$this->_configs->target}dmb-components.min.js", $js);
-        unset($obfuscator);
-
-        $this->buildFactories();
-        $bigFile = file_get_contents("{$this->_configs->target}dmb-factories.min.js");
-        $obfuscator = new JSObfuscator($bigFile);
-        $js = $obfuscator->Obfuscate();
-        file_put_contents("{$this->_configs->target}dmb-factories.min.js", $js);
-
-        $bigFile = file_get_contents("{$this->_configs->source}dumbo.js");
-        $obfuscator = new JSObfuscator($bigFile);
-        $js = $obfuscator->Obfuscate();
-        file_put_contents("{$this->_configs->target}dumbo.min.js", $js);
-    }
-
     public function buildDirectives() {
         $files = $this->_readFiles($this->_configs->source, '/^(?=.*\.directive)(?!.*?\.spec).+\.js$/');
         file_exists("{$this->_configs->target}dmb-components.min.js") and unlink("{$this->_configs->target}dmb-components.min.js");
@@ -197,10 +176,15 @@ class Builder {
     public function __construct() {
         $this->_buildConfigs();
     }
+    public function setDumboMain() {
+        //fo further actions, this section can handle obfuscation or more things
+        copy("{$this->_configs->source}dumbo.js", "{$this->_configs->target}dumbo.min.js");
+    }
     public function buildUI() {
         $this->sass();
-        $this->buildDirectives();
+        $this->setDumboMain();
         $this->buildFactories();
+        $this->buildDirectives();
         $this->setspecs();
         $this->setTestPage();
     }

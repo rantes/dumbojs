@@ -72,18 +72,13 @@ class DmbForm extends DumboDirective {
 
     submit() {
         this.dispatchEvent(window.DmbEvents.formSubmit.event);
-        const inputs = [...this.querySelectorAll('dmb-input[validate] input')];
-        const selects = [...this.querySelectorAll('dmb-select[validate] select')];
-        const textAreas = [...this.querySelectorAll('dmb-text-area[validate] textarea')];
+        this.dispatchEvent(new Event('submit'));
+
         const isAsync = this.hasAttribute('async');
         const form = this.querySelector('form');
-        let totalvalidations = 0;
+        const valid = this.validateForm();
 
-        this._valids = 0;
-        totalvalidations = this.validate(inputs, 'dmb-input') + this.validate(selects, 'dmb-select') + this.validate(textAreas, 'dmb-text-area');
-
-        if (totalvalidations === 3) {
-
+        if(valid) {
             if (isAsync) {
                 if(typeof this.callback === 'function') {
                     this.callback(this);
@@ -92,7 +87,6 @@ class DmbForm extends DumboDirective {
             } else {
                 form.submit();
             }
-
             return true;
         }
 
@@ -101,6 +95,19 @@ class DmbForm extends DumboDirective {
 
     getFormData() {
         return new FormData(this.form);
+    }
+
+    validateForm() {
+        const inputs = [...this.querySelectorAll('dmb-input[validate] input')];
+        const selects = [...this.querySelectorAll('dmb-select[validate] select')];
+        const textAreas = [...this.querySelectorAll('dmb-textarea[validate] textarea')];
+
+        let totalvalidations = 0;
+
+        this._valids = 0;
+        totalvalidations = this.validate(inputs, 'dmb-input') + this.validate(selects, 'dmb-select') + this.validate(textAreas, 'dmb-textarea');
+
+        return totalvalidations === 3;
     }
 }
 
