@@ -1,8 +1,6 @@
 #!/usr/bin/php -d display_errors
 <?php
-$dir = dirname(realpath(__FILE__));
-$pathArray = explode('/', $dir);
-define('INST_PATH', implode('/',$pathArray).'/');
+define('INST_PATH', exec('pwd').'/');
 
 class Builder {
     private $_configs = null;
@@ -23,7 +21,9 @@ class Builder {
         $file = "{$source}.log";
         $stamp = date('d-m-Y i:s:H');
 
-        file_exists("{$logdir}{$file}") and filesize("{$logdir}{$file}") >= 524288000 and rename("{$logdir}{$file}", "{$logdir}{$stamp}_{$file}");
+        file_exists("{$logdir}{$file}")
+            and filesize("{$logdir}{$file}") >= 524288000
+            and rename("{$logdir}{$file}", "{$logdir}{$stamp}_{$file}");
         $this->shellOutput and fwrite(STDOUT, "{$message}\n");
         file_put_contents("{$logdir}{$file}", "[{$stamp}] - {$message}\n", FILE_APPEND);
         return true;
@@ -34,7 +34,11 @@ class Builder {
         $dir = opendir($path);
         //first level, not subdirectories
         while(false !== ($file = readdir($dir))):
-            $file !== '.' and $file !== '..' and is_file("{$path}{$file}") and preg_match($pattern, $file, $matches) === 1 and ($files[] = "{$path}{$file}");
+            $file !== '.'
+                and $file !== '..'
+                and is_file("{$path}{$file}")
+                and preg_match($pattern, $file, $matches) === 1
+                and ($files[] = "{$path}{$file}");
         endwhile;
         closedir($dir);
         //Second level, subdirectories
@@ -46,7 +50,9 @@ class Builder {
                     $dir1 = opendir("{$path}{$file}");
                     if(false !== $dir1):
                         while(false !== ($file1 = readdir($dir1))):
-                            is_file("{$path}{$file}/{$file1}") and preg_match($pattern, $file1, $matches) === 1 and ($files[] = "{$path}{$file}/{$file1}");
+                            is_file("{$path}{$file}/{$file1}")
+                            and preg_match($pattern, $file1, $matches) === 1
+                            and ($files[] = "{$path}{$file}/{$file1}");
                         endwhile;
                         closedir($dir1);
                     endif;
@@ -85,7 +91,6 @@ class Builder {
         $bigFile = '';
         if(sizeof($files) > 0):
             while (null !== ($file = array_shift($files))):
-                $name = basename($file);
                 $bigFile .= file_get_contents($file)."\n";
             endwhile;
         endif;
@@ -100,7 +105,6 @@ class Builder {
         $bigFile = '';
         if(sizeof($files) > 0):
             while (null !== ($file = array_shift($files))):
-                $name = basename($file);
                 $bigFile .= file_get_contents($file)."\n";
             endwhile;
         endif;
@@ -110,18 +114,23 @@ class Builder {
 
     public function buildDirectives() {
         $files = $this->_readFiles($this->_configs->source, '/^(?=.*\.directive)(?!.*?\.spec).+\.js$/');
-        file_exists("{$this->_configs->target}dmb-components.min.js") and unlink("{$this->_configs->target}dmb-components.min.js");
+        file_exists("{$this->_configs->target}dmb-components.min.js")
+            and unlink("{$this->_configs->target}dmb-components.min.js");
         if(sizeof($files) > 0):
             while (null !== ($file = array_shift($files))):
                 $file = $this->_cleanJS($file);
-                file_put_contents("{$this->_configs->target}dmb-components.min.js", file_get_contents($file)."\n", FILE_APPEND);
+                file_put_contents(
+                    "{$this->_configs->target}dmb-components.min.js",
+                    file_get_contents($file)."\n", FILE_APPEND
+                );
             endwhile;
         endif;
     }
 
     public function buildFactories() {
         $files = $this->_readFiles($this->_configs->source, '/^(?=.*\.factory)(?!.*?\.spec).+\.js$/');
-        file_exists("{$this->_configs->target}dmb-factories.min.js") and unlink("{$this->_configs->target}dmb-factories.min.js");
+        file_exists("{$this->_configs->target}dmb-factories.min.js")
+            and unlink("{$this->_configs->target}dmb-factories.min.js");
         $classes = [];
         $requires = [];
         $fileClases = [];
@@ -159,18 +168,28 @@ class Builder {
             endforeach;
 
             while (null !== ($file = array_shift($filesToBuild))):
-                file_put_contents("{$this->_configs->target}dmb-factories.min.js", file_get_contents($file)."\n", FILE_APPEND);
+                file_put_contents(
+                    "{$this->_configs->target}dmb-factories.min.js",
+                    file_get_contents($file)."\n",
+                    FILE_APPEND
+                );
             endwhile;
         endif;
     }
 
     private function _buildConfigs() {
         $this->_configs = new stdClass();
-        $confs = new stdClass();
-
-        $this->_configs->source = INST_PATH.'src/';
-        $this->_configs->target = INST_PATH.'dist/';
-        $this->_configs->tests = INST_PATH.'tests/';
+        $configFile = file_get_contents(INST_PATH.'dumbojs.conf.json');
+        if ($configFile !== false):
+            $conf = json_decode($configFile);
+            $this->_configs->source = realpath($conf->src).'/';
+            $this->_configs->target = realpath($conf->target).'/';
+            $this->_configs->tests = realpath($conf->tests).'/';
+        else:
+            $this->_configs->source = INST_PATH.'src/';
+            $this->_configs->target = INST_PATH.'dist/';
+            $this->_configs->tests = INST_PATH.'tests/';
+        endif;
     }
 
     public function __construct() {
@@ -290,27 +309,39 @@ DUMBO;
         ];
         $cwd = '/tmp';
         $env = [];
-        $command = "/opt/google/chrome/chrome --headless --disable-gpu --repl --run-all-compositor-stages-before-draw --virtual-time-budget=10000 file://{$this->_configs->tests}test.html";
+        $command =<<<DUMBO
+/opt/google/chrome/chrome \\
+--headless \\
+--disable-gpu \\
+--repl \\
+--run-all-compositor-stages-before-draw \\
+--virtual-time-budget=10000 \\
+file://{$this->_configs->tests}test.html
+DUMBO;
 
         $this->_logger('dumbo_ui_unit_testing', "Executing: {$command}");
         $process = proc_open($command, $descriptorspec, $pipes, $cwd, $env);
         if(is_resource($process)):
             $script = <<<DUMBO
-let results = document.querySelector('.jasmine_html-reporter'), duration = results.querySelector('.jasmine-duration'), overall = results.querySelector('.jasmine-overall-result'), data = `\${duration.innerHTML} - \${overall.innerText}`; data;
+let results = document.querySelector('.jasmine_html-reporter'),
+duration = results.querySelector('.jasmine-duration'),
+overall = results.querySelector('.jasmine-overall-result'),
+data = `\${duration.innerHTML} - \${overall.innerText}`;
+data;
 DUMBO;
-
+            $script = str_replace("\n", '', $script);
             fwrite($pipes[0], $script);
             fclose($pipes[0]);
             $output = stream_get_contents($pipes[1]);
             fclose($pipes[1]);
-            $rvalue = proc_close($process);
+            proc_close($process);
             preg_match('@\{(?:.)+\}@', $output, $matches);
             $result = json_decode($matches[0])->result->value;
             preg_match('@((?:\d)+)\sfailures@', $result, $matches);
             $this->render['text'] = $result;
             $errors = !empty($errors);
             $this->_logger('dumbo_ui_unit_testing', $result);
-            !!$errors and fwrite(STDERR, "{$matches[0]}\n");
+            (bool)$errors and fwrite(STDERR, "{$matches[0]}\n");
         endif;
     }
 
@@ -356,25 +387,21 @@ DUMBO;
         array_shift($argv);
         $this->_command = array_shift($argv);
 
-        if(in_array($this->_command, $this->_commands)):
-            switch($this->_command):
-                case 'watch':
-                    $this->watchUI();
-                break;
-                case 'build':
-                    $this->buildUI();
-                break;
-                case 'test':
-                    $this->testUI();
-                break;
-            endswitch;
-        else:
-            die('Error: Option not valid.');
-        endif;
-
+        switch($this->_command):
+            case 'watch':
+                $this->watchUI();
+            break;
+            case 'build':
+                $this->buildUI();
+            break;
+            case 'test':
+                $this->testUI();
+            break;
+            default:
+                die('Error: Option not valid.');
+        endswitch;
     }
 }
 
 $builder = new Builder();
 $builder->run($argv);
-?>
