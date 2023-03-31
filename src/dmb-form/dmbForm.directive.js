@@ -45,6 +45,7 @@ class DmbForm extends DumboDirective {
     validate(formElements, parentSelector) {
         let item = null;
         let hasInvalids = false;
+        let parentItem = null;
 
         formElements.forEach(element => {
             element.closest(parentSelector).resetValidation();
@@ -53,7 +54,8 @@ class DmbForm extends DumboDirective {
         this.dispatchEvent(window.DmbEvents.formBeforeValidate.event);
         while ((item = formElements.shift())) {
             if (item.closest('.novalidate') === null) {
-                item.closest(parentSelector).setValidation();
+                parentItem = item.closest(parentSelector);
+                parentItem.setValidation();
 
                 if (!item.hasAttribute('valid') && !item.hasAttribute('hidden')) {
                     item.reportValidity();

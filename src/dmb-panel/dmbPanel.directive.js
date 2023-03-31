@@ -39,6 +39,7 @@ class DmbPanel extends DumboDirective {
         this.dispatchEvent(window.DmbEvents.panelClose.event);
         (this.localName === 'dmb-dialog') && this.remove();
         this.dispatchEvent(window.DmbEvents.dialogClose.event);
+        this.dispatchEvent(window.DmbEvents.panelClosed.event);
     }
 
     open() {
@@ -117,7 +118,7 @@ class DmbPanel extends DumboDirective {
 
     onClose(fn) {
         if (typeof fn === 'function') {
-            this.addEventListener('close-panel', fn);
+            this.addEventListener(window.DmbEvents.panelClose.listener, fn);
         }
     }
 

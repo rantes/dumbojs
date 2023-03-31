@@ -2,12 +2,14 @@ describe('DmbImageUploader Directive', () => {
     let element = null;
     // eslint-disable-next-line no-unused-vars
     let loadFile = null; // this var is actually used for spy purposes
+    let container = null;
 
     const contentType = 'image/png';
     const img1px = 'iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==';
 
     element = document.createElement('dmb-image-uploader');
-    document.body.append(element);
+    container = document.querySelector('#components');
+    container.append(element);
 
     const dataURLtoFile = (b64Data, contentType='', sliceSize=512) => {
         const byteCharacters = atob(b64Data);
@@ -29,6 +31,11 @@ describe('DmbImageUploader Directive', () => {
     };
   
     const imgFile = dataURLtoFile(img1px, contentType);
+
+    afterEach( done => {
+        element && element.remove();
+        done();
+    });
 
     it('Should render element', (done) => {
         expect(element).toBeDefined();

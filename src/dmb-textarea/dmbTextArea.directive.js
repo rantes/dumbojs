@@ -65,6 +65,11 @@ class DmbTextArea extends DumboDirective {
         };
     }
 
+    set value(val) {
+        this.querySelector('textarea').innerText(val);
+        this.querySelector('textarea').value = val;
+    }
+
     attributeChangedCallback(attr, oldValue, newValue) {
         const input = this.querySelector('textarea');
 

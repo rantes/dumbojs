@@ -259,14 +259,11 @@ class Builder {
     </style>
 </head>
 <body>
-        <div class="html-reporter">
-            <div class="banner">
-            </div>
-            <ul class="symbol-summary"></ul>
-            <div class="alert">
-            </div>
-            <div class="results">
-            </div>
+        <div class="jasmine_html-reporter jasmine_failure-list">
+            <div class="jasmine-banner"></div>
+            <ul class="jasmine-symbol-summary"></ul>
+            <div class="jasmine-alert"></div>
+            <div class="jasmine-results"></div>
         </div>
         <div id="components">
         </div>
@@ -336,11 +333,11 @@ DUMBO;
             fclose($pipes[1]);
             proc_close($process);
             preg_match('@\{(?:.)+\}@', $output, $matches);
-            $result = json_decode($matches[0])->result->value;
-            preg_match('@((?:\d)+)\sfailures@', $result, $matches);
-            $this->render['text'] = $result;
+            $result = json_decode($matches[0])->result->result;
+            preg_match('@((?:\d)+)\sfailures@', $result->value, $matches);
+            $this->render['text'] = $result->value;
             $errors = !empty($errors);
-            $this->_logger('dumbo_ui_unit_testing', $result);
+            $this->_logger('dumbo_ui_unit_testing', $result->value);
             (bool)$errors and fwrite(STDERR, "{$matches[0]}\n");
         endif;
     }
@@ -349,8 +346,7 @@ DUMBO;
         $this->_logger('dumbo_ui_watcher', 'Setting up files for watch...');
         $files = new ArrayObject();
         $list = [
-            ...$this->_readFiles("{$this->_configs->source}", '/^(?=.*\.directive)(?!.*?\.spec).+\.js$/'),
-            ...$this->_readFiles("{$this->_configs->source}", '/^(?=.*\.factory)(?!.*?\.spec).+\.js$/'),
+            ...$this->_readFiles("{$this->_configs->source}", '/(.+)\.js/'),
             ...$this->_readFiles("{$this->_configs->source}", '/(.+)\.scss/'),
             ...$this->_readFiles($this->_configs->source, '/(.+)\.scss/', false)
         ];

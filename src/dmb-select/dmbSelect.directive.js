@@ -38,6 +38,16 @@ class DmbSelect extends DumboDirective {
         this.buildOptions();
     }
 
+    get values() {
+        return this.valueList;
+    }
+
+    set value(val) {
+        this.querySelector('select').setAttribute('value', val);
+        this.querySelector('select').value = val;
+        this.dispatchEvent(new Event('change'));
+    }
+
     init() {
         const select = this.querySelector('select');
         let value = null;
@@ -62,8 +72,9 @@ class DmbSelect extends DumboDirective {
             this.validators = this.buildValidators(select, this.getAttribute('validate'));
         }
 
-        select.addEventListener('blur', (e) => {
-            this._runValidators(e.target, this.validators);
+        select.addEventListener('blur', () => {
+            // this._runValidators(e.target, this.validators);
+            this.setValidation();
         }, {capture: true, passive: true});
 
         options = [...select.querySelectorAll('option')];

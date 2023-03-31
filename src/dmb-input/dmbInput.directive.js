@@ -1,5 +1,5 @@
 class DmbInput extends DumboDirective {
-    static get observedAttributes() { return ['valid','name', 'validate', 'dmb-name', 'label']; }
+    static get observedAttributes() { return ['valid','name', 'validate', 'dmb-name', 'label', 'dmb-value']; }
 
     constructor() {
         super();
@@ -78,8 +78,12 @@ class DmbInput extends DumboDirective {
     }
 
     set value(val) {
-        const input = this.querySelector('input');
-        input.value = val;
+        if (this.type === 'checkbox') {
+            this.checked = !!val;
+        } else {
+            this.querySelector('input').setAttribute('value', val);
+            this.querySelector('input').value = val;
+        }
     }
 
     attributeChangedCallback(attr, oldValue, newValue) {
@@ -160,7 +164,7 @@ class DmbInput extends DumboDirective {
         }
 
         this.isValid = valid;
-        valid? element.setAttribute('valid','') : element.removeAttribute('valid');
+        valid? element.setAttribute('valid','true') : element.removeAttribute('valid');
     }
 
     resetValidation() {

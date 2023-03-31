@@ -3,9 +3,16 @@ describe('dmbWYSIWYG Directive', () => {
     let element = null;
     let textarea = null;
     let editarea = null;
+    let container = null;
 
     element = document.createElement('dmb-wysiwyg');
-    document.body.append(element);
+    container = document.querySelector('#components');
+    container.append(element);
+
+    afterEach( done => {
+        element && element.remove();
+        done();
+    });
 
     beforeAll((done) => {
         textarea = element.querySelector('textarea.dmb-wysiwyg__content-content');

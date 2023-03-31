@@ -1,21 +1,31 @@
 
-describe('DmbInput Directive', () => {
+describe('DmbSelect Directive', () => {
     let element = null;
     let input = null;
     let container = null;
     
-    element = document.createElement('dmb-input');
+    element = document.createElement('dmb-select');
     container = document.querySelector('#components');
     element.setAttribute('label', 'label');
     container.append(element);
-    
+
+    element.setAttribute('values', true);
+    element.value = null;
+
+    element.values = [
+        {value: '', text: 'Seleccione', selected: true},
+        {value: '1', text: 'Laboral'},
+        {value: '2', text: 'Pension'},
+        {value: '3', text: 'Accidente'}
+    ];
+
     afterEach( done => {
         element && element.remove();
         done();
     });
-    
+
     beforeAll((done) => {
-        input = element.querySelector('input');
+        input = element.querySelector('select');
         done();
     });
     
@@ -30,30 +40,21 @@ describe('DmbInput Directive', () => {
         done();
     });
 
-    it('Should have input text', (done) => {
+    it('Should have select', (done) => {
         expect(input).toBeDefined();
         done();
     });
 
     it('Should validate required', (done) => {
         element.setAttribute('validate', 'required');
-        input.value = null;
+        element.value = '';
         input.dispatchEvent(new Event('focusin'));
         input.dispatchEvent(new Event('blur'));
         expect(input.hasAttribute('valid')).toBe(false);
-        input.value = 'a value';
+        element.value = '1';
         input.dispatchEvent(new Event('focusin'));
         input.dispatchEvent(new Event('blur'));
         expect(input.hasAttribute('valid')).toBe(true);
-        done();
-    });
-
-    it('Should validate email', (done) => {
-        element.setAttribute('validate', 'email');
-        input.value = 'anything but email address';
-        input.dispatchEvent(new Event('focusin'));
-        input.dispatchEvent(new Event('blur'));
-        expect(input.hasAttribute('valid')).toBe(false);
         done();
     });
 });
