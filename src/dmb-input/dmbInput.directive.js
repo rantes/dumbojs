@@ -78,11 +78,18 @@ class DmbInput extends DumboDirective {
     }
 
     set value(val) {
+        const input = this.querySelector('input');
+
         if (this.type === 'checkbox') {
-            this.checked = !!val;
+            if(!!val) {
+                input.checked = true;
+                input.setAttribute('checked', true);
+            }
         } else {
-            this.querySelector('input').setAttribute('value', val);
-            this.querySelector('input').value = val;
+            if(input) {
+                input.setAttribute('value', val);
+                input.value = val;
+            }
         }
     }
 
@@ -90,23 +97,26 @@ class DmbInput extends DumboDirective {
         const input = this.querySelector('input');
 
         switch(attr) {
-        case 'valid':
-            this.isValid = (newValue !== null);
-            break;
-        case 'name':
-        case 'dmb-name':
-            if (input) input.setAttribute('name', newValue);
-            break;
-        case 'validate':
-            this.buildValidators();
-            break;
-        case 'label':
-            if (input) {
-                this.querySelector('label').innerText = newValue;
-                input.setAttribute('aria-label', newValue);
-                input.setAttribute('placeholder', newValue);
-            }
-            break;
+            case 'valid':
+                this.isValid = (newValue !== null);
+                break;
+            case 'name':
+            case 'dmb-name':
+                if (input) input.setAttribute('name', newValue);
+                break;
+            case 'validate':
+                this.buildValidators();
+                break;
+            case 'label':
+                if (input) {
+                    this.querySelector('label').innerText = newValue;
+                    input.setAttribute('aria-label', newValue);
+                    input.setAttribute('placeholder', newValue);
+                }
+                break;
+            case 'dmb-value':
+                this.value = newValue;
+                break;
         }
     }
 
