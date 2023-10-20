@@ -30,7 +30,7 @@
         --hover-opacity: 0.5;
     }
 
-    .button {
+    .button, dmb-button {
   border-radius: 0.5em;
   box-shadow: 3px 3px 0 0 #000000bb;
   box-sizing: border-box;
@@ -42,151 +42,185 @@
   text-align: center;
 }
 
-.button * {
+.button *, dmb-button * {
   pointer-events: none;
 }
 
-.col .button {
-  width: 100%;
-}
-
-.button .text {
-  display: inline-block;
-}
-
-.button:focus {
-  outline: 0 none;
-}
-
-.button:before {
-  color: var(--default);
-}
-
-.button:active {
-  box-shadow: -1px -1px 1px 0 #000000bb;
-  transform: translate(3px, 3px);
-}
-
-.button-default {
-  background-color: var(--default);
-  color: var(--default-contrast);
-}
-
-.button-default::before {
-  color: var(--default-contrast);
-}
-
-.button-default:hover {
-  background-color: var(--default-hover);
-}
-
-.button-default:visited {
-  color: var(--default-contrast);
-}
-
-.button-primary {
-  background-color: var(--primary);
-  color: var(--primary-contrast);
-}
-
-.button-primary::before {
-  color: var(--primary-contrast);
-}
-
-.button-primary:hover {
-  background-color: var(--primary-hover);
-}
-
-.button-primary:visited {
-  color: var(--primary-contrast);
-}
-
-.button-secondary {
-  background-color: var(--secondary);
-  color: var(--secondary-contrast);
-}
-
-.button-secondary::before {
-  color: var(--secondary-contrast);
-}
-
-.button-secondary:hover {
-  background-color: var(--secondary-hover);
-}
-
-.button-secondary:visited {
-  color: var(--secondary-contrast);
-}
-
-.button-error {
+.button[type="reset"], dmb-button[type="reset"] {
   background-color: var(--error);
   color: var(--error-contrast);
 }
 
-.button-error::before {
+.button[type="reset"]::before, dmb-button[type="reset"]::before {
   color: var(--error-contrast);
 }
 
-.button-error:hover {
+.button[type="reset"]:hover, dmb-button[type="reset"]:hover {
   background-color: var(--error-hover);
 }
 
-.button-error:visited {
+.button[type="reset"]:visited, dmb-button[type="reset"]:visited {
   color: var(--error-contrast);
 }
 
-.button-success {
+.button[type="submit"], dmb-button[type="submit"] {
   background-color: var(--success);
   color: var(--success-contrast);
 }
 
-.button-success::before {
+.button[type="submit"]::before, dmb-button[type="submit"]::before {
   color: var(--success-contrast);
 }
 
-.button-success:hover {
+.button[type="submit"]:hover, dmb-button[type="submit"]:hover {
   background-color: var(--success-hover);
 }
 
-.button-success:visited {
+.button[type="submit"]:visited, dmb-button[type="submit"]:visited {
   color: var(--success-contrast);
 }
 
-.button-warning {
+.col .button, .col dmb-button {
+  width: 100%;
+}
+
+.button .text, dmb-button .text {
+  display: inline-block;
+}
+
+.button:focus, dmb-button:focus {
+  outline: 0 none;
+}
+
+.button:before, dmb-button:before {
+  color: var(--default);
+}
+
+.button:active, dmb-button:active {
+  box-shadow: -1px -1px 1px 0 #000000bb;
+  transform: translate(3px, 3px);
+}
+
+.button.default, dmb-button.default {
+  background-color: var(--default);
+  color: var(--default-contrast);
+}
+
+.button.default::before, dmb-button.default::before {
+  color: var(--default-contrast);
+}
+
+.button.default:hover, dmb-button.default:hover {
+  background-color: var(--default-hover);
+}
+
+.button.default:visited, dmb-button.default:visited {
+  color: var(--default-contrast);
+}
+
+.button.primary, dmb-button.primary {
+  background-color: var(--primary);
+  color: var(--primary-contrast);
+}
+
+.button.primary::before, dmb-button.primary::before {
+  color: var(--primary-contrast);
+}
+
+.button.primary:hover, dmb-button.primary:hover {
+  background-color: var(--primary-hover);
+}
+
+.button.primary:visited, dmb-button.primary:visited {
+  color: var(--primary-contrast);
+}
+
+.button.secondary, dmb-button.secondary {
+  background-color: var(--secondary);
+  color: var(--secondary-contrast);
+}
+
+.button.secondary::before, dmb-button.secondary::before {
+  color: var(--secondary-contrast);
+}
+
+.button.secondary:hover, dmb-button.secondary:hover {
+  background-color: var(--secondary-hover);
+}
+
+.button.secondary:visited, dmb-button.secondary:visited {
+  color: var(--secondary-contrast);
+}
+
+.button.error, dmb-button.error {
+  background-color: var(--error);
+  color: var(--error-contrast);
+}
+
+.button.error::before, dmb-button.error::before {
+  color: var(--error-contrast);
+}
+
+.button.error:hover, dmb-button.error:hover {
+  background-color: var(--error-hover);
+}
+
+.button.error:visited, dmb-button.error:visited {
+  color: var(--error-contrast);
+}
+
+.button.success, dmb-button.success {
+  background-color: var(--success);
+  color: var(--success-contrast);
+}
+
+.button.success::before, dmb-button.success::before {
+  color: var(--success-contrast);
+}
+
+.button.success:hover, dmb-button.success:hover {
+  background-color: var(--success-hover);
+}
+
+.button.success:visited, dmb-button.success:visited {
+  color: var(--success-contrast);
+}
+
+.button.warning, dmb-button.warning {
   background-color: var(--warning);
   color: var(--warning-contrast);
 }
 
-.button-warning::before {
+.button.warning::before, dmb-button.warning::before {
   color: var(--warning-contrast);
 }
 
-.button-warning:hover {
+.button.warning:hover, dmb-button.warning:hover {
   background-color: var(--warning-hover);
 }
 
-.button-warning:visited {
+.button.warning:visited, dmb-button.warning:visited {
   color: var(--warning-contrast);
 }
 
-.button-information {
+.button.information, dmb-button.information {
   background-color: var(--information);
   color: var(--information-contrast);
 }
 
-.button-information::before {
+.button.information::before, dmb-button.information::before {
   color: var(--information-contrast);
 }
 
-.button-information:hover {
+.button.information:hover, dmb-button.information:hover {
   background-color: var(--information-hover);
 }
 
-.button-information:visited {
+.button.information:visited, dmb-button.information:visited {
   color: var(--information-contrast);
 }
 
-.button.icon {
+.button.icon, dmb-button.icon {
   height: auto;
 }
 
@@ -472,6 +506,15 @@ dmb-input._error input {
 
 dmb-input._error .error-container {
   display: inline-block;
+}
+
+dmb-input[type="hidden"] {
+  height: 0;
+  width: 0;
+}
+
+dmb-input[type="hidden"] ~ label {
+  display: none;
 }
 
 dmb-menu-button {
@@ -1250,7 +1293,8 @@ body { overflow-y: scroll; }
     pageLoaderClose: {event: new Event('dmb-page-loader.close'), listener: 'dmb-page-loader.close'},
     formSubmit: {event: new Event('dmb-form.submit'), listener: 'dmb-form.submit'},
     formBeforeValidate: {event: new Event('dmb-form.before-validate'), listener: 'dmb-form.before-validate'},
-    formAfterValidate: {event: new Event('dmb-form.after-validate'), listener: 'dmb-form.after-validate'}
+    formAfterValidate: {event: new Event('dmb-form.after-validate'), listener: 'dmb-form.after-validate'},
+    afterRendered: {event: new Event('dmb.after-rendered'), listener: 'dmb.after-rendered'}
 };
 
 const vDom = document.cloneNode(true);
@@ -1296,11 +1340,10 @@ class DumboDirective extends HTMLElement {
             if (this.childrenTemplate) {
                 temp = this.childrenTemplate.content.cloneNode(true);
                 transclude = temp.querySelector('[transclude]');
-            }
-
-            if (transclude) {
-                transclude.innerHTML = this.innerHTML;
-                this.innerHTML = null;
+                if (transclude) {
+                    transclude.innerHTML = this.innerHTML;
+                    this.innerHTML = null;
+                }
             }
 
             if (temp) {
@@ -1308,6 +1351,7 @@ class DumboDirective extends HTMLElement {
             }
 
             this.setAttribute('rendered', 'true');
+            this.dispatchEvent(window.DmbEvents.afterRendered.event);
         }
 
         this.init();
@@ -2652,9 +2696,7 @@ class DmbTextArea extends DumboDirective {
     constructor() {
         super();
 
-        const template = '<label></label>' +
-                        '<textarea transclude>' +
-                        '</textarea>';
+        const template = '<label><textarea transclude></textarea></label>';
 
         this.setTemplate(template);
         this.isValid = false;
@@ -2848,7 +2890,7 @@ class DmbTextArea extends DumboDirective {
                 });
 
                 if (keyParam[0] === 'required') {
-                    element.parentNode.classList.add('required');
+                    element.closest('dmb-textarea').classList.add('required');
                     element.setAttribute('required','required');
                 }
             }

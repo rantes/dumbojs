@@ -10,7 +10,8 @@ Window.prototype.DmbEvents = {
     pageLoaderClose: {event: new Event('dmb-page-loader.close'), listener: 'dmb-page-loader.close'},
     formSubmit: {event: new Event('dmb-form.submit'), listener: 'dmb-form.submit'},
     formBeforeValidate: {event: new Event('dmb-form.before-validate'), listener: 'dmb-form.before-validate'},
-    formAfterValidate: {event: new Event('dmb-form.after-validate'), listener: 'dmb-form.after-validate'}
+    formAfterValidate: {event: new Event('dmb-form.after-validate'), listener: 'dmb-form.after-validate'},
+    afterRendered: {event: new Event('dmb.after-rendered'), listener: 'dmb.after-rendered'}
 };
 
 const vDom = document.cloneNode(true);
@@ -56,11 +57,10 @@ class DumboDirective extends HTMLElement {
             if (this.childrenTemplate) {
                 temp = this.childrenTemplate.content.cloneNode(true);
                 transclude = temp.querySelector('[transclude]');
-            }
-
-            if (transclude) {
-                transclude.innerHTML = this.innerHTML;
-                this.innerHTML = null;
+                if (transclude) {
+                    transclude.innerHTML = this.innerHTML;
+                    this.innerHTML = null;
+                }
             }
 
             if (temp) {
@@ -68,6 +68,7 @@ class DumboDirective extends HTMLElement {
             }
 
             this.setAttribute('rendered', 'true');
+            this.dispatchEvent(window.DmbEvents.afterRendered.event);
         }
 
         this.init();

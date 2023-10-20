@@ -4,9 +4,7 @@ class DmbTextArea extends DumboDirective {
     constructor() {
         super();
 
-        const template = '<label></label>' +
-                        '<textarea transclude>' +
-                        '</textarea>';
+        const template = '<label><textarea transclude></textarea></label>';
 
         this.setTemplate(template);
         this.isValid = false;
@@ -200,7 +198,7 @@ class DmbTextArea extends DumboDirective {
                 });
 
                 if (keyParam[0] === 'required') {
-                    element.parentNode.classList.add('required');
+                    element.closest('dmb-textarea').classList.add('required');
                     element.setAttribute('required','required');
                 }
             }

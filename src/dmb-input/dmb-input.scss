@@ -69,4 +69,13 @@ dmb-input {
             display: inline-block;
         }
     }
+
+    &[type="hidden"] {
+        height: 0;
+        width: 0;
+
+        &~label {
+            display: none;
+        }
+    }
 }
