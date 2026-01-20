@@ -1,25 +1,10 @@
-/**
- * Component handle Imageloader
- * Get the elements of principal issues, and sub issues
- */ 
+import { DumboDirective } from "../dumbo.min.js";
 
-class DmbImageUploader extends DumboDirective {
-    constructor() {
-        super();
-
-        /**
-        * Creation of html
-        */
-        const template = '<dmb-input type="file" dmb-name="imgfile" accept="image/*"></dmb-input>' +
-                         '<div class="preview"><img /></div>';
-
-        this.setTemplate(template);
-    }
+export class DmbImageUploader extends DumboDirective {
+    static selector = 'dmb-image-uploader';
+    static template = './dmbImageUploader.html';
 
     init() {
-        /*
-        * Get elements HTML and assing to a var
-        */
         const dmbimgInput = this.querySelector('dmb-input[type="file"]');
         const imgInput = dmbimgInput.querySelector('input[type="file"]');
         const previewimg = this.querySelector('.preview img');
@@ -28,9 +13,7 @@ class DmbImageUploader extends DumboDirective {
         this.hasAttribute('validate') && dmbimgInput.setAttribute('validate', this.getAttribute('validate'));
         this.hasAttribute('dmb-name') && dmbimgInput.setAttribute('dmb-name', this.getAttribute('dmb-name'));
         this.hasAttribute('label') && dmbimgInput.setAttribute('label', this.getAttribute('label'));
-        /**
-         * Check when the event change in Select Item, and create the options for display
-         */
+        
         imgInput.addEventListener('change', e => {
             this.loadFile(e.target.files[0]);
         });
@@ -49,5 +32,3 @@ class DmbImageUploader extends DumboDirective {
         return promise;
     }
 }
-
-customElements.define('dmb-image-uploader', DmbImageUploader);

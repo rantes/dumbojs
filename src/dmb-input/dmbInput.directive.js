@@ -1,81 +1,76 @@
-class DmbInput extends DumboDirective {
+import { DumboDirective } from "../dumbo.js";
+
+export class DmbInput extends DumboDirective {
+    static selector = 'dmb-input';
     static get observedAttributes() { return ['valid','name', 'validate', 'dmb-name', 'label', 'dmb-value']; }
+    static template = '<label for=""></label><input type="text" placeholder="" />';
+    isValid = false;
+    _errorInputClass = '_error';
+    validations = {
+        _required: function (value, param, input) {
+            let response = {
+                valid: true,
+                error: null
+            };
+            param = null;
 
-    constructor() {
-        super();
-
-        const template = '<label></label>' +
-                        '<input type="text" placeholder="" />';
-
-        this.setTemplate(template);
-        this.isValid = false;
-        this._errorInputClass = '_error';
-        this.validations = {
-            _required: function (value, param, input) {
-                let response = {
-                    valid: true,
-                    error: null
-                };
-                param = null;
-
-                if (typeof value === 'undefined' || value === null || value === '' || (input.getAttribute('type') === 'checkbox' && !input.checked)) {
-                    response.valid = false;
-                }
-
-                return response;
-            },
-            _email: function (value) {
-                let response = {
-                        valid: true,
-                        error: null
-                    },
-                    re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/;
-
-                if (value && !re.test(value)) {
-                    response.valid = false;
-                }
-
-                return response;
-            },
-            _numeric: function (value) {
-                let response = {
-                        valid: true,
-                        error: null
-                    },
-                    re = /^[0-9]\d*/;
-
-                if (value && !re.test(value)) {
-                    response.valid = false;
-                }
-
-                return response;
-            },
-            _min: function(value, param) {
-                let response = {
-                    valid: true,
-                    error: null
-                };
-
-                if (value && value.length < param) {
-                    response.valid = false;
-                }
-
-                return response;
-            },
-            _max: function(value, param) {
-                let response = {
-                    valid: true,
-                    error: null
-                };
-
-                if (value && value.length > param) {
-                    response.valid = false;
-                }
-
-                return response;
+            if (typeof value === 'undefined' || value === null || value === '' || (input.getAttribute('type') === 'checkbox' && !input.checked)) {
+                response.valid = false;
             }
-        };
-    }
+
+            return response;
+        },
+        _email: function (value) {
+            let response = {
+                    valid: true,
+                    error: null
+                },
+                re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/;
+
+            if (value && !re.test(value)) {
+                response.valid = false;
+            }
+
+            return response;
+        },
+        _numeric: function (value) {
+            let response = {
+                    valid: true,
+                    error: null
+                },
+                re = /^[0-9]\d*/;
+
+            if (value && !re.test(value)) {
+                response.valid = false;
+            }
+
+            return response;
+        },
+        _min: function(value, param) {
+            let response = {
+                valid: true,
+                error: null
+            };
+
+            if (value && value.length < param) {
+                response.valid = false;
+            }
+
+            return response;
+        },
+        _max: function(value, param) {
+            let response = {
+                valid: true,
+                error: null
+            };
+
+            if (value && value.length > param) {
+                response.valid = false;
+            }
+
+            return response;
+        }
+    };
 
     set value(val) {
         const input = this.querySelector('input');
@@ -225,6 +220,10 @@ class DmbInput extends DumboDirective {
             }
         }
 
+        if (type === 'hidden') {
+            this.querySelector('label').remove();
+        }
+
         if (masked) input.setAttribute('masked', masked);
         if (autocomplete) input.setAttribute('autocomplete', autocomplete);
         if (classd) input.setAttribute('class', classd);
@@ -259,10 +258,10 @@ class DmbInput extends DumboDirective {
         if (this.getAttribute('masked')) {
             switch (this.getAttribute('masked')) {
             case 'alpha':
-                input.onkeypress = maskInputAlpha;
+                input.onkeydown = maskInputAlpha;
                 break;
             case 'numeric':
-                input.onkeypress = maskInputNumeric;
+                input.onkeydown = maskInputNumeric;
                 break;
             case 'uppercase':
                 input.oninput = maskInputUppercase;
@@ -277,5 +276,3 @@ class DmbInput extends DumboDirective {
         }, true);
     }
 }
-
-customElements.define('dmb-input', DmbInput);

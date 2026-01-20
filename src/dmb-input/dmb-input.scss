@@ -5,23 +5,19 @@ dmb-input {
     position: relative;
 
     input {
-        background-color: var(--default-contrast);
         border: 1px solid var(--default);
         border-radius: 0.5em;
         box-shadow: 1px 1px 2px 0 var(--default-hover) inset;
         box-sizing: border-box;
-        color: var(--default);
         display: block;
         line-height: normal;
         margin: 0;
         padding: 0.5em 0.5em 0.3em;
-        transition: all 0.5s ease-in-out;
         width: 100%;
 
         &:focus {
             border: 1px solid var(--success);
             box-shadow: 1px 1px 2px 0 var(--default-hover) inset, 0 1px 1px var(--default-hover) inset, 0 0 8px var(--success);
-            color: black;
             outline: 0 none;
         }
 

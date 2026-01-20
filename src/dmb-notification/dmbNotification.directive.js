@@ -1,14 +1,9 @@
-
-class DmbNotification extends DumboDirective {
-    constructor() {
-        super();
-
-        const template = '<i class="icon icon-cancel close-notification-button"></i>' +
-                        '<dmb-view class="wrapper" transclude>' +
-                        '</dmb-view>';
-
-        this.setTemplate(template);
-    }
+import { DumboDirective } from "../dumbo.js";
+export class DmbNotification extends DumboDirective {
+    static selector = 'dmb-notification';
+    static template = '<i class="icon icon-cancel close-notification-button"></i>' +
+        '<dmb-view class="wrapper" transclude>' +
+        '</dmb-view>';
 
     close() {
         this.remove();
@@ -22,4 +17,3 @@ class DmbNotification extends DumboDirective {
         });
     }
 }
-customElements.define('dmb-notification', DmbNotification);

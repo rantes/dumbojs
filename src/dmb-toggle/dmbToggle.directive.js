@@ -1,12 +1,9 @@
-class DmbToggle extends DumboDirective {
+import { DumboDirective } from "../dumbo.js";
+export class DmbToggle extends DumboDirective {
+    static selector = 'dmb-toggle';
     static get observedAttributes() { return ['value']; }
-    constructor() {
-        super();
-
-        const template = '<span class="switch"></span>';
-        this.setTemplate(template);
-        this.val = 0;
-    }
+    static template = '<span class="switch"></span>';
+    val = 0;
 
     set value(val = 0) {
         this.val = val;
@@ -54,5 +51,3 @@ class DmbToggle extends DumboDirective {
         }
     }
 }
-
-customElements.define('dmb-toggle', DmbToggle);

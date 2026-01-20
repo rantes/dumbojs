@@ -1,11 +1,7 @@
-class DmbInfoPop extends DumboDirective {
-    constructor() {
-        super();
-
-        const template = '<div class="float-content" transclude></div>';
-        
-        this.setTemplate(template);
-    }
+import { DumboDirective } from "../dumbo.js";
+export class DmbInfoPop extends DumboDirective {
+    static selector = 'dmb-info-pop';
+    static template = '<div class="float-content" transclude></div>';
 
     init() {
         const size = this.getAttribute('size') || 'small';
@@ -14,5 +10,3 @@ class DmbInfoPop extends DumboDirective {
     }
 
 }
-
-customElements.define('dmb-info-pop', DmbInfoPop);

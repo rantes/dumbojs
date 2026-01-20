@@ -1,19 +1,16 @@
-class DmbClosePanel extends DumboDirective {
-    constructor() {
-        super();
+import { DumboDirective } from "../dumbo.js";
 
-        const template = '<i class="icon"></i>';
-        
-        this.setTemplate(template);
-    }
-    
+export class DmbClosePanel extends DumboDirective {
+    static selector = 'dmb-close-panel';
+    static template = './dmbClosePanel.html';
+
     init() {
         const orientation = this.getAttribute('orientation') || 'right';
-        const icon = this.querySelector('i.icon');
+        const icon = this.querySelector('span[icon]');
         let panel = null;
 
         this.classList.add(orientation);
-        icon.classList.add(`icon-chevron-${orientation}`);
+        icon.classList.add(`chevron_${orientation}`);
 
 
         this.addEventListener('click', () => {
@@ -22,5 +19,3 @@ class DmbClosePanel extends DumboDirective {
         });
     }
 }
-
-customElements.define('dmb-close-panel', DmbClosePanel);

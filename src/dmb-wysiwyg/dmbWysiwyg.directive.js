@@ -1,4 +1,5 @@
-class DmbWysiwyg extends DumboDirective {
+import { DumboDirective } from "../dumbo.js";
+export class DmbWysiwyg extends DumboDirective {
     static get observedAttributes() { return ['valid','name', 'validate', 'dmb-name']; }
 
     constructor() {
@@ -393,5 +394,3 @@ class DmbWysiwyg extends DumboDirective {
         }
     }
 }
-
-customElements.define('dmb-wysiwyg', DmbWysiwyg);

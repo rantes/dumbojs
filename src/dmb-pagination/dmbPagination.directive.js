@@ -1,8 +1,7 @@
+import { DumboDirective } from "../dumbo.js";
 
-class DmbPagination extends DumboDirective {
-    constructor() {
-        super();
-    }
+export class DmbPagination extends DumboDirective {
+    static selector = 'dmb-pagination';
 
     init() {
         const formTarget = this.getAttribute('filter-form') || '';
@@ -26,5 +25,3 @@ class DmbPagination extends DumboDirective {
         });
     }
 }
-
-customElements.define('dmb-pagination', DmbPagination);

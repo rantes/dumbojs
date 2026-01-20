@@ -1,7 +1,7 @@
-class DmbHeader extends DumboDirective {
-    constructor() {
-        super();
-    }
+import { DumboDirective } from "../dumbo.js";
+
+export class DmbHeader extends DumboDirective {
+    static selector = 'dmb-header';
 
     init() {
         let titleDOM = null;
@@ -15,5 +15,3 @@ class DmbHeader extends DumboDirective {
         }
     }
 }
-
-customElements.define('dmb-header', DmbHeader);

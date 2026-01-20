@@ -1,4 +1,4 @@
-class DmbNotificationService {
+export class DmbNotificationService {
 
     success(container, msg) {
         const notification = document.createElement('dmb-notification');
@@ -31,4 +31,4 @@ class DmbNotificationService {
     }
 }
 
-Window.prototype.dmbNotificationService = new DmbNotificationService();
+export const dmbNotificationService = new DmbNotificationService();

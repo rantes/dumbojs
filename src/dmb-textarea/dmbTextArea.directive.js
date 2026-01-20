@@ -1,67 +1,64 @@
-class DmbTextArea extends DumboDirective {
-    static get observedAttributes() { return ['valid','name', 'validate', 'dmb-name']; }
+import { DumboDirective } from "../dumbo.js";
 
-    constructor() {
-        super();
+export class DmbTextArea extends DumboDirective {
+    static selector = 'dmb-textarea';
+    static get observedAttributes() { return ['valid','name', 'validate', 'dmb-name']; };
+    static template = '<label for=""></label><textarea id="" transclude></textarea>';
 
-        const template = '<label><textarea transclude></textarea></label>';
+    isValid = false;
+    validators = [];
+    _errorInputClass = '_error';
+    validations = {
+        _required: function (value) {
+            let response = {
+                valid: true,
+                error: null
+            };
 
-        this.setTemplate(template);
-        this.isValid = false;
-        this.validators = [];
-        this._errorInputClass = '_error';
-        this.validations = {
-            _required: function (value) {
-                let response = {
-                    valid: true,
-                    error: null
-                };
-
-                if (typeof value === 'undefined' || value === null || value === '') {
-                    response.valid = false;
-                }
-
-                return response;
-            },
-            _numeric: function (value) {
-                let response = {
-                        valid: true,
-                        error: null
-                    },
-                    re = /^[0-9]\d*/;
-
-                if (value && !re.test(value)) {
-                    response.valid = false;
-                }
-
-                return response;
-            },
-            _min: function(value, param) {
-                let response = {
-                    valid: true,
-                    error: null
-                };
-
-                if (value && value.length < param) {
-                    response.valid = false;
-                }
-
-                return response;
-            },
-            _max: function(value, param) {
-                let response = {
-                    valid: true,
-                    error: null
-                };
-
-                if (value && value.length > param) {
-                    response.valid = false;
-                }
-
-                return response;
+            if (typeof value === 'undefined' || value === null || value === '') {
+                response.valid = false;
             }
-        };
-    }
+
+            return response;
+        },
+        _numeric: function (value) {
+            let response = {
+                    valid: true,
+                    error: null
+                },
+                re = /^[0-9]\d*/;
+
+            if (value && !re.test(value)) {
+                response.valid = false;
+            }
+
+            return response;
+        },
+        _min: function(value, param) {
+            let response = {
+                valid: true,
+                error: null
+            };
+
+            if (value && value.length < param) {
+                response.valid = false;
+            }
+
+            return response;
+        },
+        _max: function(value, param) {
+            let response = {
+                valid: true,
+                error: null
+            };
+
+            if (value && value.length > param) {
+                response.valid = false;
+            }
+
+            return response;
+        }
+    };
 
     set value(val) {
         this.querySelector('textarea').innerText(val);
@@ -89,18 +86,20 @@ class DmbTextArea extends DumboDirective {
     }
 
     init() {
-        let input = this.getElementsByTagName('textarea').item(0);
+        let input = this.querySelector('textarea');
+        let label = this.querySelector('label');
 
-        this.querySelector('label').innerText = this.getAttribute('label');
+        label.innerText = this.getAttribute('label');
         input.setAttribute('aria-label',this.getAttribute('label') || '');
         input.setAttribute('masked',this.getAttribute('masked') || '');
-        input.setAttribute('autocomplete',this.getAttribute('autocomplete') || '');
+        if (this.getAttribute('autocomplete')) input.setAttribute('autocomplete',this.getAttribute('autocomplete'));
         input.setAttribute('class',this.getAttribute('dmb-class') || '');
         input.setAttribute('name',this.getAttribute('dmb-name') || '');
         input.setAttribute('validate',this.getAttribute('validate') || '');
         input.setAttribute('placeholder',this.getAttribute('placeholder') || '');
         input.setAttribute('valid','true');
         input.id = this.getAttribute('dmb-id')|| this.generateId();
+        label.setAttribute('for', input.id);
 
         const maskInputUppercase = (e) => {
             e.target.value = e.target.value.toUpperCase();
@@ -141,10 +140,10 @@ class DmbTextArea extends DumboDirective {
         if (this.getAttribute('masked')) {
             switch (this.getAttribute('masked')) {
             case 'alpha':
-                input.onkeypress = maskInputAlpha;
+                input.onkeydown = maskInputAlpha;
                 break;
             case 'numeric':
-                input.onkeypress = maskInputNumeric;
+                input.onkeydown = maskInputNumeric;
                 break;
             case 'uppercase':
                 input.oninput = maskInputUppercase;
@@ -185,8 +184,9 @@ class DmbTextArea extends DumboDirective {
     }
 
     buildValidators (element, scope) {
-        let validators = [],
-            validatorList = (scope.getAttribute('validate') || '').split(',');
+        let validators = [];
+        let validatorList = (scope.getAttribute('validate') || '').split(',');
+        let textArea = null;
 
         for (let i = 0, len = validatorList.length; i < len; i++) {
             let keyParam = validatorList[i].split(':');
@@ -198,7 +198,10 @@ class DmbTextArea extends DumboDirective {
                 });
 
                 if (keyParam[0] === 'required') {
-                    element.closest('dmb-textarea').classList.add('required');
+                    textArea = element.closest('dmb-textarea');
+                    if (textArea) {
+                        textArea.classList.add('required');
+                    }
                     element.setAttribute('required','required');
                 }
             }
@@ -218,5 +221,3 @@ class DmbTextArea extends DumboDirective {
         this._runValidators(this.querySelector('textarea'), this.validators);
     }
 }
-
-customElements.define('dmb-textarea', DmbTextArea);

@@ -1,13 +1,7 @@
-/**
- * @dmbdoc Directive
- * @name dmbButton
- * @description Will render a button
- * @attribute type posible values: submit
- */
-class DmbButton extends DumboDirective {
-    constructor() {
-        super();
-    }
+import { DumboDirective } from "../dumbo.js";
+
+export class DmbButton extends DumboDirective {
+    static selector = 'dmb-button';
 
     _submitter(e) {
         const form = e.target.closest('dmb-form');
@@ -15,12 +9,12 @@ class DmbButton extends DumboDirective {
 
         if (form) {
             switch (type) {
-            case 'submit':
-                form.submit();
-                break;
-            case 'reset':
-                form.reset();
-                break;
+                case 'submit':
+                    form.submit();
+                    break;
+                case 'reset':
+                    form.reset();
+                    break;
             }
         }
     }
@@ -28,6 +22,7 @@ class DmbButton extends DumboDirective {
     init() {
         this.addEventListener('click', this._submitter);
     }
+
     /**
      * Attach a method to run when event click is fired.
      * @param {function} method
@@ -39,4 +34,3 @@ class DmbButton extends DumboDirective {
         }
     }
 }
-customElements.define('dmb-button', DmbButton);

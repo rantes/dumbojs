@@ -1,19 +1,13 @@
+import { DumboDirective } from "../dumbo.js";
 /**
  * Component handle Video uploader
  * Get the elements of principal issues, and sub issues
  */ 
 
-class DmbVideoUploader extends DumboDirective {
-    constructor() {
-        super();
-
-        /**
-        * Creation of html
-        */
-        const template = '<dmb-input type="file" dmb-name="videofile" accept="video/*"></dmb-input>' +
-                         '<div class="preview"><video controls></video></div>';
-        this.setTemplate(template);
-    }
+export class DmbVideoUploader extends DumboDirective {
+    static selector = 'dmb-video-uploader';
+    static template = '<dmb-input type="file" dmb-name="videofile" accept="video/*"></dmb-input>' +
+        '<div class="preview"><video controls></video></div>';
 
     init() {
         const dmbVideoInput = this.querySelector('dmb-input[type="file"]');
@@ -44,5 +38,3 @@ class DmbVideoUploader extends DumboDirective {
         return promise;
     }
 }
-
-customElements.define('dmb-video-uploader', DmbVideoUploader);

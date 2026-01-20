@@ -1,37 +1,32 @@
-class DmbSelect extends DumboDirective {
+import { DmbEvents, DumboDirective } from "../dumbo.js";
+
+export class DmbSelect extends DumboDirective {
+    static selector = 'dmb-select';
     static get observedAttributes() {
         return [
             'valid','values', 'dmb-name', 'label', 'dmb-class', 'validate', 'dmb-value'
         ];
-    }
+    };
+    static template = '<label for=""></label><select transclude></select>';
+    validations = {
+        _required: value => {
+            let response = {
+                valid: true,
+                error: null
+            };
 
-    constructor() {
-        super();
-
-        const template = '<label></label>' +
-                        '<select transclude></select>';
-
-        this.setTemplate(template);
-        this.validations = {
-            _required: value => {
-                let response = {
-                    valid: true,
-                    error: null
-                };
-
-                if (typeof value === 'undefined' || value === null || value === '') {
-                    response.valid = false;
-                    response.error = '';
-                }
-
-                return response;
+            if (typeof value === 'undefined' || value === null || value === '') {
+                response.valid = false;
+                response.error = '';
             }
-        };
-        this.isValid = false;
-        this.valueList = [];
-        this.validators = [];
-        this._errorInputClass = '_error';
-    }
+
+            return response;
+        }
+    };
+    isValid = false;
+    valueList = [];
+    validators = [];
+    _errorInputClass = '_error';
 
     set values(newValues = []) {
         this.valueList = newValues;
@@ -45,23 +40,26 @@ class DmbSelect extends DumboDirective {
     set value(val) {
         this.querySelector('select').setAttribute('value', val);
         this.querySelector('select').value = val;
-        this.dispatchEvent(new Event('change'));
+        this.dispatchEvent(DmbEvents.inputChanged.event);
+        this.dispatchEvent('change');
     }
 
     init() {
         const select = this.querySelector('select');
+        const label = this.querySelector('label');
         let value = null;
         let options = null;
         let option = null;
         let opval = null;
 
-        this.hasAttribute('label') && (this.querySelector('label').innerText = this.getAttribute('label'));
+        this.hasAttribute('label') && (label.innerText = this.getAttribute('label'));
         this.hasAttribute('label') && select.setAttribute('aria-label',this.getAttribute('label'));
         this.hasAttribute('dmb-class') && select.setAttribute('class', this.getAttribute('dmb-class'));
         select.setAttribute('name', this.getAttribute('dmb-name') || '');
         this.hasAttribute('validate') && select.setAttribute('validate',this.getAttribute('validate'));
         select.id = this.getAttribute('dmb-id') || this.generateId();
         select.multiple = this.hasAttribute('multiple');
+        label.setAttribute('for', select.id);
 
         if (this.hasAttribute('dmb-value')) {
             value = this.getAttribute('dmb-value').trim();
@@ -222,5 +220,3 @@ class DmbSelect extends DumboDirective {
         this._runValidators(this.querySelector('select'), this.validators);
     }
 }
-
-customElements.define('dmb-select', DmbSelect);

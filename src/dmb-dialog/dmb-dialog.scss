@@ -1,7 +1,7 @@
 dmb-dialog {
     border: 0;
     bottom: 0;
-    height: 100vh;
+    height: 0;
     left: 0;
     opacity: 0;
     padding: 0;
@@ -10,7 +10,8 @@ dmb-dialog {
     text-align: center;
     top: 0;
     transition: opacity 0.5s ease-in-out;
-    width: 100vw;
+    visibility: hidden;
+    width: 0;
     z-index: 999;
 
     & .wrapper {
@@ -43,7 +44,7 @@ dmb-dialog {
             transform: translateY(-50%);
         }
 
-        .icon:not(.close-modal-button) {
+        [icon]:not(.close-modal-button) {
             left: 10px;
             position: absolute;
             top: 50%;
@@ -119,7 +120,10 @@ dmb-dialog {
     }
 
     &[open] {
+        height: 100vh;
         opacity: 1;
+        visibility: visible;
+        width: 100vw;
 
         .wrapper {
             transform: translate(-50%, -140vh);

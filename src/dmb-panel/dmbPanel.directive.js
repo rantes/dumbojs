@@ -1,18 +1,13 @@
+import { DmbEvents, DumboDirective } from "../dumbo.js";
 
-class DmbPanel extends DumboDirective {
+export class DmbPanel extends DumboDirective {
+    static selector = 'dmb-panel';
     static get observedAttributes() { return ['source']; }
-
-    constructor() {
-        super();
-        const template = '<dmb-view class="wrapper" transclude>' +
-                        '</dmb-view>';
-
-        this.setTemplate(template);
-        this.returnValue = null;
-    }
+    static template = '<dmb-view class="wrapper" transclude></dmb-view>';
+    returnValue = null;
 
     attributeChangedCallback(attr, oldValue, newValue) {
-        !!newValue && newValue.length && this.loadExternalSource();
+        attr === 'source' && !!newValue && newValue.length && this.loadExternalSource();
     }
 
     loadExternalSource() {
@@ -36,15 +31,15 @@ class DmbPanel extends DumboDirective {
     close(value) {
         this.returnValue = value;
         this.removeAttribute('open');
-        this.dispatchEvent(window.DmbEvents.panelClose.event);
+        this.dispatchEvent(DmbEvents.panelClose.event);
         (this.localName === 'dmb-dialog') && this.remove();
-        this.dispatchEvent(window.DmbEvents.dialogClose.event);
-        this.dispatchEvent(window.DmbEvents.panelClosed.event);
+        this.dispatchEvent(DmbEvents.dialogClose.event);
+        this.dispatchEvent(DmbEvents.panelClosed.event);
     }
 
     open() {
         this.setAttribute('open','');
-        this.dispatchEvent(window.DmbEvents.panelOpened.event);
+        this.dispatchEvent(DmbEvents.panelOpened.event);
         this.addEventListener('click', (e) => {
             if (this.openValue && e.target === this) {
                 this.close('cancelled');
@@ -118,7 +113,7 @@ class DmbPanel extends DumboDirective {
 
     onClose(fn) {
         if (typeof fn === 'function') {
-            this.addEventListener(window.DmbEvents.panelClose.listener, fn);
+            this.addEventListener(DmbEvents.panelClose.listener, fn);
         }
     }
 
@@ -129,9 +124,5 @@ class DmbPanel extends DumboDirective {
         this.addEventListener('click', (e) => {
             e.target === this && this.close('cancelled');
         }, true);
-
-        this.loadExternalSource();
     }
 }
-
-customElements.define('dmb-panel', DmbPanel);

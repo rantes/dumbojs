@@ -1,4 +1,4 @@
-class DmbDialogService {
+export class DmbDialogService {
 
     setMessage(dialog, msg) {
         const message = document.createElement('span');
@@ -82,4 +82,4 @@ class DmbDialogService {
     }
 }
 
-Window.prototype.dmbDialogService = new DmbDialogService();
+export const dmbDialogService = new DmbDialogService();

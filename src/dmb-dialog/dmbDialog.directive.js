@@ -1,16 +1,14 @@
+import {
+    DmbEvents,
+    DumboDirective
+} from "../dumbo.js";
 
-class DmbDialog extends DumboDirective {
+export class DmbDialog extends DumboDirective {
+    static selector = 'dmb-dialog';
     static get observedAttributes() { return ['open']; }
+    static template = './dmbDialog.html';
+    returnValue = null;
 
-    constructor() {
-        super();
-
-        const template = '<dmb-view class="wrapper" transclude>' +
-                        '</dmb-view>';
-
-        this.setTemplate(template);
-        this.returnValue = null;
-    }
 
     attributeChangedCallback(attr, oldValue, newValue) {
         this.openValue = (newValue !== null);
@@ -27,7 +25,7 @@ class DmbDialog extends DumboDirective {
 
     open() {
         this.hasAttribute('open') || this.setAttribute('open','');
-        this.dispatchEvent(window.DmbEvents.dialogOpen.event);
+        this.dispatchEvent(DmbEvents.dialogOpen.event);
     }
 
     showModal() {
@@ -56,9 +54,8 @@ class DmbDialog extends DumboDirective {
         if (!this.classList.contains('loader')) {
             icon = this.querySelector('.close-modal-button');
             if(!icon || !icon.length) {
-                icon = document.createElement('i');
-                icon.classList.add('icon');
-                icon.classList.add('icon-cancel');
+                icon = document.createElement('span');
+                icon.setAttribute('icon', 'close');
                 icon.classList.add('close-modal-button');
                 this.querySelector('.wrapper').prepend(icon);
                 icon.addEventListener('click', (e) => {
@@ -73,11 +70,10 @@ class DmbDialog extends DumboDirective {
     }
 
     setIcon(icon) {
-        const iconElement = document.createElement('i');
+        const iconElement = document.createElement('span');
         const wrapper = this.querySelector('.wrapper');
 
-        iconElement.classList.add('icon');
-        iconElement.classList.add(`icon-${icon}`);
+        iconElement.setAttribute('icon',icon);
 
         wrapper.prepend(iconElement);
     }
@@ -86,7 +82,7 @@ class DmbDialog extends DumboDirective {
         const message = document.createElement('span');
         const wrapper = this.querySelector('.wrapper');
 
-        this.setIcon('alert');
+        this.setIcon('warning');
         msg = msg || '';
         this.classList.add('error');
         message.classList.add('message');
@@ -136,4 +132,3 @@ class DmbDialog extends DumboDirective {
         }
     }
 }
-customElements.define('dmb-dialog', DmbDialog);

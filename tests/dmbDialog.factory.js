@@ -1,4 +1,4 @@
-class DmbDialogService {
+export class DmbDialogService {
 
     setMessage(dialog, msg) {
         const message = document.createElement('span');
@@ -81,41 +81,3 @@ class DmbDialogService {
         return true;
     }
 }
-
-Window.prototype.dmbDialogService = new DmbDialogService();
-
-class DmbNotificationService {
-
-    success(container, msg) {
-        const notification = document.createElement('dmb-notification');
-
-        notification.classList.add('success');
-        notification.innerHTML = msg;
-        container.prepend(notification);
-
-        return true;
-    }
-
-    warning(container, msg) {
-        const notification = document.createElement('dmb-notification');
-
-        notification.classList.add('warning');
-        notification.innerHTML = msg;
-        container.prepend(notification);
-
-        return true;
-    }
-
-    error(container, msg) {
-        const notification = document.createElement('dmb-notification');
-
-        notification.classList.add('error');
-        notification.innerHTML = msg;
-        container.prepend(notification);
-
-        return true;
-    }
-}
-
-Window.prototype.dmbNotificationService = new DmbNotificationService();
-

@@ -1,5 +1,6 @@
-
-class DmbPageLoader extends DumboDirective {
+import { DumboDirective } from "../dumbo.js";
+export class DmbPageLoader extends DumboDirective {
+    static selector = 'dmb-page-loader';
     constructor() {
         super();
 
@@ -34,4 +35,3 @@ class DmbPageLoader extends DumboDirective {
     }
 
 }
-customElements.define('dmb-page-loader', DmbPageLoader);

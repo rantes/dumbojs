@@ -1,8 +1,8 @@
-class DmbFooter extends DumboDirective {
-    constructor() {
-        super();
-    }
-    
+import { DumboDirective } from "../dumbo.js";
+
+export class DmbFooter extends DumboDirective {
+    static selector = 'dmb-footer';
+
     init() {
         const dmbview = this.parentNode.querySelector('dmb-content');
 
@@ -11,5 +11,3 @@ class DmbFooter extends DumboDirective {
         }
     }
 }
-
-customElements.define('dmb-footer', DmbFooter);

@@ -1,12 +1,15 @@
-class DmbForm extends DumboDirective {
-    constructor() {
-        super();
-        this._valids = 0;
+import {
+    DmbEvents,
+    DumboDirective
+} from "../dumbo.js";
 
-        this.setTemplate('<form arial-role="form" transclude></form>');
-        this.form = null;
-        this.callback = this.callback || null;
-    }
+export class DmbForm extends DumboDirective {
+    static selector = 'dmb-form';
+    static template = '<form arial-role="form" transclude></form>';
+    static get observedAttributes() { return ['action']; };
+    _valids = 0;
+    form = null;
+
 
     get valids() {
         return this._valids;
@@ -51,7 +54,7 @@ class DmbForm extends DumboDirective {
             element.closest(parentSelector).resetValidation();
         });
 
-        this.dispatchEvent(window.DmbEvents.formBeforeValidate.event);
+        this.dispatchEvent(DmbEvents.formBeforeValidate.event);
         while ((item = formElements.shift())) {
             if (item.closest('.novalidate') === null) {
                 parentItem = item.closest(parentSelector);
@@ -67,13 +70,13 @@ class DmbForm extends DumboDirective {
             }
         }
 
-        this.dispatchEvent(window.DmbEvents.formAfterValidate.event);
+        this.dispatchEvent(DmbEvents.formAfterValidate.event);
 
         return !hasInvalids;
     }
 
     submit() {
-        this.dispatchEvent(window.DmbEvents.formSubmit.event);
+        this.dispatchEvent(DmbEvents.formSubmit.event);
         this.dispatchEvent(new Event('submit'));
 
         const isAsync = this.hasAttribute('async');
@@ -111,6 +114,14 @@ class DmbForm extends DumboDirective {
 
         return totalvalidations === 3;
     }
-}
 
-customElements.define('dmb-form', DmbForm);
+    attributeChangedCallback(attr, oldValue, newValue) {
+        this.form = this.querySelector('form');
+
+        switch(attr) {
+            case 'action':
+                if (oldValue) this.form.setAttribute('action', newValue);
+            break;
+        }
+    }
+}
