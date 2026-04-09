@@ -1,12 +1,11 @@
 import {
     DmbEvents,
     DumboDirective
-} from "../dumbo.js";
+} from "../../libs/dumbojs/dumbo.min.js";
 
 export class DmbDialog extends DumboDirective {
     static selector = 'dmb-dialog';
     static get observedAttributes() { return ['open']; }
-    static template = './dmbDialog.html';
     returnValue = null;
 
 
@@ -14,12 +13,14 @@ export class DmbDialog extends DumboDirective {
         this.openValue = (newValue !== null);
     }
 
-    close(value) {
+    close(value, remove = false) {
         this.returnValue = value;
         this.removeAttribute('open');
         this.dispatchEvent(new Event('close'));
-        (this.localName === 'dmb-dialog') && this.remove();
         this.dispatchEvent(new Event('close-dialog'));
+        if (remove) {
+            this.remove();
+        }
         return true;
     }
 
@@ -43,9 +44,11 @@ export class DmbDialog extends DumboDirective {
         let delay = 1000 * this.getAttribute('delay');
         this.hasAttribute('no-close') || this.setCloseButton();
 
-        setTimeout(() => {
-            this.open();
-        }, delay);
+        if (!this.hasAttribute('no-auto-open')) {
+            setTimeout(() => {
+                this.open();
+            }, delay);
+        }
     }
 
     setCloseButton() {

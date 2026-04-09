@@ -27,7 +27,7 @@ dmb-dialog {
         transform: translate(-50%, -50%);
         transition: transform 0.5s ease-in-out;
         will-change: transform;
-        z-index: 1000;
+        z-index: 9;
 
         .dmb-header {
             border-radius: 0.6rem 0.6rem 0 0;

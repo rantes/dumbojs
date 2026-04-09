@@ -81,5 +81,3 @@ export class DmbDialogService {
         return true;
     }
 }
-
-export const dmbDialogService = new DmbDialogService();
