@@ -19,7 +19,6 @@ export const DmbEvents = {
 
 const vDom = document.cloneNode(true);
 
-// eslint-disable-next-line no-unused-vars
 export class DumboFactory {
     setTemplate(template) {
         this.childrenTemplate = vDom.querySelector(`#${this.constructor.name}-template`);
